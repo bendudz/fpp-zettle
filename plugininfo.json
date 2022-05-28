@@ -1,0 +1,18 @@
+{
+  "repoName": "fpp-zettle",
+  "name": "FPP Zettle!",
+  "author": "Ben Dudley",
+  "description": "Receive a notification from Zettle when payments are made so you can trigger effects via your display",
+  "homeURL": "https://github.com/bendudz/fpp-zettle",
+  "srcURL": "https://github.com/bendudz/fpp-zettle.git",
+  "bugURL": "https://github.com/bendudz/fpp-zettle/issues",
+  "allowUpdates": 1,
+  "versions": [
+    {
+      "minFPPVersion": "5.0",
+      "maxFPPVersion": "0",
+      "branch": "master",
+      "sha": ""
+    }
+  ]
+}
