@@ -1,7 +1,7 @@
 {
   "repoName": "fpp-zettle",
-  "name": "FPP Zettle!",
-  "author": "Ben Dudley",
+  "name": "Announce Zettle!",
+  "author": "Ben Dudley, Michael Jones",
   "description": "Receive a notification from Zettle when payments are made so you can trigger effects via your display",
   "homeURL": "https://github.com/bendudz/fpp-zettle",
   "srcURL": "https://github.com/bendudz/fpp-zettle.git",
