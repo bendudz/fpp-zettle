@@ -47,6 +47,7 @@ $pluginJson = convertAndGetSettings();
 ?>
 <div id="global" class="settings">
     <legend>Zettle Setup</legend>
+    <p>Add your client id and secret generated from the Zettle Integrations webpage</p>
     <script>
         var
             zettleConfig = <?php echo json_encode($pluginJson, JSON_PRETTY_PRINT); ?> ;
@@ -70,6 +71,7 @@ $pluginJson = convertAndGetSettings();
         function SaveZETTLE() {
             var client_id = $("#client_id").val();
             var client_secret = $("#client_secret").val();
+            // TODO read in subs & orgid as to not rewrite over them?
             var zettleConfig = {
                 "client_id": client_id,
                 "client_secret": client_secret,
