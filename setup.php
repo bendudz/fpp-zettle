@@ -47,7 +47,8 @@ $pluginJson = convertAndGetSettings();
 ?>
 <div id="global" class="settings">
     <legend>Zettle Setup</legend>
-    <p>Add your client id and secret generated from the Zettle Integrations webpage</p>
+    <p>Add your client id and secret generated from the Zettle Integrations
+        webpage</p>
     <script>
         var
             zettleConfig = <?php echo json_encode($pluginJson, JSON_PRETTY_PRINT); ?> ;
@@ -63,7 +64,13 @@ $pluginJson = convertAndGetSettings();
                 processData: false,
                 contentType: 'application/json',
                 success: function(data) {
-                    console.log('saved');
+                    $.jGrowl('Details saved', {
+                        themeState: 'success'
+                    });
+                    setTimeout(function() {
+                        //window.location.href = "plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php";
+                        location.reload();
+                    });
                 }
             });
         }
@@ -79,6 +86,11 @@ $pluginJson = convertAndGetSettings();
                 "subscriptions": []
             };
             SaveZETTLEConfig(zettleConfig);
+        }
+
+        function gotoCreateSubscriptions() {
+            window.location.href =
+                "plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php";
         }
     </script>
     <div class="row">
@@ -100,6 +112,11 @@ $pluginJson = convertAndGetSettings();
                 <div class="col-auto">
                     <input type="button" value="Save"
                         class="buttons genericButton" onclick="SaveZETTLE();">
+                    <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) == 0) { ?>
+                    <input type="button" value="Create Subscription"
+                        class="buttons genericButton"
+                        onclick="gotoCreateSubscriptions();">
+                    <?php } ?>
                 </div>
             </div>
         </div>
