@@ -75,6 +75,9 @@ $pluginJson = convertAndGetSettings();
                     data: JSON.stringify(zettleConfig),
                     processData: false,
                     contentType: 'application/json',
+                    beforeSend: function() {
+                        $('#save').prop('disabled', true);
+                    },
                     success: function(data) {
                         $.jGrowl('Details saved', {
                             themeState: 'success'
@@ -82,7 +85,13 @@ $pluginJson = convertAndGetSettings();
                         setTimeout(function() {
                             //window.location.href = "plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php";
                             location.reload();
-                        }, 2000);
+                        }, 3000);
+                    },
+                    error: function() {
+                        $('#save').prop('disabled', false);
+                        $.jGrowl('There was an error in saving your details!', {
+                            themeState: 'danger'
+                        });
                     }
                 });
             });
@@ -112,11 +121,11 @@ $pluginJson = convertAndGetSettings();
                 </div>
                 <div class="row">
                     <div class="col-auto">
-                        <input type="submit" value="Save"
-                            class="buttons genericButton"">
+                        <input id="save" type="submit" value="Save"
+                            class="buttons btn-success"">
                         <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) == 0) { ?>
                         <input type=" button" value="Create Subscription"
-                            class="buttons genericButton"
+                            class="buttons"
                             onclick="gotoCreateSubscriptions();">
                         <?php } ?>
                     </div>
