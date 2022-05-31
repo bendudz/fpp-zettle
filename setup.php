@@ -39,7 +39,7 @@ function convertAndGetSettings()
         $json = json_decode($j, true);
         return $json;
     }
-    $j = "{\"client_id\": \"client_id\", \"client_secret\": \"client_secret\", \"organizationUuid\": \"\", \"subscriptions\": [] }";
+    $j = "{\"client_id\": \"\", \"client_secret\": \"\", \"organizationUuid\": \"\", \"subscriptions\": [] }";
     return json_decode($j, true);
 }
 
@@ -50,43 +50,43 @@ $pluginJson = convertAndGetSettings();
     <p>Add your client id and secret generated from the Zettle Integrations
         webpage</p>
     <script>
-        var
-            zettleConfig = <?php echo json_encode($pluginJson, JSON_PRETTY_PRINT); ?> ;
+        $(function() {
+            var zettleConfigJsonData = '<?php echo json_encode($pluginJson); ?>';
+            var zettleConfigData = JSON.parse(zettleConfigJsonData);
 
-        function SaveZETTLEConfig(config) {
-            var data = JSON.stringify(config);
-            $.ajax({
-                type: "POST",
-                url: 'fppjson.php?command=setPluginJSON&plugin=fpp-zettle',
-                dataType: 'json',
-                async: false,
-                data: data,
-                processData: false,
-                contentType: 'application/json',
-                success: function(data) {
-                    $.jGrowl('Details saved', {
-                        themeState: 'success'
-                    });
-                    setTimeout(function() {
-                        //window.location.href = "plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php";
-                        location.reload();
-                    });
-                }
+            $('#setup').on('submit', function(e) {
+                e.preventDefault();
+
+                var client_id = $("#client_id").val();
+                var client_secret = $("#client_secret").val();
+
+                var zettleConfig = {
+                    "client_id": client_id,
+                    "client_secret": client_secret,
+                    "organizationUuid": zettleConfigData.organizationUuid,
+                    "subscriptions": zettleConfigData.subscriptions
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: 'fppjson.php?command=setPluginJSON&plugin=fpp-zettle',
+                    dataType: 'json',
+                    async: false,
+                    data: JSON.stringify(zettleConfig),
+                    processData: false,
+                    contentType: 'application/json',
+                    success: function(data) {
+                        $.jGrowl('Details saved', {
+                            themeState: 'success'
+                        });
+                        setTimeout(function() {
+                            //window.location.href = "plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php";
+                            location.reload();
+                        }, 2000);
+                    }
+                });
             });
-        }
-
-        function SaveZETTLE() {
-            var client_id = $("#client_id").val();
-            var client_secret = $("#client_secret").val();
-            // TODO read in subs & orgid as to not rewrite over them?
-            var zettleConfig = {
-                "client_id": client_id,
-                "client_secret": client_secret,
-                "organizationUuid": "",
-                "subscriptions": []
-            };
-            SaveZETTLEConfig(zettleConfig);
-        }
+        });
 
         function gotoCreateSubscriptions() {
             window.location.href =
@@ -94,31 +94,34 @@ $pluginJson = convertAndGetSettings();
         }
     </script>
     <div class="row">
-        <div class="col-auto mr-auto">
-            <div class="row">
-                <div class="col-auto">
-                    Client Id: &nbsp;<input type='text' id='client_id'
-                        value='<?php echo $pluginJson["client_id"] ?>'
-                        required></input>
+        <form id="setup" action="" method="post">
+            <div class="col-auto mr-auto">
+                <div class="row">
+                    <div class="col-auto">
+                        Client Id: &nbsp;<input type='text' id='client_id'
+                            name='client_id'
+                            value='<?php echo $pluginJson["client_id"] ?>'
+                            required></input>
+                    </div>
+                    <div class="col-auto">
+                        Client Secret: &nbsp;<input type='password'
+                            id='client_secret' name='client_secret'
+                            value='<?php echo $pluginJson["client_secret"] ?>'
+                            required></input>
+                    </div>
                 </div>
-                <div class="col-auto">
-                    Client Secret: &nbsp;<input type='password'
-                        id='client_secret'
-                        value='<?php echo $pluginJson["client_secret"] ?>'
-                        required></input>
+                <div class="row">
+                    <div class="col-auto">
+                        <input type="submit" value="Save"
+                            class="buttons genericButton"">
+                        <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) == 0) { ?>
+                        <input type=" button" value="Create Subscription"
+                            class="buttons genericButton"
+                            onclick="gotoCreateSubscriptions();">
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-auto">
-                    <input type="button" value="Save"
-                        class="buttons genericButton" onclick="SaveZETTLE();">
-                    <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) == 0) { ?>
-                    <input type="button" value="Create Subscription"
-                        class="buttons genericButton"
-                        onclick="gotoCreateSubscriptions();">
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
