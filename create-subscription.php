@@ -1,34 +1,24 @@
 <?php
-function convertAndGetSettings()
-{
-    global $settings;
+include_once 'zettle.common.php';
+$pluginName = 'zettle';
 
-    $cfgFile = $settings['configDirectory'] . "/plugin.fpp-zettle.json";
-    if (file_exists($cfgFile)) {
-        $j = file_get_contents($cfgFile);
-        $json = json_decode($j, true);
-        return $json;
-    }
-    $j = "{\"client_id\": \"client_id\", \"client_secret\": \"client_secret\", \"organizationUuid\": \"\", \"subscriptions\": [] }";
-    return json_decode($j, true);
-}
-
-$pluginJson = convertAndGetSettings();
+$pluginJson = convertAndGetSettings($pluginName);
 
 if (count($pluginJson['subscriptions']) > 0) {
-    echo 'Subscription has been set up nothing to do here';
+    echo '<p class="mb-0">Subscription has been set up nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-' . $pluginName . '&page=status.php">status page</a></p>';
 } else { ?>
 <script>
   $(function() {
     var zettleConfigJsonData = '<?php echo json_encode($pluginJson); ?>';
     var zettleConfigData = JSON.parse(zettleConfigJsonData);
+    var pluginName = '<?php echo $pluginName; ?>';
 
     $('#subscription').on('submit', function(e) {
       e.preventDefault();
 
       $.ajax({
         type: "GET",
-        url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_org_id&nopage=1',
+        url: 'plugin.php?plugin=fpp-' + pluginName + '&page=zettle.php&command=get_org_id&nopage=1',
         dataType: 'json',
         async: false,
         data: {},
@@ -37,7 +27,7 @@ if (count($pluginJson['subscriptions']) > 0) {
         success: function(data) {
           $.ajax({
             type: "POST",
-            url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=create_subscription&nopage=1',
+            url: 'plugin.php?plugin=fpp-' + pluginName + '&page=zettle.php&command=create_subscription&nopage=1',
             dataType: 'json',
             async: false,
             data: {
@@ -55,8 +45,8 @@ if (count($pluginJson['subscriptions']) > 0) {
                   themeState: 'success'
                 });
                 updateJson({
-                  "client_id": zettleConfig.client_id,
-                  "client_secret": zettleConfig.client_secret,
+                  "client_id": zettleConfigData.client_id,
+                  "client_secret": zettleConfigData.client_secret,
                   "organizationUuid": data
                     .organizationUuid,
                   "subscriptions": data.subscription
@@ -81,7 +71,7 @@ if (count($pluginJson['subscriptions']) > 0) {
     function updateJson(data, message) {
       $.ajax({
         type: "POST",
-        url: 'fppjson.php?command=setPluginJSON&plugin=fpp-zettle',
+        url: 'fppjson.php?command=setPluginJSON&plugin=fpp-' + pluginName,
         dataType: 'json',
         async: false,
         data: JSON.stringify(data),
@@ -94,6 +84,10 @@ if (count($pluginJson['subscriptions']) > 0) {
         }
       });
     }
+
+    $('#status').on('click', function() {
+      window.location.href = "plugin.php?_menu=status&plugin=fpp-" + pluginName + "&page=status.php";
+    });
   });
 </script>
 
@@ -132,6 +126,7 @@ if (count($pluginJson['subscriptions']) > 0) {
       </div>
     </div>
     <input id="save" type="submit" value="Save" class="buttons btn-success">
+    <input id="status" type="button" value="Back To Status Page" class="buttons">
   </form>
 </div>
 <?php }

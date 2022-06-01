@@ -1,5 +1,6 @@
 <?php
 include_once "/opt/fpp/www/common.php";
+include_once 'zettle.common.php';
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -44,20 +45,6 @@ if (array_key_exists($command, $command_array)) {
     call_user_func($command_array[$command]);
 }
 return;
-
-function convertAndGetSettings()
-{
-    global $settings;
-
-    $cfgFile = $settings['configDirectory'] . "/plugin.fpp-zettle.json";
-    if (file_exists($cfgFile)) {
-        $j = file_get_contents($cfgFile);
-        $json = json_decode($j, true);
-        return $json;
-    }
-    $j = "{\"client_id\": \"client_id\", \"client_secret\": \"client_secret\", \"organizationUuid\": \"\", \"subscriptions\": [] }";
-    return json_decode($j, true);
-}
 
 function buildQuery($data = [], $o = [], $url)
 {
@@ -112,7 +99,7 @@ function LoginUser()
 {
     global $oauth_base;
 
-    $pluginJson = convertAndGetSettings();
+    $pluginJson = convertAndGetSettings('zettle');
 
     $query = httpPost(
         $oauth_base.'/token',
@@ -190,7 +177,7 @@ function GetOrgId()
 {
     global $oauth_base;
 
-    $pluginJson = convertAndGetSettings();
+    $pluginJson = convertAndGetSettings('zettle');
     // Check if organizationUuid has been saved in congif if so use it
     if ($pluginJson['organizationUuid'] !== '') {
         echo json_encode([

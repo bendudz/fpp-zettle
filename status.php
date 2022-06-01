@@ -1,20 +1,16 @@
 <h2>Zettle Status</h2>
 <?
-function convertAndGetSettings($filename)
-{
-    global $settings;
+include_once 'zettle.common.php';
+$pluginName = 'zettle';
 
-    $cfgFile = $settings['configDirectory'] . "/" . $filename;
-    if (file_exists($cfgFile)) {
-        $j = file_get_contents($cfgFile);
-        $json = json_decode($j, true);
-        return $json;
-    }
-    $j = "{\"client_id\": \"\", \"client_secret\": \"\", \"organizationUuid\": \"\", \"subscriptions\": [] }";
-    return json_decode($j, true);
-}
+$pluginJson = convertAndGetSettings($pluginName);
+$plugindatabase = convertAndGetSettings($pluginName . "-transactions");
 
-$pluginJson = convertAndGetSettings("plugin.fpp-zettle.json");
+$setupUrl = 'plugin.php?' . http_build_query([
+    '_menu' => 'content',
+    'plugin' => 'fpp-' . $pluginName,
+    'page' => 'setup.php'
+]);
 ?>
 <style type="text/css">
     .tg {
@@ -57,6 +53,40 @@ $pluginJson = convertAndGetSettings("plugin.fpp-zettle.json");
         vertical-align: top
     }
 </style>
+<script>
+    $(function() {
+        var zettleConfigJsonData = '<?php echo json_encode($pluginJson); ?>';
+        var zettleConfigData = JSON.parse(zettleConfigJsonData);
+        var pluginName = '<?php echo $pluginName; ?>';
+
+        $('#clear_transactions').on('click', function(e) {
+            var transactions = <?php echo json_encode([]) ?>;
+
+            $.ajax({
+                type: "POST",
+                url: 'fppjson.php?command=setPluginJSON&plugin=fpp-' + pluginName + '-transactions',
+                dataType: 'json',
+                async: false,
+                data: JSON.stringify(transactions),
+                processData: false,
+                contentType: 'application/json',
+                success: function(data) {
+                    $.jGrowl('Transactions cleared', {
+                        themeState: 'success'
+                    });
+                    setTimeout(function() {
+                        location.reload();
+                    }, 3000);
+                },
+                error: function() {
+                    $('#save').prop('disabled', false);
+                    DialogError('Error', "ERROR: There was an error in saving your details, please try again!");
+                }
+            });
+        });
+    });
+</script>
+<?php if ($pluginJson['client_id'] != '') { ?>
 <table class="tg">
     <thead>
     <tr>
@@ -73,15 +103,13 @@ $pluginJson = convertAndGetSettings("plugin.fpp-zettle.json");
         <td class="tg-3xvn">Status</td>
     <tr>
 
-        <? foreach ($pluginJson['subscriptions'] as $result) {
-            echo '<tr>';
-            echo '<td class="tg-0lax">' . $pluginJson['client_id'] . '</td>';
-            echo '<td class="tg-0lax">********</td>';
-            echo '<td class="tg-0lax">' . $result['contactEmail'] . '</td>';
-            echo '<td class="tg-0lax">' . $result['destination'] . '</td>';
-            echo '<td class="tg-0lax">' . $result['status'] . '</td>';
-            echo '</tr>';
-        } ?>
+    <tr>
+        <td class="tg-0lax"><?php echo $pluginJson['client_id']; ?></td>
+        <td class="tg-0lax">**********</td>
+        <td class="tg-0lax"><?php echo $pluginJson['subscriptions']['contactEmail']; ?></td>
+        <td class="tg-0lax"><?php echo $pluginJson['subscriptions']['destination']; ?></td>
+        <td class="tg-0lax"><?php echo $pluginJson['subscriptions']['status']; ?></td>
+    </tr>
     </tbody>
 </table>
 
@@ -96,17 +124,26 @@ $pluginJson = convertAndGetSettings("plugin.fpp-zettle.json");
     </thead>
     <tbody>
     <?
-    $plugindatabase = convertAndGetSettings("plugin.fpp-zettle-transactions.json");
-
-    foreach ($plugindatabase as $d) {
-        $payload = json_decode($d['payload'], true);
-        echo '<tr>';
-        echo '<td class="tg-0lax">' . $d['timestamp'] . '</td>';
-        echo '<td class="tg-0lax">' . $payload['amount'] . ' ' . $payload['currency'] . '</td>';
-        echo '<td class="tg-0lax">' . $payload['userDisplayName'] . '</td>';
-        echo '</tr>';
+    if (count($plugindatabase) > 0) {
+        $total = 0;
+        foreach ($plugindatabase as $d) {
+            // $payload = json_decode($d['payload'], true);
+            echo '<tr>';
+            echo '<td class="tg-0lax">' .  date('d/m/y H:i', ceil($d['timestamp']/1000)) . '</td>';
+            echo '<td class="tg-0lax">' . $d['formatted_amount'] . '</td>';
+            echo '<td class="tg-0lax">' . $d['userDisplayName'] . '</td>';
+            echo '</tr>';
+            $total += $d['amount'];
+        }
+        echo '<tr><td>Total:</td><td colspan="2">' . $total . '</td></tr>';
+    } else {
+        echo '<tr><td colspan="3">No Transactions Yet</td></tr>';
     }
     ?>
     </tbody>
-
 </table>
+<br>
+<input id="clear_transactions" class="buttons" value="Clear Transactions">
+<?php } else { ?>
+<p>You need to config this plugin befor you can see the status. Click here to get <a href="<?php echo $setupUrl; ?>">setup</a></p>
+<?php } ?>

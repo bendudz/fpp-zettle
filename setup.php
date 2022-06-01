@@ -1,49 +1,8 @@
 <?php
 
-$oauth_base = "https://oauth.zettle.com";
-$subscriptions_url = "https://pusher.izettle.com/organizations/self/subscriptions";
-
-function getToken()
-{
-}
-
-function httpPost($url, $data)
-{
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    return $response;
-}
-
-function returnIfExists($json, $setting)
-{
-    if ($json == null) {
-        return "";
-    }
-    if (array_key_exists($setting, $json)) {
-        return $json[$setting];
-    }
-    return "";
-}
-
-function convertAndGetSettings()
-{
-    global $settings;
-
-    $cfgFile = $settings['configDirectory'] . "/plugin.fpp-zettle.json";
-    if (file_exists($cfgFile)) {
-        $j = file_get_contents($cfgFile);
-        $json = json_decode($j, true);
-        return $json;
-    }
-    $j = "{\"client_id\": \"\", \"client_secret\": \"\", \"organizationUuid\": \"\", \"subscriptions\": [] }";
-    return json_decode($j, true);
-}
-
-$pluginJson = convertAndGetSettings();
+include_once 'zettle.common.php';
+$pluginName = 'zettle';
+$pluginJson = convertAndGetSettings($pluginName);
 ?>
 <div id="global" class="settings">
     <legend>Zettle Setup</legend>
@@ -53,6 +12,7 @@ $pluginJson = convertAndGetSettings();
         $(function() {
             var zettleConfigJsonData = '<?php echo json_encode($pluginJson); ?>';
             var zettleConfigData = JSON.parse(zettleConfigJsonData);
+            var pluginName = '<?php echo $pluginName; ?>';
 
             $('#setup').on('submit', function(e) {
                 e.preventDefault();
@@ -69,7 +29,7 @@ $pluginJson = convertAndGetSettings();
 
                 $.ajax({
                     type: "POST",
-                    url: 'fppjson.php?command=setPluginJSON&plugin=fpp-zettle',
+                    url: 'fppjson.php?command=setPluginJSON&plugin=fpp-'+pluginName,
                     dataType: 'json',
                     async: false,
                     data: JSON.stringify(zettleConfig),
@@ -89,18 +49,15 @@ $pluginJson = convertAndGetSettings();
                     },
                     error: function() {
                         $('#save').prop('disabled', false);
-                        $.jGrowl('There was an error in saving your details!', {
-                            themeState: 'danger'
-                        });
+                        DialogError('Error', "ERROR: There was an error in saving your details, please try again!");
                     }
                 });
             });
-        });
 
-        function gotoCreateSubscriptions() {
-            window.location.href =
-                "plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php";
-        }
+            $('#createSubscriptions').on('click', function() {
+                window.location.href = "plugin.php?_menu=content&plugin=fpp-" + pluginName + "&page=create-subscription.php";
+            });
+        });
     </script>
     <div class="row">
         <form id="setup" action="" method="post">
@@ -124,9 +81,7 @@ $pluginJson = convertAndGetSettings();
                         <input id="save" type="submit" value="Save"
                             class="buttons btn-success"">
                         <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) == 0) { ?>
-                        <input type=" button" value="Create Subscription"
-                            class="buttons"
-                            onclick="gotoCreateSubscriptions();">
+                        <input id="createSubscriptions" type="button" value="Create Subscription" class="buttons">
                         <?php } ?>
                     </div>
                 </div>
