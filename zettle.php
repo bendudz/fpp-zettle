@@ -16,7 +16,8 @@ $command_array = array(
   'session' => 'GetSessionVaules',
   'subscriptions' => 'GetSubscriptions',
   'create_subscription' => 'CreatePurchaseSubscription',
-  'get_org_id' => 'GetOrgId'
+  'get_org_id' => 'GetOrgId',
+  'delete_subscription' => 'DeleteSubscription'
 );
 
 $command = "";
@@ -195,4 +196,20 @@ function GetOrgId()
         ]);
     }
     //plugin=fpp-zettle&page=zettle.php&command=get_org_id&nopage=1
+}
+
+function DeleteSubscription()
+{
+    global $subscriptions_url;
+    $pluginJson = convertAndGetSettings('zettle');
+
+    if (isset($pluginJson['subscriptions']['uuid'])) {
+        $query = buildQuery([], [
+        'method' => 'DELETE',
+        ], $subscriptions_url . '/' . $pluginJson['subscriptions']['uuid']);
+    }
+
+    echo json_encode([
+        'error' => false
+    ]);
 }

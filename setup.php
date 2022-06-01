@@ -57,6 +57,67 @@ $pluginJson = convertAndGetSettings($pluginName);
             $('#createSubscriptions').on('click', function() {
                 window.location.href = "plugin.php?_menu=content&plugin=fpp-" + pluginName + "&page=create-subscription.php";
             });
+
+            $('#clear_config').on('click', function(e) {
+                if (confirm('CLEAR CONFIG are you sure?')) {
+                    var blankConfig = {
+                        "client_id": "",
+                        "client_secret": "",
+                        "organizationUuid": "",
+                        "subscriptions": []
+                    };
+                    var blackTransactions = <?php echo json_encode([]); ?>;
+                    $.ajax({
+                        type: "GET",
+                        url: 'plugin.php?plugin=fpp-' + pluginName + '&page=zettle.php&command=delete_subscription&nopage=1',
+                        dataType: 'json',
+                        async: false,
+                        data: {},
+                        processData: false,
+                        contentType: 'application/json',
+                        success: function(data) {
+                            $.ajax({
+                                type: "POST",
+                                url: 'fppjson.php?command=setPluginJSON&plugin=fpp-'+pluginName,
+                                dataType: 'json',
+                                async: false,
+                                data: JSON.stringify(blankConfig),
+                                processData: false,
+                                contentType: 'application/json',
+                                success: function(data) {
+                                    $.jGrowl('Config Cleared!', {
+                                        themeState: 'success'
+                                    });
+                                },
+                                error: function() {
+                                    DialogError('Error', "ERROR: Cound not clear config");
+                                }
+                            });
+                            $.ajax({
+                                type: "POST",
+                                url: 'fppjson.php?command=setPluginJSON&plugin=fpp-' + pluginName + '-transactions',
+                                dataType: 'json',
+                                async: false,
+                                data: JSON.stringify(blackTransactions),
+                                processData: false,
+                                contentType: 'application/json',
+                                success: function(data) {
+                                    $.jGrowl('Transactions Cleared!', {
+                                        themeState: 'success'
+                                    });
+                                },
+                                error: function() {
+                                    DialogError('Error', "ERROR: Cound not clear transactions");
+                                }
+                            });
+
+                            setTimeout(function () {
+                                location.reload();
+                            }, 1000);
+                        }
+                    });
+                }
+            });
         });
     </script>
     <div class="row">
@@ -82,6 +143,7 @@ $pluginJson = convertAndGetSettings($pluginName);
                             class="buttons btn-success"">
                         <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) == 0) { ?>
                         <input id="createSubscriptions" type="button" value="Create Subscription" class="buttons">
+                        <input id="clear_config" type="button" class="buttons" value="Clear Config">
                         <?php } ?>
                     </div>
                 </div>
