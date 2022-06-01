@@ -10,7 +10,7 @@ touch /home/fpp/media/config/plugin.fpp-zettle.json
 defalt_json=$(cat <<EOF
 {
   "client_id": "",
-  "client_secret: "",
+  "client_secret": "",
   "organizationUuid": "",
   "subscriptions": []
 }
