@@ -13,11 +13,11 @@ $_SESSION['session_id'] = session_id();
 
 $command_array = array(
   'login' => 'LoginUser',
-  'session' => 'GetSessionVaules',
   'subscriptions' => 'GetSubscriptions',
   'create_subscription' => 'CreatePurchaseSubscription',
   'get_org_id' => 'GetOrgId',
-  'delete_subscription' => 'DeleteSubscription'
+  'delete_subscription' => 'DeleteSubscription',
+  'clear_config' => 'ClearConfig'
 );
 
 $command = "";
@@ -54,12 +54,26 @@ function buildQuery($data = [], $o = [], $url)
 
     if (isset($_SESSION['expires_in']) && isset($_SESSION['access_token'])) {
         if (time() >= $_SESSION['expires_in']) {
-            $access_token = LoginUser();
+            $login = LoginUser();
+            if ($login['error']) {
+                return [
+                    'error' => true,
+                    'message' => $login['message']
+                ];
+            }
+            $access_token = $login['access_token'];
         } else {
             $access_token = $_SESSION['access_token'];
         }
     } else {
-        $access_token = LoginUser();
+        $login = LoginUser();
+        if ($login['error']) {
+            return [
+                'error' => true,
+                'message' => $login['message']
+            ];
+        }
+        $access_token = $login['access_token'];
     }
 
     $o['header'] = 'Authorization: Bearer '.$access_token;
@@ -68,6 +82,7 @@ function buildQuery($data = [], $o = [], $url)
     $context = stream_context_create($opts);
     $result = file_get_contents($url, false, $context);
     $jsonResult = json_decode($result);
+    // $jsonResult['error'] = false;
     return $jsonResult;
 }
 
@@ -76,12 +91,26 @@ function httpPost($url, $data, $headers, $auth = false, $json = false)
     if ($auth) {
         if (isset($_SESSION['expires_in']) && isset($_SESSION['access_token'])) {
             if (time() >= $_SESSION['expires_in']) {
-                $headers[] = "Authorization: Bearer ".LoginUser();
+                $login = LoginUser();
+                if ($login['error']) {
+                    return json_encode([
+                        'error' => true,
+                        'message' => $login['message']
+                    ]);
+                }
+                $headers[] = "Authorization: Bearer " . $login['access_token'];
             } else {
                 $headers[] = "Authorization: Bearer ".$_SESSION['access_token'];
             }
         } else {
-            $headers[] = "Authorization: Bearer ".LoginUser();
+            $login = LoginUser();
+            if ($login['error']) {
+                return json_encode([
+                    'error' => true,
+                    'message' => $login['message']
+                ]);
+            }
+            $headers[] = "Authorization: Bearer " . $login['access_token'];
         }
     }
 
@@ -111,10 +140,15 @@ function LoginUser()
         ],
         [
             'Content-Type: application/x-www-form-urlencoded'
-        ],
-        false,
-        false
+        ]
     );
+
+    if (isset($query->error) || isset($query->code)) {
+        return[
+            'error' => true,
+            'message' => isset($query->error) ? $query->error_description : $query->message
+        ];
+    }
 
     $access_token = $query->access_token;
     $expires_in = time() + $query->expires_in;
@@ -122,8 +156,11 @@ function LoginUser()
     $_SESSION['access_token'] = $access_token;
     $_SESSION['expires_in'] = $expires_in;
 
-    return $access_token;
-    // //plugin.php?plugin=fpp-zettle&page=zettle.php&command=login&nopage=1
+    return [
+        'error' => false,
+        'access_token' => $access_token
+    ];
+    // /plugin.php?plugin=fpp-zettle&page=zettle.php&command=login&nopage=1
 }
 
 function GetSubscriptions()
@@ -134,7 +171,17 @@ function GetSubscriptions()
       'method'  => 'GET',
     ], $subscriptions_url);
 
-    echo json_encode($query);
+    if (isset($query['error'])) {
+        echo json_encode([
+            'error' => true,
+            'message' => $query['message'] . '//Query Error'
+        ]);
+    } else {
+        echo json_encode([
+            'error' => false,
+            'subscriptions' => $query
+        ]);
+    }
     //plugin.php?plugin=fpp-zettle&page=zettle.php&command=subscriptions&nopage=1
 }
 
@@ -157,12 +204,22 @@ function CreatePurchaseSubscription()
         true,
         true
     );
+    // Convert stdClass object to array
+    $data = json_decode(json_encode($query), true);
 
-    if (array_key_exists('errorType', $query)) {
+    if (array_key_exists('errorType', $data)) {
+        switch ($data['errorType']) {
+            case 'CONSTRAINT_VIOLATION':
+                $message = $data['violations'][0]['developerMessage'];
+                break;
+            default:
+                $message = $data['developerMessage'];
+        }
+
         echo json_encode([
-        'error' => true,
-        'message' => $query->developerMessage
-      ]);
+            'error' => true,
+            'message' => $message
+        ]);
     } else {
         echo json_encode([
           'error' => false,
@@ -183,22 +240,30 @@ function GetOrgId()
     if ($pluginJson['organizationUuid'] !== '') {
         echo json_encode([
             'error' => false,
-            'organizationUuid' => $pluginJson['organizationUuid']
+            'organizationUuid' => $pluginJson['organizationUuid'],
+            'message' => 'organizationUuid found in config'
         ]);
     } else {
         $query = buildQuery([], [
-        'method'  => 'GET',
+        'method' => 'GET',
         ], $oauth_base.'/users/self', true);
 
-        echo json_encode([
-            'error' => false,
-            'organizationUuid' => $query->organizationUuid
-        ]);
+        if (isset($query->error)) {
+            echo json_encode([
+                'error' => true,
+                'message' => $query->message . '//Query Error'
+            ]);
+        } else {
+            echo json_encode([
+                'error' => false,
+                'organizationUuid' => $query->organizationUuid
+            ]);
+        }
     }
     //plugin=fpp-zettle&page=zettle.php&command=get_org_id&nopage=1
 }
 
-function DeleteSubscription()
+function DeleteSubscription($display = true)
 {
     global $subscriptions_url;
     $pluginJson = convertAndGetSettings('zettle');
@@ -209,7 +274,31 @@ function DeleteSubscription()
         ], $subscriptions_url . '/' . $pluginJson['subscriptions']['uuid']);
     }
 
+    if ($display) {
+        echo json_encode([
+            'error' => false
+        ]);
+    } else {
+        return true;
+    }
+}
+
+function ClearConfig()
+{
+    DeleteSubscription(false);
+    setPluginJSON('fpp-zettle', emptyConfig());
+    setPluginJSON('fpp-zettle-transactions', []);
+
     echo json_encode([
         'error' => false
     ]);
+}
+
+function setPluginJSON($plugin, $js)
+{
+    global $settings;
+
+    $cfgFile = $settings['configDirectory'] . "/plugin." . $plugin . ".json";
+    file_put_contents($cfgFile, json_encode($js, JSON_PRETTY_PRINT));
+    // echo json_encode($js, JSON_PRETTY_PRINT);
 }

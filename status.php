@@ -53,39 +53,7 @@ $setupUrl = 'plugin.php?' . http_build_query([
         vertical-align: top
     }
 </style>
-<script>
-    $(function() {
-        var zettleConfigJsonData = '<?php echo json_encode($pluginJson); ?>';
-        var zettleConfigData = JSON.parse(zettleConfigJsonData);
-        var pluginName = '<?php echo $pluginName; ?>';
-
-        $('#clear_transactions').on('click', function(e) {
-            var transactions = <?php echo json_encode([]) ?>;
-
-            $.ajax({
-                type: "POST",
-                url: 'fppjson.php?command=setPluginJSON&plugin=fpp-' + pluginName + '-transactions',
-                dataType: 'json',
-                async: false,
-                data: JSON.stringify(transactions),
-                processData: false,
-                contentType: 'application/json',
-                success: function(data) {
-                    $.jGrowl('Transactions cleared', {
-                        themeState: 'success'
-                    });
-                    setTimeout(function() {
-                        location.reload();
-                    }, 3000);
-                },
-                error: function() {
-                    $('#save').prop('disabled', false);
-                    DialogError('Error', "ERROR: There was an error in saving your details, please try again!");
-                }
-            });
-        });
-    });
-</script>
+<script src="/plugin.php?plugin=fpp-zettle&page=zettle.js&nopage=1"></script>
 <?php if ($pluginJson['client_id'] != '') { ?>
 <table class="tg">
     <thead>

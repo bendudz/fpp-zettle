@@ -36,8 +36,6 @@ function fppZettleVersion()
 # Copy The client id & secret to a notepad or something they are needed for the plugin.
 function fppZettleEvent()
 {
-    global $pluginName;
-
     $event = json_decode(file_get_contents('php://input'), true);
     header("Content-Type: application/json");
 
@@ -59,6 +57,19 @@ function fppZettleEvent()
         array_push($currentTransactions, $paymentData);
         // Store transaction to json file
         writeToJsonFile('transactions', $currentTransactions);
+        // Get zettle config
+        $config = convertAndGetSettings('zettle');
+        // Check an effect has set
+        if ($config['effect'] != '') {
+            // Build command url
+            $buildUrlOptions = http_build_query([
+                'effect' => $config['effect'],
+                'loop' => false,
+                'bg' => true
+            ]);
+            $url = 'https://' . $_SERVER['SERVER_NAME'] . '/api/command/FSEQ Effect Start?' . $buildUrlOptions;
+            file_get_contents($url);
+        }
 
         // TODO trigger an action or effect or custom script
         // Triggering a command we can just call the API check http://{fpp_address}/apihelp.php#commands

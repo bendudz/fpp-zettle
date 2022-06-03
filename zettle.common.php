@@ -1,5 +1,16 @@
 <?php
 
+function emptyConfig()
+{
+  return [
+    'client_id' => '',
+    'client_secret'  => '',
+    'organizationUuid' => '',
+    'subscriptions' => [],
+    'effect' => ''
+  ];
+}
+
 function convertAndGetSettings($filename)
 {
   global $settings;
@@ -12,12 +23,7 @@ function convertAndGetSettings($filename)
   }
   // Create json for config not found
   if ($filename == 'zettle') {
-    $j = json_encode([
-      'client_id' => '',
-      'client_secret' => '',
-      'organizationUuid' => '',
-      'subscriptions' => []
-    ]);
+    $j = json_encode(emptyConfig());
   }
   // Create json for transactions not found
   if ($filename == 'zettle-transactions') {

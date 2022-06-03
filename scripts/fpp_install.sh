@@ -12,7 +12,8 @@ defalt_json=$(cat <<EOF
   "client_id": "",
   "client_secret": "",
   "organizationUuid": "",
-  "subscriptions": []
+  "subscriptions": [],
+  "effect": ""
 }
 EOF
 )

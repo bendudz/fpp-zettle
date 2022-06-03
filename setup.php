@@ -4,150 +4,62 @@ include_once 'zettle.common.php';
 $pluginName = 'zettle';
 $pluginJson = convertAndGetSettings($pluginName);
 ?>
+<script src="/plugin.php?plugin=fpp-zettle&page=zettle.js&nopage=1"></script>
 <div id="global" class="settings">
     <legend>Zettle Setup</legend>
     <p>Add your client id and secret generated from the Zettle Integrations
         webpage</p>
-    <script>
-        $(function() {
-            var zettleConfigJsonData = '<?php echo json_encode($pluginJson); ?>';
-            var zettleConfigData = JSON.parse(zettleConfigJsonData);
-            var pluginName = '<?php echo $pluginName; ?>';
-
-            $('#setup').on('submit', function(e) {
-                e.preventDefault();
-
-                var client_id = $("#client_id").val();
-                var client_secret = $("#client_secret").val();
-
-                var zettleConfig = {
-                    "client_id": client_id,
-                    "client_secret": client_secret,
-                    "organizationUuid": zettleConfigData.organizationUuid,
-                    "subscriptions": zettleConfigData.subscriptions
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: 'fppjson.php?command=setPluginJSON&plugin=fpp-'+pluginName,
-                    dataType: 'json',
-                    async: false,
-                    data: JSON.stringify(zettleConfig),
-                    processData: false,
-                    contentType: 'application/json',
-                    beforeSend: function() {
-                        $('#save').prop('disabled', true);
-                    },
-                    success: function(data) {
-                        $.jGrowl('Details saved', {
-                            themeState: 'success'
-                        });
-                        setTimeout(function() {
-                            //window.location.href = "plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php";
-                            location.reload();
-                        }, 3000);
-                    },
-                    error: function() {
-                        $('#save').prop('disabled', false);
-                        DialogError('Error', "ERROR: There was an error in saving your details, please try again!");
-                    }
-                });
-            });
-
-            $('#createSubscriptions').on('click', function() {
-                window.location.href = "plugin.php?_menu=content&plugin=fpp-" + pluginName + "&page=create-subscription.php";
-            });
-
-            $('#clear_config').on('click', function(e) {
-                if (confirm('CLEAR CONFIG are you sure?')) {
-                    var blankConfig = {
-                        "client_id": "",
-                        "client_secret": "",
-                        "organizationUuid": "",
-                        "subscriptions": []
-                    };
-                    var blackTransactions = <?php echo json_encode([]); ?>;
-                    $.ajax({
-                        type: "GET",
-                        url: 'plugin.php?plugin=fpp-' + pluginName + '&page=zettle.php&command=delete_subscription&nopage=1',
-                        dataType: 'json',
-                        async: false,
-                        data: {},
-                        processData: false,
-                        contentType: 'application/json',
-                        success: function(data) {
-                            $.ajax({
-                                type: "POST",
-                                url: 'fppjson.php?command=setPluginJSON&plugin=fpp-'+pluginName,
-                                dataType: 'json',
-                                async: false,
-                                data: JSON.stringify(blankConfig),
-                                processData: false,
-                                contentType: 'application/json',
-                                success: function(data) {
-                                    $.jGrowl('Config Cleared!', {
-                                        themeState: 'success'
-                                    });
-                                },
-                                error: function() {
-                                    DialogError('Error', "ERROR: Cound not clear config");
-                                }
-                            });
-                            $.ajax({
-                                type: "POST",
-                                url: 'fppjson.php?command=setPluginJSON&plugin=fpp-' + pluginName + '-transactions',
-                                dataType: 'json',
-                                async: false,
-                                data: JSON.stringify(blackTransactions),
-                                processData: false,
-                                contentType: 'application/json',
-                                success: function(data) {
-                                    $.jGrowl('Transactions Cleared!', {
-                                        themeState: 'success'
-                                    });
-                                },
-                                error: function() {
-                                    DialogError('Error', "ERROR: Cound not clear transactions");
-                                }
-                            });
-
-                            setTimeout(function () {
-                                location.reload();
-                            }, 1000);
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-    <div class="row">
-        <form id="setup" action="" method="post">
-            <div class="col-auto mr-auto">
-                <div class="row">
-                    <div class="col-auto">
-                        Client Id: &nbsp;<input type='text' id='client_id'
-                            name='client_id'
-                            value='<?php echo $pluginJson["client_id"] ?>'
-                            required></input>
-                    </div>
-                    <div class="col-auto">
-                        Client Secret: &nbsp;<input type='password'
-                            id='client_secret' name='client_secret'
-                            value='<?php echo $pluginJson["client_secret"] ?>'
-                            required></input>
+    <form id="setup" action="" method="post">
+        <div class="container-fluid settingsTable settingsGroupTable">
+            <div class="row">
+                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                    <div class="description">
+                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Client ID
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-auto">
-                        <input id="save" type="submit" value="Save"
-                            class="buttons btn-success"">
-                        <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) == 0) { ?>
-                        <input id="createSubscriptions" type="button" value="Create Subscription" class="buttons">
-                        <input id="clear_config" type="button" class="buttons" value="Clear Config">
-                        <?php } ?>
-                    </div>
+                <div class="printSettingFieldCol col-md">
+                    <input type='text' id='client_id' value="<?php echo $pluginJson["client_id"]; ?>" required class="form-control">
                 </div>
             </div>
-        </form>
-    </div>
+
+            <div class="row">
+                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                    <div class="description">
+                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Client Secret
+                    </div>
+                </div>
+                <div class="printSettingFieldCol col-md">
+                    <input type='password' id='client_secret' value="<?php echo $pluginJson["client_secret"]; ?>" required class="form-control">
+                </div>
+            </div>
+        </div>
+        <input id="save" type="submit" value="Save" class="buttons btn-success">
+        <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) == 0) { ?>
+        <input id="createSubscriptions" type="button" value="Create Subscription" class="buttons">
+        <?php } ?>
+        <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>
+        <input id="clear_config" type="button" class="buttons" value="Clear Config">
+        <?php } ?>
+    </form>
+    <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>
+    <legend>Effect</legend>
+    <p>The effect that will be run when a transaction comes in.</p>
+    <form id="effect" action="" method="post">
+        <div class="container-fluid settingsTable settingsGroupTable">
+            <div class="row">
+                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                    <div class="description">
+                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Select effect
+                    </div>
+                </div>
+                <div class="printSettingFieldCol col-md">
+                    <select name="select_effect" id="select_effect" class="form-control" required>
+                        <option value="">Select Effect</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <input id="effect_save" type="submit" value="Save" class="buttons btn-success">
+    </form>
+    <?php } ?>
 </div>
