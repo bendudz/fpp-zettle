@@ -207,6 +207,6 @@ $(function() {
       "organizationUuid": zettleConfig.organizationUuid,
       "subscriptions": zettleConfig.subscriptions,
       "effect": effect
-    }, '#effect_save', true, 'Effect Saved!');
+    }, '#effect_save', false, 'Effect Saved!');
   });
 });
