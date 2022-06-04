@@ -61,14 +61,18 @@ function fppZettleEvent()
         $config = convertAndGetSettings('zettle');
         // Check an effect has set
         if ($config['effect'] != '') {
+            logEntry('Fire effect:' . $config['effect']);
             // Build command url
             $buildUrlOptions = http_build_query([
                 'effect' => $config['effect'],
+                'startChannel' => 0,
                 'loop' => false,
-                'bg' => true
+                'bg' => true,
+                'ifNotRunning' => false
             ]);
-            $url = 'https://' . $_SERVER['SERVER_NAME'] . '/api/command/FSEQ Effect Start?' . $buildUrlOptions;
+            $url = 'https://' . $_SERVER['SERVER_NAME'] . '/api/command/Effect Start?' . $buildUrlOptions;
             file_get_contents($url);
+            logEntry('Effect FIRED:' . $config['effect']);
         }
 
         // TODO trigger an action or effect or custom script

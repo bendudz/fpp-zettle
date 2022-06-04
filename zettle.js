@@ -176,7 +176,7 @@ $(function() {
   if ($('#select_effect').length > 0) {
     $.ajax({
       type: "GET",
-      url: '/api/sequence',
+      url: '/api/effects',
       dataType: 'json',
       ContentType: 'application/json',
       async: false,
@@ -196,4 +196,17 @@ $(function() {
       $('#select_effect option[value="' + zettleConfig.effect + '"]').attr('selected','selected');
     }, 1000);
   }
+
+  $('#api_effect').on('submit', function(e) {
+    e.preventDefault();
+
+    var effect = $('#select_effect option:selected').val();
+    SaveZettleConfig({
+      "client_id": zettleConfig.client_id,
+      "client_secret": zettleConfig.client_secret,
+      "organizationUuid": zettleConfig.organizationUuid,
+      "subscriptions": zettleConfig.subscriptions,
+      "effect": effect
+    }, '#effect_save', true, 'Effect Saved!');
+  });
 });

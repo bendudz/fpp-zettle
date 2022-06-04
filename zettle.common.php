@@ -60,3 +60,13 @@ function readTransactions()
   $config = utf8_encode($config);
   return json_decode($config);
 }
+
+function logEntry($data)
+{
+  global $settings;
+
+  $logFile = $settings['logDirectory'] . "/fpp-zettle.log";
+  $logWrite = fopen($logFile, "a") or die("Unable to open file!");
+  fwrite($logWrite, date('Y-m-d h:i:s A', time()) . ": " . $data . "\n");
+  fclose($logWrite);
+}

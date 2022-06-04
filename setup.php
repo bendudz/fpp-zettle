@@ -4,7 +4,7 @@ include_once 'zettle.common.php';
 $pluginName = 'zettle';
 $pluginJson = convertAndGetSettings($pluginName);
 ?>
-<script src="/plugin.php?plugin=fpp-zettle&page=zettle.js&nopage=1"></script>
+<script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 <div id="global" class="settings">
     <legend>Zettle Setup</legend>
     <p>Add your client id and secret generated from the Zettle Integrations
@@ -44,7 +44,7 @@ $pluginJson = convertAndGetSettings($pluginName);
     <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>
     <legend>Effect</legend>
     <p>The effect that will be run when a transaction comes in.</p>
-    <form id="effect" action="" method="post">
+    <form id="api_effect" action="" method="post">
         <div class="container-fluid settingsTable settingsGroupTable">
             <div class="row">
                 <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">

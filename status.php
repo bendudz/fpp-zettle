@@ -53,7 +53,7 @@ $setupUrl = 'plugin.php?' . http_build_query([
         vertical-align: top
     }
 </style>
-<script src="/plugin.php?plugin=fpp-zettle&page=zettle.js&nopage=1"></script>
+<script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 <?php if ($pluginJson['client_id'] != '') { ?>
 <table class="tg">
     <thead>
