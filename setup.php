@@ -75,6 +75,7 @@ $pluginJson = convertAndGetSettings($pluginName);
             </div>
         </div-->
         <input id="effect_save" type="submit" value="Save" class="buttons btn-success">
+        <input id="test_command" type="button" value="Test" class="buttons">
     </form>
 
     <?php } ?>

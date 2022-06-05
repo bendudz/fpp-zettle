@@ -1,34 +1,9 @@
 var zettleConfig=null;
 
-function uuidv1() {
-  //TODO generate either on device or via REST call https://www.uuidgenerator.net/api/version1
-  var uuid_arr = [
-    "c673eca1-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673eca2-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673eca3-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673eca4-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673eca5-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673eca6-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673eca7-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673eca8-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673eca9-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecaa-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecab-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecac-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecad-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecae-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecaf-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecb0-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecb1-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecb2-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecb3-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecb4-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecb5-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecb6-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecb7-e4f1-11ec-b3c7-f9a27a2d665d",
-    "c673ecb8-e4f1-11ec-b3c7-f9a27a2d665d"]
-
-  return uuid_arr[Math.floor(Math.random() * uuid_arr.length)];
+function uuidv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
 }
 
 function SaveZettleConfig(config, button='', reload=false, success_msg='') {
@@ -164,7 +139,7 @@ $(function() {
           dataType: 'json',
           async: false,
           data: {
-            uuid: uuidv1(),
+            uuid: uuidv4(),
             destination: $('#destination').val(),
             contactEmail: $('#contactEmail').val()
           },
@@ -258,10 +233,26 @@ $(function() {
       "subscriptions": zettleConfig.subscriptions
     };
     CommandToJSON('button_TPL_Command', 'tableButtonTPL', zettle);
-    SaveZettleConfig(zettle, '#effect_save', false, 'Effect Saved!');
+    SaveZettleConfig(zettle, '#effect_save', true, 'Effect Saved!');
   });
 
-  $('.bb_commandSummary').click(function(){
-        launchButtonConfigModal();
-    });
+  $('#test_command').on('click', function () {
+    // Check for command
+    if (zettleConfig.command == '') {
+      // Display error to user if command not found
+      DialogError('Error', 'No command found, please select a command!');
+    } else {
+      // Make up url
+      var url = '/api/command/' + zettleConfig.command + '/';
+      // Check if there are args
+      if (zettleConfig.args.length > 0) {
+        // join args to make url
+        url += zettleConfig.args.join('/');
+      }
+      // Get url and display message to user
+      $.get(url, function (data, textStatus, jqXHR) {
+        $.jGrowl('Test Sent!', { themeState: 'success' });
+      });
+    }
+  });
 });
