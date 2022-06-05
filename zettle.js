@@ -1,5 +1,36 @@
 var zettleConfig=null;
 
+function uuidv1() {
+  //TODO generate either on device or via REST call https://www.uuidgenerator.net/api/version1
+  var uuid_arr = [
+    "c673eca1-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673eca2-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673eca3-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673eca4-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673eca5-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673eca6-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673eca7-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673eca8-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673eca9-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecaa-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecab-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecac-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecad-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecae-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecaf-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecb0-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecb1-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecb2-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecb3-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecb4-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecb5-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecb6-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecb7-e4f1-11ec-b3c7-f9a27a2d665d",
+    "c673ecb8-e4f1-11ec-b3c7-f9a27a2d665d"]
+
+  return uuid_arr[Math.floor(Math.random() * uuid_arr.length)];
+}
+
 function SaveZettleConfig(config, button='', reload=false, success_msg='') {
   var data = JSON.stringify(config);
   $.ajax({
@@ -133,7 +164,7 @@ $(function() {
           dataType: 'json',
           async: false,
           data: {
-            organizationUuid: data.organizationUuid,
+            uuid: uuidv1(),
             destination: $('#destination').val(),
             contactEmail: $('#contactEmail').val()
           },
