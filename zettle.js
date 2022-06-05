@@ -28,7 +28,7 @@ function uuidv1() {
     "c673ecb7-e4f1-11ec-b3c7-f9a27a2d665d",
     "c673ecb8-e4f1-11ec-b3c7-f9a27a2d665d"]
 
-  return uuid_arr[Math.floor(Math.random() * myArray.length)];
+  return uuid_arr[Math.floor(Math.random() * uuid_arr.length)];
 }
 
 function SaveZettleConfig(config, button='', reload=false, success_msg='') {
