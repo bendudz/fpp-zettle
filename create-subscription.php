@@ -5,7 +5,7 @@ $pluginName = 'zettle';
 $pluginJson = convertAndGetSettings($pluginName);
 
 if (count($pluginJson['subscriptions']) > 0) {
-    echo '<p class="mb-0">Subscription has been set up nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-' . $pluginName . '&page=status.php">status page</a></p>';
+    echo '<p class="mb-0">Subscription has been set up nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-' . $pluginName . '&page=status.php">status page</a> or back to <a href="plugin.php?plugin=fpp-' . $pluginName . '&page=setup.php">set up page</a> to add a trigger.</p>';
 } else { ?>
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 <div id="global" class="settings">

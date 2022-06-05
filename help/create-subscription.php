@@ -4,7 +4,7 @@
 <p>Either <a href="https://www.dataplicity.com/">register</a> or <a href="https://www.dataplicity.com/app">login</a> with Dataplicity.</p>
 <ul>
     <li>Add Device</li>
-    <li>In FPP to Help > SSL Sell and login with <b>Username</b>: fpp <b>Password</b>: falcon</li>
+    <li>In FPP to Help > SSL Shell and login with <b>Username</b>: fpp <b>Password</b>: falcon</li>
     <li>In the sell copy and paste the command and press enter</li>
     <li>Once the script has been installed go back to Dataplicity Click on 'Your devices' you will see FPP listed</li>
     <li>Click on the device in the right menu click the secord option and enable 'Wormhole'</li>
