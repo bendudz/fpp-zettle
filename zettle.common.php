@@ -7,7 +7,8 @@ function emptyConfig()
     'client_secret'  => '',
     'organizationUuid' => '',
     'subscriptions' => [],
-    'effect' => ''
+    'effect' => '',
+    'command' => ''
   ];
 }
 

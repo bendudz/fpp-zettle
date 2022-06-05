@@ -59,20 +59,24 @@ function fppZettleEvent()
         writeToJsonFile('transactions', $currentTransactions);
         // Get zettle config
         $config = convertAndGetSettings('zettle');
-        // Check an effect has set
-        if ($config['effect'] != '') {
-            logEntry('Fire effect:' . $config['effect']);
-            // Build command url
-            $buildUrlOptions = http_build_query([
-                'effect' => $config['effect'],
-                'startChannel' => 0,
-                'loop' => false,
-                'bg' => true,
-                'ifNotRunning' => false
-            ]);
-            $url = 'https://' . $_SERVER['SERVER_NAME'] . '/api/command/Effect Start?' . $buildUrlOptions;
-            file_get_contents($url);
-            logEntry('Effect FIRED:' . $config['effect']);
+        // Check an command has set
+        if ($config['command'] != '') {
+            // Build command url from selected command on setup page
+            $command_url = 'https://' . $_SERVER['SERVER_NAME'] . '/api/command/';
+            $command_url .= $config['command'] . '/';
+            $command_url .= implode('/', $config['args']);
+            file_get_contents($command_url);
+
+            // // Build command url from selected command on setup page
+            // $buildUrlOptions = http_build_query([
+            //     'effect' => $config['effect'],
+            //     'startChannel' => 0,
+            //     'loop' => false,
+            //     'bg' => true,
+            //     'ifNotRunning' => false
+            // ]);
+            // $url = 'https://' . $_SERVER['SERVER_NAME'] . '/api/command/Effect Start?' . $buildUrlOptions;
+            // file_get_contents($url);
         }
 
         // TODO trigger an action or effect or custom script

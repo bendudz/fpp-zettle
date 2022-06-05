@@ -173,27 +173,37 @@ $(function() {
     window.location.href = "plugin.php?_menu=status&plugin=fpp-zettle&page=status.php";
   });
 
-  if ($('#select_effect').length > 0) {
-    $.ajax({
-      type: "GET",
-      url: '/api/effects',
-      dataType: 'json',
-      ContentType: 'application/json',
-      async: false,
-      data: {},
-      processData: false,
-      success: function(data) {
-        $.each(data, function (i, item) {
-          $('#select_effect').append($('<option>', {
-            value: item,
-            text: item
-          }));
-        });
-      }
-    });
+  if ($('#api_effect').length > 0) {
+    // $.ajax({
+    //   type: "GET",
+    //   url: '/api/effects',
+    //   dataType: 'json',
+    //   ContentType: 'application/json',
+    //   async: false,
+    //   data: {},
+    //   processData: false,
+    //   success: function(data) {
+    //     $.each(data, function (i, item) {
+    //       $('#select_effect').append($('<option>', {
+    //         value: item,
+    //         text: item
+    //       }));
+    //     });
+    //   }
+    // });
     // Wait for zettleConfig to load
     setTimeout(function() {
-      $('#select_effect option[value="' + zettleConfig.effect + '"]').attr('selected','selected');
+      var newButtonRowCommand = 'button_TPL_Command';
+      var newButtonRowTable = 'tableButtonTPL';
+
+      LoadCommandList(newButtonRowCommand);
+      PopulateExistingCommand(zettleConfig, newButtonRowCommand,  newButtonRowTable, true);
+
+      $('.buttonCommand').attr('id',newButtonRowCommand).on('change',function(){
+        CommandSelectChanged(newButtonRowCommand, newButtonRowTable, true);
+      });
+
+      // $('#select_effect option[value="' + zettleConfig.effect + '"]').attr('selected','selected');
     }, 1000);
   }
 
@@ -201,12 +211,26 @@ $(function() {
     e.preventDefault();
 
     var effect = $('#select_effect option:selected').val();
-    SaveZettleConfig({
+
+    $('[id^="tableButton"]').each(function(){
+        var oldId = $(this).prop('id')
+        var idArr = oldId.split('_');
+        idArr[0]='tableButtonTPL'
+        $(this).attr('id',idArr.join('_'));
+        console.log($(this).attr('id',idArr.join('_')));
+    });
+
+    var zettle = {
       "client_id": zettleConfig.client_id,
       "client_secret": zettleConfig.client_secret,
       "organizationUuid": zettleConfig.organizationUuid,
-      "subscriptions": zettleConfig.subscriptions,
-      "effect": effect
-    }, '#effect_save', false, 'Effect Saved!');
+      "subscriptions": zettleConfig.subscriptions
+    };
+    CommandToJSON('button_TPL_Command', 'tableButtonTPL', zettle);
+    SaveZettleConfig(zettle, '#effect_save', false, 'Effect Saved!');
   });
+
+  $('.bb_commandSummary').click(function(){
+        launchButtonConfigModal();
+    });
 });

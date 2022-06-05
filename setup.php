@@ -43,9 +43,24 @@ $pluginJson = convertAndGetSettings($pluginName);
     </form>
     <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>
     <legend>Effect</legend>
-    <p>The effect that will be run when a transaction comes in.</p>
+    <!--p>The effect that will be run when a transaction comes in.</p-->
+    <p>Select a command that you would like to run when a transaction comes in</p>
     <form id="api_effect" action="" method="post">
         <div class="container-fluid settingsTable settingsGroupTable">
+            <div class="row">
+                <div class="buttonCommandWrap">
+                    <select id='button_TPL_Command' class="buttonCommand" required><option value="" disabled selected>Select a Command</option></select>
+                    <div class="bb_commandTableWrap">
+                        <div class="bb_commandTableCrop">
+                            <table border=0 id='tableButtonTPL' class="tableButton">
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--div class="container-fluid settingsTable settingsGroupTable">
             <div class="row">
                 <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
                     <div class="description">
@@ -53,13 +68,14 @@ $pluginJson = convertAndGetSettings($pluginName);
                     </div>
                 </div>
                 <div class="printSettingFieldCol col-md">
-                    <select name="select_effect" id="select_effect" class="form-control" required>
+                    <select name="select_effect" id="select_effect" class="form-control">
                         <option value="">Select Effect</option>
                     </select>
                 </div>
             </div>
-        </div>
+        </div-->
         <input id="effect_save" type="submit" value="Save" class="buttons btn-success">
     </form>
+
     <?php } ?>
 </div>
