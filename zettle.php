@@ -124,7 +124,7 @@ function httpPost($url, $data, $headers, $auth = false, $json = false)
     return json_decode($response);
 }
 
-
+// /plugin.php?plugin=fpp-zettle&page=zettle.php&command=login&nopage=1
 function LoginUser()
 {
     global $oauth_base;
@@ -160,9 +160,9 @@ function LoginUser()
         'error' => false,
         'access_token' => $access_token
     ];
-    // /plugin.php?plugin=fpp-zettle&page=zettle.php&command=login&nopage=1
 }
 
+//plugin.php?plugin=fpp-zettle&page=zettle.php&command=subscriptions&nopage=1
 function GetSubscriptions()
 {
     global $subscriptions_url;
@@ -182,9 +182,9 @@ function GetSubscriptions()
             'subscriptions' => $query
         ]);
     }
-    //plugin.php?plugin=fpp-zettle&page=zettle.php&command=subscriptions&nopage=1
 }
 
+//plugin.php?plugin=fpp-zettle&page=zettle.php&command=create_subscription&nopage=1
 function CreatePurchaseSubscription()
 {
     global $subscriptions_url;
@@ -192,7 +192,7 @@ function CreatePurchaseSubscription()
     $query = httpPost(
         $subscriptions_url,
         [
-            'uuid' => $_POST['organizationUuid'],
+            'uuid' => $_POST['uuid'],
             "transportName"=> "WEBHOOK",
             "eventNames" => ["PurchaseCreated"],
             "destination" => $_POST['destination'],
@@ -225,18 +225,18 @@ function CreatePurchaseSubscription()
           'error' => false,
           'message' => 'Purchase Subscription Created',
           'subscription' => $query,
-          'organizationUuid' => $_POST['organizationUuid']
+          'uuid' => $_POST['uuid']
         ]);
     }
-    //plugin.php?plugin=fpp-zettle&page=zettle.php&command=create_subscription&nopage=1
 }
 
+//plugin=fpp-zettle&page=zettle.php&command=get_org_id&nopage=1
 function GetOrgId()
 {
     global $oauth_base;
 
     $pluginJson = convertAndGetSettings('zettle');
-    // Check if organizationUuid has been saved in congif if so use it
+    // Check if organizationUuid has been saved in config if so use it
     if ($pluginJson['organizationUuid'] !== '') {
         echo json_encode([
             'error' => false,
@@ -260,7 +260,6 @@ function GetOrgId()
             ]);
         }
     }
-    //plugin=fpp-zettle&page=zettle.php&command=get_org_id&nopage=1
 }
 
 function DeleteSubscription($display = true)

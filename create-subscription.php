@@ -10,6 +10,7 @@ if (count($pluginJson['subscriptions']) > 0) {
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 <div id="global" class="settings">
   <legend>Create Subscription</legend>
+<!--    TODO what is this used for? It sticks a warning banner on the page-->
     <div class="callout callout-warning">
       <h4>Warning:</h4>
     </div>
