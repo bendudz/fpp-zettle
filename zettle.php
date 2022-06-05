@@ -225,7 +225,7 @@ function CreatePurchaseSubscription()
           'error' => false,
           'message' => 'Purchase Subscription Created',
           'subscription' => $query,
-          'uuid' => $_POST['uuid']
+          'organizationUuid' => $_POST['organizationUuid']
         ]);
     }
 }

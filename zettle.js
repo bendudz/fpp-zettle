@@ -1,9 +1,10 @@
 var zettleConfig=null;
+var uuidv1=null;
 
-function uuidv4() {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
+function uuid() {
+  $.get('https://www.uuidtools.com/api/generate/v1', function (data) {
+    uuidv1 = data[0];
+  });
 }
 
 function SaveZettleConfig(config, button='', reload=false, success_msg='') {
@@ -52,6 +53,8 @@ $(function() {
       }
     }
   });
+  // Genarate UUID
+  uuid();
 
   $('#setup').on('submit', function(e) {
     e.preventDefault();
@@ -139,7 +142,8 @@ $(function() {
           dataType: 'json',
           async: false,
           data: {
-            uuid: uuidv4(),
+            uuid: uuidv1,
+            organizationUuid: data.organizationUuid,
             destination: $('#destination').val(),
             contactEmail: $('#contactEmail').val()
           },
