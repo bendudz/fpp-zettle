@@ -70,7 +70,7 @@ function fppZettleEvent()
                 // Find and replace vaules in array as payment details
                 $text = str_replace([
                     '{{PAYER_NAME}}',
-                    '{{AMMOUNT}}'
+                    '{{AMOUNT}}'
                 ], [
                     $paymentData['userDisplayName'],
                     $paymentData['formatted_amount']

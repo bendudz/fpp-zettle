@@ -51,7 +51,7 @@ $pluginJson = convertAndGetSettings($pluginName);
         <p>There are a number of options available.</p>
         <ul>
             <li>{{PAYER_NAME}} : Show the name of the person that has donated</li>
-            <li>{{AMMOUNT}} : Show the ammount the person donated</li>
+            <li>{{AMOUNT}} : Show the amount the person donated</li>
         </ul>
     </div>
 
