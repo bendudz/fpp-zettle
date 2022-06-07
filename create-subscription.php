@@ -7,12 +7,13 @@ $pluginJson = convertAndGetSettings($pluginName);
 if (count($pluginJson['subscriptions']) > 0) {
     echo '<p class="mb-0">Subscription has been set up nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-' . $pluginName . '&page=status.php">status page</a> or back to <a href="plugin.php?plugin=fpp-' . $pluginName . '&page=setup.php">set up page</a> to add a trigger.</p>';
 } else { ?>
+<link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 <div id="global" class="settings">
   <legend>Create Subscription</legend>
-<!--    TODO what is this used for? It sticks a warning banner on the page-->
-    <div class="callout callout-warning">
-      <h4>Warning:</h4>
+    <div class="callout callout-info">
+      <h4>Destination:</h4>
+      <p>Need to be accessible to the internet. Press F1 for help on this topic.</p>
     </div>
 
     <form id="subscription" action="" method="post">

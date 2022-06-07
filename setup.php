@@ -4,6 +4,7 @@ include_once 'zettle.common.php';
 $pluginName = 'zettle';
 $pluginJson = convertAndGetSettings($pluginName);
 ?>
+<link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 <div id="global" class="settings">
     <legend>Zettle Setup</legend>
@@ -46,7 +47,7 @@ $pluginJson = convertAndGetSettings($pluginName);
     <!--p>The effect that will be run when a transaction comes in.</p-->
     <p>Select a command that you would like to run when a transaction comes in</p>
 
-    <div id="text_options" class="callout callout-warning" style="display: none;">
+    <div id="text_options" class="callout callout-info" style="display: none;">
         <h4>Overlay Model Effect Text Options</h4>
         <p>There are a number of options available.</p>
         <ul>

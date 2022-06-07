@@ -1,5 +1,5 @@
 <h2 id="getting-started">Create Subscription</h2>
-<p>A payement subscription is need to for zettle to talk to FPP. For this to work your FPP need to be accsable to the internet.</p>
+<p>A payement subscription is need to for zettle to talk to FPP. For this to work your FPP need to be accessible to the internet.</p>
 <p>This can be done with a service called Dataplicity. Free to use for one device.</p>
 <p>Either <a href="https://www.dataplicity.com/">register</a> or <a href="https://www.dataplicity.com/app">login</a> with Dataplicity.</p>
 <ul>
