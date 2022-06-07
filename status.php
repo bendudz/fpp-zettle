@@ -101,7 +101,7 @@ $setupUrl = 'plugin.php?' . http_build_query([
         <?
         if (count($plugindatabase) > 0) {
             $total = 0;
-            foreach ($plugindatabase as $d) {
+            foreach (array_reverse($plugindatabase) as $d) {
                 // $payload = json_decode($d['payload'], true);
                 echo '<tr>';
                 echo '<td class="tg-0lax">' . date('d/m/y H:i', ceil($d['timestamp'] / 1000)) . '</td>';
@@ -110,7 +110,7 @@ $setupUrl = 'plugin.php?' . http_build_query([
                 echo '</tr>';
                 $total += $d['amount'];
             }
-            echo '<tr><td>Total:</td><td colspan="2">' . $total . '</td></tr>';
+            echo '<tr><td>Total:</td><td colspan="2">' . number_format($total, 2) . '</td></tr>';
         } else {
             echo '<tr><td colspan="3">No Transactions Yet</td></tr>';
         }
