@@ -31,7 +31,7 @@ else
    echo " Config file does not exist, or is empty "
    touch $file
    writeDefaultJsonToConfig()
-   sudo chown fpp /home/fpp/media/config/plugin.fpp-zettle.json
+   chown fpp /home/fpp/media/config/plugin.fpp-zettle.json
 fi
 
 echo "You need a secure https endpoint on your pi to use this plugin. Dataplicity is the easiest way to achieve that. Check out the readme or the plugin help text for more information."
