@@ -2,6 +2,22 @@
 
 # fpp-zettle install script
 
+function writeDefaultJsonToConfig()
+{
+defalt_json=$(cat <<EOF
+{
+   "client_id": "",
+   "client_secret": "",
+   "organizationUuid": "",
+   "subscriptions": [],
+   "effect": "",
+   "command": ""
+}
+EOF
+)
+echo "$defalt_json" > /home/fpp/media/config/plugin.fpp-zettle.json
+}
+
 echo "Installing Announce Zettle Plugin for FPP...."
 
 echo "Writing config file...."
@@ -14,20 +30,7 @@ then
 else
    echo " Config file does not exist, or is empty "
    touch $file
-   defalt_json=$(cat <<EOF
-   {
-     "client_id": "",
-     "client_secret": "",
-     "organizationUuid": "",
-     "subscriptions": [],
-     "effect": "",
-     "command": ""
-   }
-   EOF
-   )
-
-   echo "$defalt_json" > /home/fpp/media/config/plugin.fpp-zettle.json
-
+   writeDefaultJsonToConfig()
    sudo chown fpp /home/fpp/media/config/plugin.fpp-zettle.json
 fi
 
