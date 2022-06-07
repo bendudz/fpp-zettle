@@ -62,30 +62,34 @@ function fppZettleEvent()
         // Check an command has set
         if ($config['command'] != '') {
             // Build command url from selected command on setup page
-            $command_url = 'https://' . $_SERVER['SERVER_NAME'] . '/api/command/';
-            $command_url .= $config['command'] . '/';
-            $command_url .= implode('/', $config['args']);
-            file_get_contents($command_url);
-
-            // // Build command url from selected command on setup page
-            // $buildUrlOptions = http_build_query([
-            //     'effect' => $config['effect'],
-            //     'startChannel' => 0,
-            //     'loop' => false,
-            //     'bg' => true,
-            //     'ifNotRunning' => false
-            // ]);
-            // $url = 'https://' . $_SERVER['SERVER_NAME'] . '/api/command/Effect Start?' . $buildUrlOptions;
-            // file_get_contents($url);
+            $url = 'http://' . $_SERVER['SERVER_NAME'] . '/api/command/'.urlencode($config['command']);
+            // Get command args
+            $data = $config['args'];
+            // Check if command is "Overlay Model Effect"
+            if ($config['command'] == 'Overlay Model Effect') {
+                // Find and replace vaules in array as payment details
+                $text = str_replace([
+                    '{{PAYER_NAME}}',
+                    '{{AMMOUNT}}'
+                ], [
+                    $paymentData['userDisplayName'],
+                    $paymentData['formatted_amount']
+                ], end($data));
+                // Remove and replace last item from array
+                array_pop($data);
+                $data[] = $text;
+            }
+            // Fire the command
+            $query = json_encode($data);
+            $ch    = curl_init();
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+            curl_exec($ch);
+            curl_close($ch);
         }
-
-        // TODO trigger an action or effect or custom script
-        // Triggering a command we can just call the API check http://{fpp_address}/apihelp.php#commands
-        // $input = readConfig()['trigger'];
-        // TODO do we need to support a start channel other than 0?
-        // $url = 'http://localhost/api/command/Effect Start?effect=' . $input . '&startChannel=0&loop=false&bg=true&ifNotRunning=false';
-        // $trigger_effect = file_get_contents($url);
-
         return true;
     }
     return true;

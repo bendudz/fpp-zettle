@@ -17,7 +17,8 @@ $command_array = array(
   'create_subscription' => 'CreatePurchaseSubscription',
   'get_org_id' => 'GetOrgId',
   'delete_subscription' => 'DeleteSubscription',
-  'clear_config' => 'ClearConfig'
+  'clear_config' => 'ClearConfig',
+  'matrix_text' => 'MatrixText'
 );
 
 $command = "";
@@ -300,4 +301,34 @@ function setPluginJSON($plugin, $js)
     $cfgFile = $settings['configDirectory'] . "/plugin." . $plugin . ".json";
     file_put_contents($cfgFile, json_encode($js, JSON_PRETTY_PRINT));
     // echo json_encode($js, JSON_PRETTY_PRINT);
+}
+
+function MatrixText()
+{
+    $url = 'http://192.168.1.156/api/command/'.urlencode('Overlay Model Effect');
+
+    $data = [
+        "Matrix",
+        "Enabled",
+        "Text",
+        "#ffffff",
+        "Helvetica",
+        "22",
+        "true",
+        "Right to Left",
+        "100",
+        "0",
+        "Thank You ".$_GET['name']
+    ];
+
+    $query = json_encode($data);
+    $ch    = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    echo $response;
 }

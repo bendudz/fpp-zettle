@@ -209,8 +209,20 @@ $(function() {
       LoadCommandList(newButtonRowCommand);
       PopulateExistingCommand(zettleConfig, newButtonRowCommand,  newButtonRowTable, true);
 
+      if (zettleConfig.command == 'Overlay Model Effect' && zettleConfig.args[2] == 'Text') {
+        $('#text_options').show();
+      }
+
       $('.buttonCommand').attr('id',newButtonRowCommand).on('change',function(){
         CommandSelectChanged(newButtonRowCommand, newButtonRowTable, true);
+      });
+
+      $('#tableButtonTPL_arg_3').on('change', function() {
+        if ($(this).val() == 'Text') {
+          $('#text_options').show();
+        } else {
+          $('#text_options').hide();
+        }
       });
 
       // $('#select_effect option[value="' + zettleConfig.effect + '"]').attr('selected','selected');
@@ -246,16 +258,24 @@ $(function() {
       // Display error to user if command not found
       DialogError('Error', 'No command found, please select a command!');
     } else {
-      // Make up url
-      var url = '/api/command/' + zettleConfig.command + '/';
-      // Check if there are args
-      if (zettleConfig.args.length > 0) {
-        // join args to make url
-        url += zettleConfig.args.join('/');
-      }
-      // Get url and display message to user
-      $.get(url, function (data, textStatus, jqXHR) {
-        $.jGrowl('Test Sent!', { themeState: 'success' });
+      var url = "api/command/";
+      url += zettleConfig.command;
+
+      var data = new Array();
+      $.each( zettleConfig.args, function(i, v) {
+          data.push(v);
+      });
+      $.ajax({
+        type: "POST",
+        url: url,
+        dataType: 'json',
+        async: false,
+        data: JSON.stringify(data),
+        processData: false,
+        contentType: 'application/json',
+        success: function (data) {
+          $.jGrowl('Test Sent!', { themeState: 'success' });
+        }
       });
     }
   });
