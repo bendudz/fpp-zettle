@@ -67,7 +67,8 @@ $(function() {
       "client_secret": client_secret,
       "organizationUuid": zettleConfig.organizationUuid,
       "subscriptions": zettleConfig.subscriptions,
-      "effect": zettleConfig.effect
+      "effect": zettleConfig.effect,
+      "command": zettleConfig.command
     }, '#save', true, 'Details Saved!');
   });
 
