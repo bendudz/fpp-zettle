@@ -4,3 +4,6 @@
 .callout-info h4 {
   color: #0c5460;
 }
+.hidetext {
+  -webkit-text-security: disc; /* Default */
+}

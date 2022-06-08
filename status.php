@@ -37,16 +37,10 @@ function getStatusData($pj)
 
 ?>
 <head>
-    <link
-            href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
-            rel="stylesheet"
-    />
-    <style type="text/css">
-        .hidetext {
-            -webkit-text-security: disc; /* Default */
-        }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css">
+    <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
     <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 </head>
 <body>
 <?php if ($pluginJson['client_id'] != '') { ?>
