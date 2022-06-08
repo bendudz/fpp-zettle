@@ -94,6 +94,8 @@ function getStatusData($pj)
 <br><br>
 <h3>Transactions</h3>
 <div id="transactions"></div>
+<br>
+<input id="clear_transactions" class="buttons" value="Clear Transactions">
 <script>
     const grid = new gridjs.Grid({
         columns: [{
