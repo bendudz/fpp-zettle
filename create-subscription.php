@@ -25,7 +25,7 @@ if (count($pluginJson['subscriptions']) > 0) {
           </div>
         </div>
         <div class="printSettingFieldCol col-md">
-          <input type='text' id='destination' value="<?php echo 'https://'.$_SERVER['HTTP_HOST'].'/api/plugin/fpp-zettle/event'; ?>" required>
+          <input type='text' id='destination' value="" placeholder="https://{wormhole address}/api/plugin/fpp-zettle/event" required autofocus>
           <img id='HostName_img' title='This is the url that zettle will talk to' src='images/redesign/help-icon.svg' class='icon-help'>
           <span id='HostName_tip' class='tooltip' style='display: none'>This is the url that zettle will talk to</span>
         </div>
