@@ -24,6 +24,16 @@ function getTransactions()
     return $data;
 }
 
+function getTransactionsTotal()
+{
+    $transactions = convertAndGetSettings('zettle-transactions');
+    $total = 0;
+    foreach ($transactions as $transaction) {
+        $total += $transaction['amount'];
+    }
+    return number_format($total, 2);
+}
+
 function getStatusData($pj)
 {
     return [[
@@ -86,7 +96,7 @@ function getStatusData($pj)
     }).render(document.getElementById("status"));
 </script>
 <br><br>
-<h3>Transactions</h3>
+<h3>Transactions (Total: <?php echo getTransactionsTotal(); ?>)</h3>
 <div id="transactions"></div>
 <br>
 <input id="clear_transactions" class="buttons" value="Clear Transactions">
