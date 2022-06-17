@@ -11,6 +11,11 @@ if (count($pluginJson['subscriptions']) > 0) {
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 <div id="global" class="settings">
   <legend>Create Subscription</legend>
+    <?php
+    if (!checkForDataplicity()) {
+      echo '<div class="callout callout-danger"><h4>Dataplicity:</h4><p>Dataplicity is not installed, please install dataplicity and active wornhole on the device.</p><p><a href="https://www.dataplicity.com/" target="_blank">Go To Dataplicity</a></a></p><p>You could follow Greg Macaree video on whole subject <a href="https://www.youtube.com/watch?v=7LeD3dz-uXU" target="_blank">Click here for video</a></p></div>';
+    }
+    ?>
     <div class="callout callout-info">
       <h4>Destination:</h4>
       <p>Need to be accessible to the internet. Press F1 for help on this topic.</p>

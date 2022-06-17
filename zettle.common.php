@@ -71,3 +71,9 @@ function logEntry($data)
   fwrite($logWrite, date('Y-m-d h:i:s A', time()) . ": " . $data . "\n");
   fclose($logWrite);
 }
+
+function checkForDataplicity()
+{
+    $serial = '/opt/dataplicity/tuxtunnel/serial';
+    return file_exists($serial);
+}
