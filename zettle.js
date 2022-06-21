@@ -252,7 +252,7 @@ $(function() {
     CommandToJSON('button_TPL_Command', 'tableButtonTPL', zettle);
     SaveZettleConfig(zettle, '#effect_save', true, 'Effect Saved!');
   });
-
+  // Test command with out the need to save it first
   $('#test_command').on('click', function () {
     // Check for command
     if (zettleConfig.command == '') {
@@ -260,22 +260,25 @@ $(function() {
       DialogError('Error', 'No command found, please select a command!');
     } else {
       var url = "api/command/";
-      url += zettleConfig.command;
-
-      var data = new Array();
-      $.each( zettleConfig.args, function(i, v) {
-          data.push(v);
-      });
+      var data = {};
+      // Get command data
+      CommandToJSON('button_TPL_Command', 'tableButtonTPL', data);
+      // Build url with selected command
+      url += data['command'];
+      // Send ajax to test command to see if user likes it before they save it
       $.ajax({
         type: "POST",
         url: url,
-        dataType: 'json',
+        dataType: 'text',
         async: false,
-        data: JSON.stringify(data),
+        data: JSON.stringify(data['args']),
         processData: false,
         contentType: 'application/json',
         success: function (data) {
-          $.jGrowl('Test Sent!', { themeState: 'success' });
+          if (data != '') {
+            $.jGrowl('Test Sent!', { themeState: 'success' });
+            $.jGrowl('If you like what you see don\'t forget to save it!!', { themeState: 'success', life: 5000 });
+          }
         }
       });
     }
