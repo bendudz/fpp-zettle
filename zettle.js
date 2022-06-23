@@ -39,6 +39,15 @@ function SaveZettleConfig(config, button='', reload=false, success_msg='') {
   });
 }
 
+function InstallDone() {
+  $('#closeDialogButton').show();
+}
+
+function CloseInstallDialog() {
+  $('#installPopup').fppDialog('close');
+  location.reload();
+}
+
 $(function() {
   $.ajax({
     type: "GET",
@@ -282,5 +291,18 @@ $(function() {
         }
       });
     }
+  });
+
+  $('#install').on('submit', function(e) {
+    e.preventDefault();
+
+    $('#closeDialogButton').hide();
+    $('#installPopup').fppDialog({ height: 600, width: 900, title: "Install Dataplicity", dialogClass: 'no-close' });
+    $('#installPopup').fppDialog( "moveToTop" );
+    $('#installText').html('');
+
+    var command = $('#command').val();
+
+    StreamURL('plugin.php?plugin=fpp-zettle&page=install-dataplicity.php&nopage=1&command=' + command , 'installText', 'InstallDone');
   });
 });

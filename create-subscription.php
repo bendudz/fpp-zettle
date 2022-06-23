@@ -13,7 +13,34 @@ if (count($pluginJson['subscriptions']) > 0) {
   <legend>Create Subscription</legend>
     <?php
     if (!checkForDataplicity()) {
-      echo '<div class="callout callout-danger"><h4>Dataplicity:</h4><p>Dataplicity is not installed, please install dataplicity and active wornhole on the device.</p><p><a href="https://www.dataplicity.com/" target="_blank">Go To Dataplicity</a></a></p><p>You could follow Greg Macaree video on whole subject <a href="https://www.youtube.com/watch?v=7LeD3dz-uXU" target="_blank">Click here for video</a></p></div>';
+    ?>
+      <div class="callout callout-danger">
+        <h4>Dataplicity:</h4>
+        <p>Dataplicity is not installed, please install dataplicity and active wornhole on the device.</p>
+        <p><a href="https://www.dataplicity.com/" target="_blank">Go To Dataplicity</a></a></p>
+        <p>You could follow Greg Macaree video on whole subject <a href="https://www.youtube.com/watch?v=7LeD3dz-uXU" target="_blank">Click here for video</a></p>
+      </div>
+      <p>Or install Dataplicity in the web browser</p>
+      <form id="install" action="" method="post">
+        <div class="container-fluid settingsTable settingsGroupTable">
+          <div class="row">
+            <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+              <div class="description">
+                <i class="fas fa-fw fa-nbsp ui-level-0"></i>Dataplicity Install Command
+              </div>
+            </div>
+            <div class="printSettingFieldCol col-md">
+              <input type='text' id='command' class="form-control" required placeholder="curl -s https://www.dataplicity.com/*****.py | sudo python">
+            </div>
+          </div>
+        </div>
+        <input id="install" type="submit" value="Install" class="buttons btn-success">
+      </form>
+      <div id='installPopup' title='Dataplicity Install' style="display: none">
+        <textarea style='width: 99%; height: 500px;' disabled id='installText'></textarea>
+        <input id='closeDialogButton' type='button' class='buttons' value='Close' onClick='CloseInstallDialog();' style='display: none;'>
+      </div>
+    <?php
     }
     ?>
     <div class="callout callout-info">
