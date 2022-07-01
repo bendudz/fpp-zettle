@@ -190,13 +190,21 @@ function CreatePurchaseSubscription()
 {
     global $subscriptions_url;
 
+    // Check if destination as api/plugin/fpp-zettle/event on the end
+    $destination_url = $_POST['destination'];
+    if (strpos($destination_url, 'api/plugin/fpp-zettle/event') !== false) {
+        $destination = $destination_url;
+    } else {
+        $destination = $destination_url . '/api/plugin/fpp-zettle/event';
+    }
+
     $query = httpPost(
         $subscriptions_url,
         [
             'uuid' => $_POST['uuid'],
             "transportName"=> "WEBHOOK",
             "eventNames" => ["PurchaseCreated"],
-            "destination" => $_POST['destination'],
+            "destination" => $destination,
             "contactEmail" => $_POST['contactEmail']
             ],
         [
