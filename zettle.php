@@ -18,6 +18,7 @@ $command_array = array(
   'get_org_id' => 'GetOrgId',
   'delete_subscription' => 'DeleteSubscription',
   'clear_config' => 'ClearConfig',
+  'clear_subscription' => 'ClearSubscription',
   'matrix_text' => 'MatrixText'
 );
 
@@ -189,13 +190,32 @@ function GetSubscriptions()
 function CreatePurchaseSubscription()
 {
     global $subscriptions_url;
-
-    // Check if destination as api/plugin/fpp-zettle/event on the end
+    // Get destination from form
     $destination_url = $_POST['destination'];
-    if (strpos($destination_url, 'api/plugin/fpp-zettle/event') !== false) {
-        $destination = $destination_url;
+    // Explode destination_url to get parts that we need
+    $explode_destination_url = explode('/', $destination_url);
+    // Get the url that we need
+    $base_url = $explode_destination_url[2];
+    // Check if explode_destination_url last item == event
+    if (end($explode_destination_url) == 'event') {
+        // Unset first two explode_destination_url items
+        unset($explode_destination_url[0]);
+        unset($explode_destination_url[1]);
+        // Rebuild destination url
+        $destination = implode('/', $explode_destination_url);
     } else {
-        $destination = $destination_url . '/api/plugin/fpp-zettle/event';
+        // Build destination url with added part
+        $destination = $base_url . '/api/plugin/fpp-zettle/event';
+    }
+    // Check for password
+    if (isset($_POST['password'])) {
+        // Build username_password
+        $username_password = 'fpp:' . $_POST['password'] . '@';
+        // Combine username_password and destination
+        $complete_destination_url = $username_password . $destination;
+    } else {
+        // set destination as password is not found
+        $complete_destination_url = $destination;
     }
 
     $query = httpPost(
@@ -204,7 +224,7 @@ function CreatePurchaseSubscription()
             'uuid' => $_POST['uuid'],
             "transportName"=> "WEBHOOK",
             "eventNames" => ["PurchaseCreated"],
-            "destination" => $destination,
+            "destination" => 'https://' . $complete_destination_url,
             "contactEmail" => $_POST['contactEmail']
             ],
         [
@@ -299,6 +319,19 @@ function ClearConfig()
 
     echo json_encode([
         'error' => false
+    ]);
+}
+
+function ClearSubscription()
+{
+    $pluginJson = convertAndGetSettings('zettle');
+    $pluginJson['subscriptions'] = [];
+
+    DeleteSubscription(false);
+    setPluginJSON('fpp-zettle', $pluginJson);
+    echo json_encode([
+        'error' => false,
+        'message' => 'Subscription Cleared!'
     ]);
 }
 

@@ -40,6 +40,7 @@ $pluginJson = convertAndGetSettings($pluginName);
         <?php } ?>
         <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>
         <input id="clear_config" type="button" class="buttons" value="Clear Config">
+        <input id="clear_subscription" type="button" class="buttons" value="Clear Subscription">
         <?php } ?>
     </form>
     <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>

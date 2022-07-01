@@ -77,3 +77,11 @@ function checkForDataplicity()
     $serial = '/opt/dataplicity/tuxtunnel/serial';
     return file_exists($serial);
 }
+
+function checkForUIPassword()
+{
+  global $settings;
+
+  $htpasswd = $settings['mediaDirectory'] . "/config/.htpasswd";
+  return file_exists($htpasswd);
+}

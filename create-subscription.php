@@ -3,10 +3,11 @@ include_once 'zettle.common.php';
 $pluginName = 'zettle';
 
 $pluginJson = convertAndGetSettings($pluginName);
+$checkForUIPassword = checkForUIPassword();
 
-if (count($pluginJson['subscriptions']) > 0) {
-    echo '<p class="mb-0">Subscription has been set up nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-' . $pluginName . '&page=status.php">status page</a> or back to <a href="plugin.php?plugin=fpp-' . $pluginName . '&page=setup.php">set up page</a> to add a trigger.</p>';
-} else { ?>
+if (count($pluginJson['subscriptions']) > 0) { ?>
+    <p class="mb-0">Subscription has been set up nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-' . $pluginName . '&page=status.php">status page</a> or back to <a href="plugin.php?_menu=content&plugin=fpp-' . $pluginName . '&page=setup.php">set up page</a> to add a trigger.</p>
+<?php } else { ?>
 <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 <div id="global" class="settings">
@@ -48,8 +49,30 @@ if (count($pluginJson['subscriptions']) > 0) {
       <p>Need to be accessible to the internet. Press F1 for help on this topic.</p>
     </div>
 
+    <?php if ($checkForUIPassword) { ?>
+      <div class="callout callout-info">
+        <h4>UI Password Detected:</h4>
+        <p>As you have a ui password set for fpp, we need your password so it can be passed with the zettle destination.</p>
+        <p>Please fill in your password below.</p>
+      </div>
+    <?php } ?>
+
     <form id="subscription" action="" method="post">
     <div class="container-fluid settingsTable settingsGroupTable">
+      <?php if ($checkForUIPassword) { ?>
+      <div class="row">
+        <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+          <div class="description">
+            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Password
+          </div>
+        </div>
+        <div class="printSettingFieldCol col-md">
+          <input type='text' id='password' value="" required autofocus>
+          <img id='password_img' title='Your UI Password' src='images/redesign/help-icon.svg' class='icon-help'>
+          <span id='password_tip' class='tooltip' style='display: none'>Your UI Password</span>
+        </div>
+      </div>
+      <?php } ?>
       <div class="row">
         <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
           <div class="description">
@@ -57,7 +80,7 @@ if (count($pluginJson['subscriptions']) > 0) {
           </div>
         </div>
         <div class="printSettingFieldCol col-md">
-          <input type='text' id='destination' value="" placeholder="https://{wormhole address}/api/plugin/fpp-zettle/event" required autofocus>
+          <input type='text' id='destination' value="" placeholder="https://{wormhole address}/api/plugin/fpp-zettle/event" required <?php !$checkForUIPassword ? 'autofocus' : '' ?>>
           <img id='HostName_img' title='This is the url that zettle will talk to' src='images/redesign/help-icon.svg' class='icon-help'>
           <span id='HostName_tip' class='tooltip' style='display: none'>This is the url that zettle will talk to</span>
         </div>

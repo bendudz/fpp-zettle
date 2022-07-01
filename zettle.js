@@ -105,6 +105,26 @@ $(function() {
     }
   });
 
+  $('#clear_subscription').on('click', function(e) {
+    if (confirm('CLEAR SUBSCRIPTION are you sure?')) {
+      $.ajax({
+        type: "GET",
+        url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=clear_subscription&nopage=1',
+        dataType: 'json',
+        async: false,
+        data: {},
+        processData: false,
+        contentType: 'application/json',
+        success: function(data) {
+          $.jGrowl(data.message, {
+              themeState: 'success'
+          });
+          setTimeout(function() { location.reload(); }, 1000);
+        }
+      });
+    }
+  });
+
   $('#status').on('click', function() {
     window.location.href = "plugin.php?_menu=status&plugin=fpp-zettle&page=status.php";
   });
@@ -146,17 +166,21 @@ $(function() {
       processData: false,
       contentType: 'application/json',
       success: function(data) {
+        var subscription_data = {
+          uuid: uuidv1,
+          organizationUuid: data.organizationUuid,
+          destination: $('#destination').val(),
+          contactEmail: $('#contactEmail').val()
+        };
+        if ($('#password').length) {
+          subscription_data.password = $('#password').val();
+        }
         $.ajax({
           type: "POST",
           url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=create_subscription&nopage=1',
           dataType: 'json',
           async: false,
-          data: {
-            uuid: uuidv1,
-            organizationUuid: data.organizationUuid,
-            destination: $('#destination').val(),
-            contactEmail: $('#contactEmail').val()
-          },
+          data: subscription_data,
           success: function(data) {
             if (data.error) {
               $.jGrowl('Error: ' + data.message, {
