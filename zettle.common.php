@@ -82,6 +82,5 @@ function checkForUIPassword()
 {
   global $settings;
 
-  $htpasswd = $settings['mediaDirectory'] . "/config/.htpasswd";
-  return file_exists($htpasswd);
+  return $settings['passwordEnable'] == "0" ? false : true;
 }
