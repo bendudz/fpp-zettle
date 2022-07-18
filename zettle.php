@@ -190,6 +190,8 @@ function GetSubscriptions()
 function CreatePurchaseSubscription()
 {
     global $subscriptions_url;
+    global $settings;
+
     // Get destination from form
     $destination_url = $_POST['destination'];
     // Explode destination_url to get parts that we need
@@ -207,10 +209,10 @@ function CreatePurchaseSubscription()
         // Build destination url with added part
         $destination = $base_url . '/api/plugin/fpp-zettle/event';
     }
-    // Check for password
-    if (isset($_POST['password'])) {
+    // Check for ui password
+    if (checkForUIPassword()) {
         // Build username_password
-        $username_password = 'fpp:' . $_POST['password'] . '@';
+        $username_password = 'fpp:' . $settings['password'] . '@';
         // Combine username_password and destination
         $complete_destination_url = $username_password . $destination;
     } else {
