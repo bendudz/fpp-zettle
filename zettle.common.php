@@ -82,5 +82,8 @@ function checkForUIPassword()
 {
   global $settings;
 
-  return $settings['passwordEnable'] == "0" ? false : true;
+  if (in_array('passwordEnable')) {
+    return $settings['passwordEnable'] == "0" ? false : true;
+  }
+  return false;
 }

@@ -329,4 +329,45 @@ $(function() {
 
     StreamURL('plugin.php?plugin=fpp-zettle&page=install-dataplicity.php&nopage=1&command=' + command , 'installText', 'InstallDone');
   });
+
+  $('#api_effect').on('submit', function(e) {
+    e.preventDefault();
+
+    var effect = $('#select_effect option:selected').val();
+
+    $('[id^="tableButton"]').each(function(){
+        var oldId = $(this).prop('id')
+        var idArr = oldId.split('_');
+        idArr[0]='tableButtonTPL'
+        $(this).attr('id',idArr.join('_'));
+        console.log($(this).attr('id',idArr.join('_')));
+    });
+
+    var zettle = {
+      "client_id": zettleConfig.client_id,
+      "client_secret": zettleConfig.client_secret,
+      "organizationUuid": zettleConfig.organizationUuid,
+      "subscriptions": zettleConfig.subscriptions
+    };
+    CommandToJSON('button_TPL_Command', 'tableButtonTPL', zettle);
+    SaveZettleConfig(zettle, '#effect_save', true, 'Effect Saved!');
+  });
+  // Test command with out the need to save it first
+  $('#real_test').on('submit', function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: "GET",
+      url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=real_test&nopage=1',
+      dataType: 'json',
+      async: false,
+      data: {
+        name: $(this).find('#name').val(),
+        amount: $(this).find('#amount').val()
+      },
+      processData: false,
+      contentType: 'application/json',
+      success: function(data) {
+      }
+    });
+  });
 });

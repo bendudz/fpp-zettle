@@ -90,5 +90,32 @@ $pluginJson = convertAndGetSettings($pluginName);
         <input id="test_command" type="button" value="Test" class="buttons">
     </form>
 
+    <!--legend>Test With Real Data</legend>
+    <form id="real_test" action="" method="post">
+        <div class="container-fluid settingsTable settingsGroupTable">
+            <div class="row">
+                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                    <div class="description">
+                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Name
+                    </div>
+                </div>
+                <div class="printSettingFieldCol col-md">
+                    <input type='text' id='name' value="" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                    <div class="description">
+                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Amount
+                    </div>
+                </div>
+                <div class="printSettingFieldCol col-md">
+                    <input type='text' id='amount' value="" required>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="Test" class="buttons btn-success">
+    </form>
+
     <?php } ?>
 </div>
