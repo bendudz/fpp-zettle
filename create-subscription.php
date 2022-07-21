@@ -6,7 +6,7 @@ $pluginJson = convertAndGetSettings($pluginName);
 $checkForUIPassword = checkForUIPassword();
 
 if (count($pluginJson['subscriptions']) > 0) { ?>
-    <p class="mb-0">Subscription has been set up nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-' . $pluginName . '&page=status.php">status page</a> or back to <a href="plugin.php?_menu=content&plugin=fpp-' . $pluginName . '&page=setup.php">set up page</a> to add a trigger.</p>
+    <p class="mb-0">Subscription has been set up nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-<?php echo $pluginName; ?>&page=status.php">status page</a> or back to <a href="plugin.php?_menu=content&plugin=fpp-<?php echo $pluginName; ?>&page=setup.php">set up page</a> to add a trigger.</p>
 <?php } else { ?>
 <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
