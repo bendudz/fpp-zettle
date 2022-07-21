@@ -57,12 +57,14 @@ function fppZettleEvent()
         array_push($currentTransactions, $paymentData);
         // Store transaction to json file
         writeToJsonFile('transactions', $currentTransactions);
+        // Write transaction to log file
+        custom_logs($paymentData);
         // Get zettle config
         $config = convertAndGetSettings('zettle');
         // Check an command has set
         if ($config['command'] != '') {
             // Build command url from selected command on setup page
-            $url = 'http://' . $_SERVER['SERVER_NAME'] . '/api/command/'.urlencode($config['command']);
+            $url = 'http://localhost/api/command/'.urlencode($config['command']);
             // Get command args
             $data = $config['args'];
             // Check if command is "Overlay Model Effect"
@@ -89,6 +91,8 @@ function fppZettleEvent()
             curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
             curl_exec($ch);
             curl_close($ch);
+            // Write to log file
+            custom_logs('command fired');
         }
         return true;
     }

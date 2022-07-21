@@ -93,3 +93,14 @@ function outputSettings()
   global $settings;
   return $settings;
 }
+
+function custom_logs($message) {
+  global $settings;
+  if( is_array($message) ) {
+        $message = json_encode($message);
+  }
+  $file = fopen($settings['configDirectory'] . "/custom_logs.log","a");
+  fwrite($file, "\n" . date('Y-m-d h:i:s') . " :: " . $message);
+  fclose($file);
+	return;
+}
