@@ -212,7 +212,7 @@ function CreatePurchaseSubscription()
     // Check for ui password
     if (checkForUIPassword()) {
         // Build username_password
-        $username_password = 'fpp:' . $settings['password'] . '@';
+        $username_password = 'admin:' . $settings['password'] . '@';
         // Combine username_password and destination
         $complete_destination_url = $username_password . $destination;
     } else {
