@@ -55,6 +55,7 @@ $pluginJson = convertAndGetSettings($pluginName);
             <li>{{PAYER_NAME}} : Show the name of the person that has donated</li>
             <li>{{AMOUNT}} : Show the amount the person donated</li>
         </ul>
+        <p>Note: You can put what ever you want in the text feild does not to have the above options in it.</p>
     </div>
 
     <form id="api_effect" action="" method="post">
@@ -89,33 +90,6 @@ $pluginJson = convertAndGetSettings($pluginName);
         <input id="effect_save" type="submit" value="Save" class="buttons btn-success">
         <input id="test_command" type="button" value="Test" class="buttons">
     </form>
-
-    <!--legend>Test With Real Data</legend>
-    <form id="real_test" action="" method="post">
-        <div class="container-fluid settingsTable settingsGroupTable">
-            <div class="row">
-                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                    <div class="description">
-                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Name
-                    </div>
-                </div>
-                <div class="printSettingFieldCol col-md">
-                    <input type='text' id='name' value="" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                    <div class="description">
-                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Amount
-                    </div>
-                </div>
-                <div class="printSettingFieldCol col-md">
-                    <input type='text' id='amount' value="" required>
-                </div>
-            </div>
-        </div>
-        <input type="submit" value="Test" class="buttons btn-success">
-    </form>
-
+    <div class="alert alert-info">If you are looking for help press F1</div>
     <?php } ?>
 </div>

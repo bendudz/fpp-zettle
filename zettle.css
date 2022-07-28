@@ -1,9 +1,25 @@
 .callout-info {
   border-color: #bee5eb;
 }
+
 .callout-info h4 {
   color: #0c5460;
 }
+
 .hidetext {
-  -webkit-text-security: disc; /* Default */
+  -webkit-text-security: disc;
+  /* Default */
+}
+
+.buttonCommandWrap,
+.tableButton {
+  width: 100%;
+}
+
+.tableButton tr td:first-child {
+  width: 10%;
+}
+
+.arg_Text {
+  width: 100%;
 }
