@@ -141,13 +141,22 @@ function getStatusData($pj)
                 'text-align': 'center'
             }
         },
-        data:
-        <?
-        echo json_encode(getTransactions());
-        ?>
-
+        server: {
+            url: '/api/configfile/plugin.fpp-zettle-transactions.json',
+            then: data => data.map(card => [card.timestamp, card.amount, card.userDisplayName])
+        }
     });
     grid.render(document.getElementById("transactions"));
+
+    setInterval(function() {
+        grid.updateConfig({
+            server: {
+                url: '/api/configfile/plugin.fpp-zettle-transactions.json',
+                then: data => data.map(card => [card.timestamp, card.amount, card.userDisplayName])
+            }
+        }).forceRender();
+    }, 30000);
+
 </script>
 </body>
 <?php } else { ?>
