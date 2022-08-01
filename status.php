@@ -12,6 +12,12 @@ $setupUrl = 'plugin.php?' . http_build_query([
         'page' => 'setup.php'
     ]);
 
+$subscriptionUrl = 'plugin.php?' . http_build_query([
+        '_menu' => 'content',
+        'plugin' => 'fpp-' . $pluginName,
+        'page' => 'create-subscription.php'
+    ]);
+
 function sortByTimestampDesc($a, $b)
 {
     return $b['timestamp'] > $a['timestamp'];
@@ -53,7 +59,7 @@ function getStatusData($pj)
     <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 </head>
 <body>
-<?php if ($pluginJson['client_id'] != '') { ?>
+<?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>
 <div id="status"></div>
 <script>new gridjs.Grid({
         columns: [{
@@ -145,6 +151,10 @@ function getStatusData($pj)
 </script>
 </body>
 <?php } else { ?>
-    <p>You need to configure this plugin before you can see the status. Click here to get to <a
-                href="<?php echo $setupUrl; ?>">setup</a></p>
+    <?php if ($pluginJson['client_id'] == '') { ?>
+        <p>You need to configure this plugin before you can see the status. Click here to get to <a href="<?php echo $setupUrl; ?>">setup</a></p>
+    <?php } ?>
+    <?php if (count($pluginJson['subscriptions']) == 0) { ?>
+        <p>You have <strong>Client ID</strong> and <strong>Client Secret</strong> setup, now you need to create a Subscription to link FPP with Zettle. Click here to <a href="<?php echo $subscriptionUrl; ?>">create subscription</a></p>
+    <?php } ?>
 <?php } ?>
