@@ -58,7 +58,7 @@ function fppZettleEvent()
         // Store transaction to json file
         writeToJsonFile('transactions', $currentTransactions);
         // Write transaction to log file
-        custom_logs($paymentData);
+        custom_logs($payload);
         // Get zettle config
         $config = convertAndGetSettings('zettle');
         // Check an command has set
