@@ -394,6 +394,19 @@ function GetPurchases () {
             ];
             break;
 
+        case 'yesterday':
+            $data = [
+                'startDate' => date('Y-m-d',strtotime("-1 days"))
+            ];
+            break;
+
+        case 'this_week':
+            $data = [
+                'startDate' => date("Y-m-d", strtotime('monday this week')),
+                'endDate' => date("Y-m-d", strtotime('sunday this week'))
+            ];
+            break;
+
         case 'this_month':
             $data = [
                 'startDate' => implode('-', [
