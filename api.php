@@ -48,7 +48,7 @@ function fppZettleEvent()
             'formatted_amount' => number_format($amount, 2) . ' ' . $currency,
             'amount' => $amount,
             'timestamp' => $payload['timestamp'],
-            'userDisplayName' => $payload['userDisplayName']
+            // 'userDisplayName' => $payload['userDisplayName']
         ];
 
         // Get currentTransactions
@@ -57,6 +57,8 @@ function fppZettleEvent()
         array_push($currentTransactions, $paymentData);
         // Store transaction to json file
         writeToJsonFile('transactions', $currentTransactions);
+        // Store transation account
+        totalTransactions($amount);
         // Write transaction to log file
         custom_logs($payload);
         // Get zettle config
@@ -71,11 +73,17 @@ function fppZettleEvent()
             if ($config['command'] == 'Overlay Model Effect') {
                 // Find and replace vaules in array as payment details
                 $text = str_replace([
-                    '{{PAYER_NAME}}',
-                    '{{AMOUNT}}'
+                    // '{{PAYER_NAME}}',
+                    '{{AMOUNT}}',
+                    '{{EVERYTHING}}',
+                    '{{TODAY}}',
+                    '{{THIS_MONTH}}'
                 ], [
-                    $paymentData['userDisplayName'],
-                    $paymentData['formatted_amount']
+                    // $paymentData['userDisplayName'],
+                    $paymentData['formatted_amount'],
+                    runningTotal('everything'),
+                    runningTotal('today'),
+                    runningTotal('this_month')
                 ], end($data));
                 // Remove and replace last item from array
                 array_pop($data);
@@ -97,4 +105,8 @@ function fppZettleEvent()
         return true;
     }
     return true;
+}
+
+function runningTotal($option = 'everything') {
+    return file_get_contents('http://localhost/plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=' . $option);
 }

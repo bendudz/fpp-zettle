@@ -104,3 +104,25 @@ function custom_logs($message) {
   fclose($file);
 	return;
 }
+
+function totalTransactions($amount = 0) {
+  global $settings;
+
+  $filepath = $settings['configDirectory'] . "/plugin.fpp-zettle-transactions-total.txt";
+  // Check if exists
+  if (!file_exists($filepath)) {
+    file_put_contents($filepath, 0);
+  }
+  // Get current total
+  $current = (int) file_get_contents($filepath);
+  // Check if amount is set
+  if ($amount > 0) {
+    // Add amount to current total
+    $newTotal = $current + $amount;
+    // Write to file
+    file_put_contents($filepath, $newTotal);
+    return number_format($newTotal, 2);
+  } else {
+    return number_format($current, 2);
+  }
+}

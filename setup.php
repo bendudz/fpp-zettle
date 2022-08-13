@@ -52,8 +52,11 @@ $pluginJson = convertAndGetSettings($pluginName);
         <h4>Overlay Model Effect Text Options</h4>
         <p>There are a number of options available.</p>
         <ul>
-            <li>{{PAYER_NAME}} : Show the name of the person that has donated</li>
+            <!--li>{{PAYER_NAME}} : Show the name of the person that has donated</li-->
             <li>{{AMOUNT}} : Show the amount the person donated</li>
+            <li>{{EVERYTHING}} : Show the amount you have from day one</li>
+            <li>{{TODAY}} : Show the amount you have rased today</li>
+            <li>{{THIS_MONTH}} : Show the amount you have rased this month</li>
         </ul>
         <p>Note: You can put what ever you want in the text feild does not to have the above options in it.</p>
     </div>

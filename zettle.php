@@ -19,7 +19,8 @@ $command_array = array(
   'delete_subscription' => 'DeleteSubscription',
   'clear_config' => 'ClearConfig',
   'clear_subscription' => 'ClearSubscription',
-  'matrix_text' => 'MatrixText'
+  'matrix_text' => 'MatrixText',
+  'get_purchases' => 'GetPurchases'
 );
 
 $command = "";
@@ -28,6 +29,7 @@ $args = array();
 $oauth_base = "https://oauth.zettle.com";
 $pusher_base = "https://pusher.izettle.com";
 $subscriptions_url = $pusher_base."/organizations/self/subscriptions";
+$purchases_url = "https://purchase.izettle.com/purchases/v2";
 
 
 if (isset($_GET['command']) && !empty($_GET['command'])) {
@@ -78,7 +80,8 @@ function buildQuery($data = [], $o = [], $url)
         $access_token = $login['access_token'];
     }
 
-    $o['header'] = 'Authorization: Bearer '.$access_token;
+    // $o['header'] = 'Authorization: Bearer '.$access_token.'\r\n' . 'Content-Type: application/json';
+    $o['header'] = ["Authorization: Bearer " . $access_token,"Content-Type: application/json"];
 
     $opts = array('http' => $o);
     $context = stream_context_create($opts);
@@ -374,4 +377,64 @@ function MatrixText()
     $response = curl_exec($ch);
     curl_close($ch);
     echo $response;
+}
+
+function GetPurchases () {
+    global $purchases_url;
+
+    $current_year = date('Y');
+    $current_month = date('m');
+
+    $option = $_GET['option'];
+
+    switch ($option) {
+        case 'today':
+            $data = [
+                'startDate' => date('Y-m-d')
+            ];
+            break;
+
+        case 'this_month':
+            $data = [
+                'startDate' => implode('-', [
+                    $current_year,
+                    $current_month,
+                    '01'
+                ]),
+                'endDate' => implode('-', [
+                    $current_year,
+                    $current_month,
+                    cal_days_in_month(CAL_GREGORIAN, $current_month, $current_year)
+                ])
+            ];
+            break;
+
+        default:
+            $data = [];
+    }
+
+    $url = $purchases_url;
+    if (!empty($data)) {
+        $url .= '?' . http_build_query($data);
+    }
+
+    $query = buildQuery([], [
+      'method'  => 'GET'
+    ], $url);
+
+    // if (isset($query['code'])) {
+    //     echo json_encode([
+    //         'error' => true,
+    //         'message' => $query['message'] . '//Query Error'
+    //     ]);
+    // } else {
+        $purchases = $query->purchases;
+
+        $total = 0;
+        foreach ($purchases as $purchase) {
+            $total += $purchase->amount / 100;
+        }
+
+        echo '£' . number_format($total, 2);
+    // }
 }

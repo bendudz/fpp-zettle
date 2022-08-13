@@ -1,5 +1,5 @@
-var zettleConfig=null;
-var uuidv1=null;
+var zettleConfig = null;
+var uuidv1 = null;
 
 function uuid() {
   $.get('https://www.uuidtools.com/api/generate/v1', function (data) {
@@ -7,7 +7,7 @@ function uuid() {
   });
 }
 
-function SaveZettleConfig(config, button='', reload=false, success_msg='') {
+function SaveZettleConfig(config, button = '', reload = false, success_msg = '') {
   var data = JSON.stringify(config);
   $.ajax({
     type: "POST",
@@ -17,25 +17,28 @@ function SaveZettleConfig(config, button='', reload=false, success_msg='') {
     data: data,
     processData: false,
     contentType: 'application/json',
-    beforeSend: function() {
+    beforeSend: function () {
       if (button != '') {
         $(button).prop('disabled', true);
       }
     },
     success: function (data) {
       $.jGrowl(success_msg, {
-          themeState: 'success'
+        themeState: 'success'
       });
-      if (reload) {;
-        setTimeout(function() { location.reload(); }, 3000);
+      if (reload) {
+        ;
+        setTimeout(function () {
+          location.reload();
+        }, 3000);
       }
     },
-    error: function() {
+    error: function () {
       if (button != '') {
         $(button).prop('disabled', false);
       }
       DialogError('Error', "ERROR: There was an error, please try again!");
-      }
+    }
   });
 }
 
@@ -48,7 +51,7 @@ function CloseInstallDialog() {
   location.reload();
 }
 
-$(function() {
+$(function () {
   allowMultisyncCommands = true;
 
   $.ajax({
@@ -57,10 +60,10 @@ $(function() {
     dataType: 'json',
     contentType: 'application/json',
     success: function (data) {
-      if (typeof data==="string") {
-          zettleConfig = $.parseJSON(data);
+      if (typeof data === "string") {
+        zettleConfig = $.parseJSON(data);
       } else {
-          zettleConfig = data;
+        zettleConfig = data;
       }
       if ($('#api_effect').length > 0) {
         console.log('api_effect found');
@@ -68,16 +71,16 @@ $(function() {
         var newButtonRowTable = 'tableButtonTPL';
 
         LoadCommandList(newButtonRowCommand);
-        PopulateExistingCommand(zettleConfig, newButtonRowCommand,  newButtonRowTable, true);
+        PopulateExistingCommand(zettleConfig, newButtonRowCommand, newButtonRowTable, true);
 
         if (zettleConfig.command == 'Overlay Model Effect' && zettleConfig.args[2] == 'Text') {
           $('#text_options').show();
         }
 
-        $('.buttonCommand').attr('id',newButtonRowCommand).on('change',function(){
+        $('.buttonCommand').attr('id', newButtonRowCommand).on('change', function () {
           CommandSelectChanged(newButtonRowCommand, newButtonRowTable, true);
 
-          $('#tableButtonTPL_arg_3_row').find('select').on('change', function(){
+          $('#tableButtonTPL_arg_3_row').find('select').on('change', function () {
             if ($(this).val() == 'Text') {
               $('#text_options').fadeIn();
             } else {
@@ -91,27 +94,26 @@ $(function() {
   // Genarate UUID
   uuid();
 
-  $('#setup').on('submit', function(e) {
+  $('#setup').on('submit', function (e) {
     e.preventDefault();
 
     var client_id = $("#client_id").val();
     var client_secret = $("#client_secret").val();
 
-    SaveZettleConfig({
-      "client_id": client_id,
-      "client_secret": client_secret,
-      "organizationUuid": zettleConfig.organizationUuid,
-      "subscriptions": zettleConfig.subscriptions,
-      "effect": zettleConfig.effect,
-      "command": zettleConfig.command
-    }, '#save', true, 'Details Saved!');
+    // Get current config
+    var data = zettleConfig;
+    // Override config feilds
+    data.client_id = client_id;
+    data.client_secret = client_secret;
+    // Save config
+    SaveZettleConfig(data, '#save', true, 'Details Saved!');
   });
 
-  $('#createSubscriptions').on('click', function() {
+  $('#createSubscriptions').on('click', function () {
     window.location.href = "plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php";
   });
 
-  $('#clear_config').on('click', function(e) {
+  $('#clear_config').on('click', function (e) {
     if (confirm('CLEAR CONFIG are you sure?')) {
       $.ajax({
         type: "GET",
@@ -121,17 +123,19 @@ $(function() {
         data: {},
         processData: false,
         contentType: 'application/json',
-        success: function(data) {
+        success: function (data) {
           $.jGrowl('Config Cleared!', {
-              themeState: 'success'
+            themeState: 'success'
           });
-          setTimeout(function() { location.reload(); }, 1000);
+          setTimeout(function () {
+            location.reload();
+          }, 1000);
         }
       });
     }
   });
 
-  $('#clear_subscription').on('click', function(e) {
+  $('#clear_subscription').on('click', function (e) {
     if (confirm('CLEAR SUBSCRIPTION are you sure?')) {
       $.ajax({
         type: "GET",
@@ -141,47 +145,49 @@ $(function() {
         data: {},
         processData: false,
         contentType: 'application/json',
-        success: function(data) {
+        success: function (data) {
           $.jGrowl(data.message, {
-              themeState: 'success'
+            themeState: 'success'
           });
-          setTimeout(function() { location.reload(); }, 1000);
+          setTimeout(function () {
+            location.reload();
+          }, 1000);
         }
       });
     }
   });
 
-  $('#status').on('click', function() {
+  $('#status').on('click', function () {
     window.location.href = "plugin.php?_menu=status&plugin=fpp-zettle&page=status.php";
   });
 
-  $('#clear_transactions').on('click', function(e) {
+  $('#clear_transactions').on('click', function (e) {
     var transactions = [];
 
     $.ajax({
-        type: "POST",
-        url: 'fppjson.php?command=setPluginJSON&plugin=fpp-zettle-transactions',
-        dataType: 'json',
-        async: false,
-        data: JSON.stringify(transactions),
-        processData: false,
-        contentType: 'application/json',
-        success: function(data) {
-            $.jGrowl('Transactions cleared', {
-                themeState: 'success'
-            });
-            setTimeout(function() {
-                location.reload();
-            }, 3000);
-        },
-        error: function() {
-            $('#save').prop('disabled', false);
-            DialogError('Error', "ERROR: There was an error in saving your details, please try again!");
-        }
+      type: "POST",
+      url: 'fppjson.php?command=setPluginJSON&plugin=fpp-zettle-transactions',
+      dataType: 'json',
+      async: false,
+      data: JSON.stringify(transactions),
+      processData: false,
+      contentType: 'application/json',
+      success: function (data) {
+        $.jGrowl('Transactions cleared', {
+          themeState: 'success'
+        });
+        setTimeout(function () {
+          location.reload();
+        }, 3000);
+      },
+      error: function () {
+        $('#save').prop('disabled', false);
+        DialogError('Error', "ERROR: There was an error in saving your details, please try again!");
+      }
     });
   });
 
-  $('#subscription').on('submit', function(e) {
+  $('#subscription').on('submit', function (e) {
     e.preventDefault();
     $.ajax({
       type: "GET",
@@ -191,7 +197,7 @@ $(function() {
       data: {},
       processData: false,
       contentType: 'application/json',
-      success: function(data) {
+      success: function (data) {
         var subscription_data = {
           uuid: uuidv1,
           organizationUuid: data.organizationUuid,
@@ -207,7 +213,7 @@ $(function() {
           dataType: 'json',
           async: false,
           data: subscription_data,
-          success: function(data) {
+          success: function (data) {
             if (data.error) {
               $.jGrowl('Error: ' + data.message, {
                 themeState: 'danger'
@@ -223,37 +229,37 @@ $(function() {
                   .organizationUuid,
                 "subscriptions": data.subscription
               }, '', false, 'Subscription Details Saved!');
-              setTimeout(function() {
+              setTimeout(function () {
                 location.reload();
               }, 3000);
             }
           },
-          error: function(xhr, ajaxOptions, thrownError) {
+          error: function (xhr, ajaxOptions, thrownError) {
             DialogError('create_subscription Error', "ERROR: Error Please Try Again");
           }
         });
       },
-      error: function(xhr, ajaxOptions, thrownError) {
+      error: function (xhr, ajaxOptions, thrownError) {
         DialogError('get_org_id Error', "ERROR: There was an error getting get_org_id");
       }
     });
   });
 
-  $('#status').on('click', function() {
+  $('#status').on('click', function () {
     window.location.href = "plugin.php?_menu=status&plugin=fpp-zettle&page=status.php";
   });
 
-  $('#api_effect').on('submit', function(e) {
+  $('#api_effect').on('submit', function (e) {
     e.preventDefault();
 
     var effect = $('#select_effect option:selected').val();
 
-    $('[id^="tableButton"]').each(function(){
-        var oldId = $(this).prop('id')
-        var idArr = oldId.split('_');
-        idArr[0]='tableButtonTPL'
-        $(this).attr('id',idArr.join('_'));
-        console.log($(this).attr('id',idArr.join('_')));
+    $('[id^="tableButton"]').each(function () {
+      var oldId = $(this).prop('id')
+      var idArr = oldId.split('_');
+      idArr[0] = 'tableButtonTPL'
+      $(this).attr('id', idArr.join('_'));
+      console.log($(this).attr('id', idArr.join('_')));
     });
 
     var zettle = {
@@ -289,38 +295,48 @@ $(function() {
         contentType: 'application/json',
         success: function (data) {
           if (data != '') {
-            $.jGrowl('Test Sent!', { themeState: 'success' });
-            $.jGrowl('If you like what you see don\'t forget to save it!!', { themeState: 'success', life: 5000 });
+            $.jGrowl('Test Sent!', {
+              themeState: 'success'
+            });
+            $.jGrowl('If you like what you see don\'t forget to save it!!', {
+              themeState: 'success',
+              life: 5000
+            });
           }
         }
       });
     }
   });
 
-  $('#install').on('submit', function(e) {
+  $('#install').on('submit', function (e) {
     e.preventDefault();
 
     $('#closeDialogButton').hide();
-    $('#installPopup').fppDialog({ height: 600, width: 900, title: "Install Dataplicity", dialogClass: 'no-close' });
-    $('#installPopup').fppDialog( "moveToTop" );
+    $('#installPopup').fppDialog({
+      height: 600,
+      width: 900,
+      title: "Install Dataplicity",
+      dialogClass: 'no-close'
+    });
+    $('#installPopup').fppDialog("moveToTop");
     $('#installText').html('');
 
     var command = $('#command').val();
 
-    StreamURL('plugin.php?plugin=fpp-zettle&page=install-dataplicity.php&nopage=1&command=' + command , 'installText', 'InstallDone');
+    StreamURL('plugin.php?plugin=fpp-zettle&page=install-dataplicity.php&nopage=1&command=' + command, 'installText', 'InstallDone');
   });
 
-  $('#api_effect').on('submit', function(e) {
+  $('#api_effect').on('submit', function (e) {
     e.preventDefault();
 
     var effect = $('#select_effect option:selected').val();
 
-    $('[id^="tableButton"]').each(function(){
-        var oldId = $(this).prop('id')
-        var idArr = oldId.split('_');
-        idArr[0]='tableButtonTPL'
-        $(this).attr('id',idArr.join('_'));
-        console.log($(this).attr('id',idArr.join('_')));
+    $('[id^="tableButton"]').each(function () {
+      var oldId = $(this).prop('id')
+      var idArr = oldId.split('_');
+      idArr[0] = 'tableButtonTPL'
+      $(this).attr('id', idArr.join('_'));
+      console.log($(this).attr('id', idArr.join('_')));
     });
 
     var zettle = {
