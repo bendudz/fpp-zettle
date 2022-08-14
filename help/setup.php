@@ -33,7 +33,7 @@
     <li><strong>Scroll Speed</strong>: Larger the number this quick the text will move. Note if you have "Center" select in "Position" this feild does not apply.</li>
     <li><strong>Duration</strong>: Larger the number the text will display longer. This only applys to "Center"</li>
     <li>
-        <strong>Text</strong>: Thank You {{PAYER_NAME}} for {{AMOUNT}} Note: There is two options available to text override
+        <strong>Text</strong>: Thank You Note: There is two options available to text override
         <ul>
             <!--li>{{PAYER_NAME}} : Show the name of the person that has donated</li-->
             <li>{{AMOUNT}} : Show the amount the person donated</li>
