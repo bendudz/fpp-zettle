@@ -35,7 +35,7 @@ Greg Macaree has produced an excellent [getting started video](https://youtu.be/
 
 ## FPP
 
-Navigate to your FPP instance. 
+Navigate to your FPP instance.
 
 Click `'Content Setup' > 'Plugin Manager'`
 
@@ -53,9 +53,9 @@ This will now unlock the ability to add a `Subscription` that will listen for 'p
 
 Enter your Dataplicity wormhole address followed by this plugin's API event path. ie
 
-`https://{wormhole address}/api/plugin/fpp-zettle/event`
+`https://{wormhole address}/`
 
-`https://wandering-sheep-0157.dataplicity.io/api/plugin/fpp-zettle/event`
+`https://wandering-sheep-0157.dataplicity.io/`
 
 Add your email address too. This is the address that is notified of any errors sending (or in Zettle's terminology, 'pushing') a transaction to your Pi.
 
@@ -65,15 +65,15 @@ Save the subscription.
 
 The first time you create a subscription you will receive a test notification sent to your Raspberry Pi. This is just the Zettle API notifying you that a subscription has been set up.
 
-Once the subscription has been created successfully, you can then add an effect to be triggered. 
+Once the subscription has been created successfully, you can then select what you want to be triggered.
 
-Navigate back to the set-up page where you can select the effect to trigger once a transaction is received.
+Navigate back to the set-up page where you can select the command to trigger once a transaction is received.
 
 ![](./img/add-effect-trigger.png)
 
-At the moment this plugin can only trigger an effect (ESEQ file), if you have a use case for triggering something else please raise an issue on GitHub, so we can add support.
-
 When a real transaction is received the plugin will log it to a transaction file. You can view transactions in `Status / Control > Zettle - Status`. This page will also allow you to clear any transactions should you wish. This is mearly for you to see what / who has used your Zettle device to donate at your show.
+
+You will also be able to see Today/Yesterday/This Week totals. This data is pulled from zettle.
 
 ![](./img/status-page.png)
 
@@ -85,4 +85,4 @@ Absolutely nothing!
 
 ### What We Don't Collect
 
-We do not collect or store any of your personal information. The information you submit via this plugin is transmitted between your Pi & the Zettle API. Any transactions are kept on your device & are retrievable from Zettle using your API Keys (client_id & secret) should you clear them. 
+We do not collect or store any of your personal information. The information you submit via this plugin is transmitted between your Pi & the Zettle API. Any transactions are kept on your device & are retrievable from Zettle using your API Keys (client_id & secret) should you clear them.
