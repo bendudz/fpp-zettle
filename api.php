@@ -107,6 +107,6 @@ function fppZettleEvent()
     return true;
 }
 
-function runningTotal($option = 'everything') {
-    return file_get_contents('http://localhost/plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=' . $option);
-}
+// function runningTotal($option = 'everything') {
+//     return file_get_contents('http://localhost/plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=' . $option);
+// }

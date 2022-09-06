@@ -99,7 +99,7 @@ function custom_logs($message) {
   if( is_array($message) ) {
         $message = json_encode($message);
   }
-  $file = fopen($settings['configDirectory'] . "/custom_logs.log","a");
+  $file = fopen($settings['logDirectory'] . "/fpp-zettle.log","a");
   fwrite($file, "\n" . date('Y-m-d h:i:s') . " :: " . $message);
   fclose($file);
 	return;
@@ -125,4 +125,8 @@ function totalTransactions($amount = 0) {
   } else {
     return number_format($current, 2);
   }
+}
+
+function runningTotal($option = 'everything') {
+    return file_get_contents('http://localhost/plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=' . $option);
 }

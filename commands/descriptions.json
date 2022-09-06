@@ -1,0 +1,10 @@
+[{
+  "name": "Zettle Totals",
+  "script": "ZettleTotals.sh",
+  "args": [{
+    "name": "Text",
+    "type": "string",
+    "description": "Message",
+    "optional": false,
+  }]
+}]
