@@ -47,6 +47,11 @@
 <p>At the moment this plugin can only trigger an effect (ESEQ file), if you have a use case for triggering something else please raise an issue on GitHub, so we can add support.</p>
 <p>When a real transaction is received the plugin will log it to a transaction file. You can view transactions in <code>Status / Control &gt; Zettle - Status</code>. This page will also allow you to clear any transactions should you wish. This is mearly for you to see what / who has used your Zettle device to donate at your show.</p>
 <p><img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/status-page.png" alt="1"></p>
+
+<h2 id="commands">Commands</h2>
+<p>Zettle Total: Allows you to show what has been raised at the end or during your show using the "Overlay Model Effect Command". The command text can use all text options available.</p>
+<p>The command will only work if you are using the "Overlay Model Effect Command" in your zettle setup page.</p>
+
 <h2 id="privacy-policy">Privacy Policy</h2>
 <h3 id="what-we-collect">What We Collect</h3>
 <p>Absolutely nothing!</p>
