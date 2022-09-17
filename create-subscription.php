@@ -17,7 +17,7 @@ if (count($pluginJson['subscriptions']) > 0) { ?>
     ?>
       <div class="callout callout-danger">
         <h4>Dataplicity:</h4>
-        <p>Dataplicity is not installed, please install dataplicity and active wornhole on the device.</p>
+        <p>Dataplicity is not installed, please install dataplicity and active wormhole on the device.</p>
         <p><a href="https://www.dataplicity.com/" target="_blank">Go To Dataplicity</a></a></p>
         <p>You could follow Greg Macaree video on whole subject <a href="https://www.youtube.com/watch?v=7LeD3dz-uXU" target="_blank">Click here for video</a></p>
       </div>
@@ -47,8 +47,8 @@ if (count($pluginJson['subscriptions']) > 0) { ?>
     <div class="callout callout-info">
       <h4>Destination:</h4>
       <p>Need to be accessible to the internet. Press F1 for help on this topic.</p>
+      <p>If you are using Dataplicity. Make sure you <b>Active</b> the wormhole from there web portal. Overwise you will get an error.</p>
     </div>
-
     <form id="subscription" action="" method="post">
     <div class="container-fluid settingsTable settingsGroupTable">
       <div class="row">
