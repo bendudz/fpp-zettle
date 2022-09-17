@@ -47,7 +47,7 @@ if (count($pluginJson['subscriptions']) > 0) { ?>
     <div class="callout callout-info">
       <h4>Destination:</h4>
       <p>Need to be accessible to the internet. Press F1 for help on this topic.</p>
-      <p>If you are using Dataplicity. Make sure you <b>Active</b> the wormhole from there web portal. Overwise you will get an error.</p>
+      <p>If you are using Dataplicity. Make sure you <b>Activate</b> the wormhole from there web portal. Overwise you will get an error.</p>
     </div>
     <form id="subscription" action="" method="post">
     <div class="container-fluid settingsTable settingsGroupTable">
