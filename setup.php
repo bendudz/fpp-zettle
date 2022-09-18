@@ -3,6 +3,10 @@
 include_once 'zettle.common.php';
 $pluginName = 'zettle';
 $pluginJson = convertAndGetSettings($pluginName);
+// Check if command has been made executable
+if (!is_executable('/home/fpp/media/plugins/fpp-zettle/commands/ZettleTotals.sh')) {
+    chmod('/home/fpp/media/plugins/fpp-zettle/commands/ZettleTotals.sh', 0755);
+}
 ?>
 <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
