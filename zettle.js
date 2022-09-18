@@ -51,8 +51,44 @@ function CloseInstallDialog() {
   location.reload();
 }
 
+function UpgradePlugin() {
+  var url = 'api/plugin/fpp-zettle/upgrade?stream=true';
+
+  $('#pluginsProgressPopup').fppDialog({
+    width: 900,
+    title: "Upgrade Plugin",
+    dialogClass: 'no-close'
+  });
+  $('#pluginsProgressPopup').fppDialog("moveToTop");
+  document.getElementById('pluginsText').value = '';
+  StreamURL(url, 'pluginsText', 'PluginProgressDialogDone', 'PluginProgressDialogDone');
+}
+
+function PluginProgressDialogDone() {
+  $('#closeDialogButton').show();
+}
+
+function ClosePluginProgressDialog() {
+  $('#pluginsProgressPopup').fppDialog('close');
+  location.reload(true);
+}
+
 $(function () {
   allowMultisyncCommands = true;
+
+  if ($('#pluginupdate').length) {
+    $.ajax({
+      type: "POST",
+      url: 'api/plugin/fpp-zettle/updates',
+      dataType: 'json',
+      contentType: 'application/json',
+      success: function (data) {
+        if (data.updatesAvailable) {
+          $('#pluginupdate').show();
+        }
+      }
+    });
+  }
 
   $.ajax({
     type: "GET",

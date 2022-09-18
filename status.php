@@ -1,3 +1,4 @@
+<?php include $settings['pluginDirectory']."/fpp-zettle/pluginUpdate.php" ?>
 <h2>Zettle Status</h2>
 <?
 include_once 'zettle.common.php';
