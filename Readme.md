@@ -51,7 +51,7 @@ Add your `Client ID` and `Secret` to the page & click 'Save'
 
 This will now unlock the ability to add a `Subscription` that will listen for 'purchases' aka donations from our Zettle device.
 
-Enter your Dataplicity wormhole address followed by this plugin's API event path. ie
+Enter your Dataplicity wormhole address. ie
 
 `https://{wormhole address}/`
 
