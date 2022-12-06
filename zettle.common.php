@@ -130,3 +130,29 @@ function totalTransactions($amount = 0) {
 function runningTotal($option = 'everything') {
     return file_get_contents('http://localhost/plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=' . $option);
 }
+
+function isSiteAvailible($url){
+    // Check, if a valid url is provided
+    if(!filter_var($url, FILTER_VALIDATE_URL)){
+        return false;
+    }
+
+    // Initialize cURL
+    $curlInit = curl_init($url);
+
+    // Set options
+    curl_setopt($curlInit,CURLOPT_CONNECTTIMEOUT,10);
+    curl_setopt($curlInit,CURLOPT_HEADER,true);
+    curl_setopt($curlInit,CURLOPT_NOBODY,true);
+    curl_setopt($curlInit,CURLOPT_RETURNTRANSFER,true);
+
+    // Get response
+    $response = curl_exec($curlInit);
+    $httpcode = curl_getinfo($curlInit, CURLINFO_HTTP_CODE);
+
+    // Close a cURL session
+    curl_close($curlInit);
+
+    // return $response?true:false;
+    return $httpcode;
+}

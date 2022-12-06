@@ -67,6 +67,14 @@ function getStatusData($pj)
 </head>
 <body>
 <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>
+
+<?php
+echo isSiteAvailible(str_replace('/api/plugin/fpp-zettle/event', '', $pluginJson['subscriptions'][0]['destination']));
+if (isSiteAvailible(str_replace('/api/plugin/fpp-zettle/event', '', $pluginJson['subscriptions'][0]['destination'])) !== 200) {
+    echo '<div class="alert alert-danger">FPP could not be seen, have you actived wormhole on dataplicity</div>';
+}
+?>
+
 <div id="status"></div>
 <script>new gridjs.Grid({
         columns: [{
@@ -149,6 +157,17 @@ function getStatusData($pj)
             </div>
         </div>
     </div>
+    <div class="col">
+        <div class="alert-info alert mb-0">
+            <div class="d-flex align-items-center">
+                <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fas fa-pound-sign fa-lg"></i></div>
+                <div class="flex-fill ms-3 text-truncate">
+                    <div class="h6 mb-0">This Month</div>
+                    <span class="small" id="tihs_month">£0</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <h3>Transactions (Total: <?php echo getTransactionsTotal(); ?>)</h3>
@@ -215,6 +234,7 @@ function getStatusData($pj)
         ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today', 'today');
         ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=yesterday', 'yesterday');
         ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_week', 'this_week');
+        ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_month', 'this_month');
     });
 </script>
 </body>

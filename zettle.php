@@ -390,20 +390,22 @@ function GetPurchases () {
     switch ($option) {
         case 'today':
             $data = [
-                'startDate' => date('Y-m-d')
+                'startDate' => date('Y-m-d') . 'T00:00',
+                'endDate' => date('Y-m-d') . 'T23:59'
             ];
             break;
 
         case 'yesterday':
             $data = [
-                'startDate' => date('Y-m-d',strtotime("-1 days"))
+                'startDate' => date('Y-m-d',strtotime("-1 days")) . 'T00:00',
+                'endDate' => date('Y-m-d',strtotime("-1 days")) . 'T23:59',
             ];
             break;
 
         case 'this_week':
             $data = [
-                'startDate' => date("Y-m-d", strtotime('monday this week')),
-                'endDate' => date("Y-m-d", strtotime('sunday this week'))
+                'startDate' => date("Y-m-d", strtotime('monday this week')) . 'T00:00',
+                'endDate' => date("Y-m-d", strtotime('sunday this week')) . 'T23:59'
             ];
             break;
 
