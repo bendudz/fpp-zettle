@@ -122,7 +122,7 @@ if (isSiteAvailible(str_replace('/api/plugin/fpp-zettle/event', '', $pluginJson[
 // echo date("Y-m-d", strtotime('sunday this week')), "\n";
 ?>
 
-<div class="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-3">
+<div class="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4">
     <div class="col">
         <div class="alert-success alert mb-0">
             <div class="d-flex align-items-center">
@@ -162,7 +162,7 @@ if (isSiteAvailible(str_replace('/api/plugin/fpp-zettle/event', '', $pluginJson[
                 <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fas fa-pound-sign fa-lg"></i></div>
                 <div class="flex-fill ms-3 text-truncate">
                     <div class="h6 mb-0">This Month</div>
-                    <span class="small" id="tihs_month">£0</span>
+                    <span class="small" id="this_month">£0</span>
                 </div>
             </div>
         </div>
