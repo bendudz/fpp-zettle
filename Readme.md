@@ -73,7 +73,7 @@ Navigate back to the set-up page where you can select the command to trigger onc
 
 When a real transaction is received the plugin will log it to a transaction file. You can view transactions in `Status / Control > Zettle - Status`. This page will also allow you to clear any transactions should you wish. This is mearly for you to see what / who has used your Zettle device to donate at your show.
 
-You will also be able to see Today/Yesterday/This Week totals. This data is pulled from zettle.
+You will also be able to see Today/Yesterday/This Week and This Month totals. This data is pulled from zettle.
 
 ![](./img/status-page.png)
 
