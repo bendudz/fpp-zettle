@@ -69,7 +69,6 @@ function getStatusData($pj)
 <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>
 
 <?php
-echo isSiteAvailible(str_replace('/api/plugin/fpp-zettle/event', '', $pluginJson['subscriptions'][0]['destination']));
 if (isSiteAvailible(str_replace('/api/plugin/fpp-zettle/event', '', $pluginJson['subscriptions'][0]['destination'])) !== 200) {
     echo '<div class="alert alert-danger">FPP could not be seen, have you actived wormhole on dataplicity</div>';
 }
