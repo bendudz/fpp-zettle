@@ -11,7 +11,7 @@ if (!is_executable($settings['pluginDirectory'] . '/fpp-zettle/commands/ZettleTo
 <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
 <div id="global" class="settings">
-    <?php include $settings['pluginDirectory']."/fpp-zettle/pluginUpdate.php" ?>
+    <!-- <?php include $settings['pluginDirectory']."/fpp-zettle/pluginUpdate.php" ?> -->
     <legend>Zettle Setup</legend>
     <p>Add your client id and secret generated from the Zettle Integrations
         webpage</p>
