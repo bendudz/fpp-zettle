@@ -285,7 +285,7 @@ function updatePurchaseSubscription()
           'error' => false,
           'message' => 'Purchase Subscription Updated',
           'subscription' => $query,
-          'organizationUuid' => $organizationUuid
+          'organizationUuid' => $organization_uuid
         ]);
     }
 }

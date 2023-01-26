@@ -164,7 +164,7 @@ function isSiteAvailible($url){
  * @param array $settings fpp settings
  * @return string
  */
-function explode_destination_url(string $url, array $settings): string {
+function explode_destination_url(string $url, array $settings) {
   $explode_destination_url = explode('/', $url);
     // Get the url that we need
     $base_url = $explode_destination_url[2];
