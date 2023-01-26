@@ -41,11 +41,11 @@ if (!is_executable($settings['pluginDirectory'] . '/fpp-zettle/commands/ZettleTo
         </div>
         <input id="save" type="submit" value="Save" class="buttons btn-success">
         <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) == 0) { ?>
-        <input id="createSubscriptions" type="button" value="Create Subscription" class="buttons">
+        <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php" class="buttons">Create Subscription</a>
         <?php } ?>
         <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>
         <input id="clear_config" type="button" class="buttons" value="Clear Config">
-        <input id="clear_subscription" type="button" class="buttons" value="Clear Subscription">
+        <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=update-subscription.php" class="buttons">Update Subscription</a>
         <?php } ?>
     </form>
     <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>

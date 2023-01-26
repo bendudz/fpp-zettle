@@ -3,10 +3,9 @@ include_once 'zettle.common.php';
 $pluginName = 'zettle';
 
 $pluginJson = convertAndGetSettings($pluginName);
-$checkForUIPassword = checkForUIPassword();
 
 if (count($pluginJson['subscriptions']) > 0) { ?>
-    <p class="mb-0">Subscription has been set up nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-<?php echo $pluginName; ?>&page=status.php">status page</a> or back to <a href="plugin.php?_menu=content&plugin=fpp-<?php echo $pluginName; ?>&page=setup.php">set up page</a> to add a trigger.</p>
+    <p class="mb-0">Subscription has been setup nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-<?php echo $pluginName; ?>&page=status.php">status page</a> or back to <a href="plugin.php?_menu=content&plugin=fpp-<?php echo $pluginName; ?>&page=setup.php">set up page</a> to add a trigger.</p>
 <?php } else { ?>
 <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
@@ -58,7 +57,7 @@ if (count($pluginJson['subscriptions']) > 0) { ?>
           </div>
         </div>
         <div class="printSettingFieldCol col-md">
-          <input type='text' id='destination' value="" placeholder="Wormhole Address" required autofocus>
+          <input type='text' id='destination' value="" placeholder="Wormhole Address" required autofocus style="width: 97%;">
           <img id='HostName_img' title='This is the url that zettle will talk to' src='images/redesign/help-icon.svg' class='icon-help'>
           <span id='HostName_tip' class='tooltip' style='display: none'>This is the url that zettle will talk to</span>
         </div>
@@ -70,14 +69,14 @@ if (count($pluginJson['subscriptions']) > 0) { ?>
           </div>
         </div>
         <div class="printSettingFieldCol col-md">
-          <input type='email' id='contactEmail' value="" required>
+          <input type='email' id='contactEmail' value="" required style="width: 97%;">
           <img id='contactEmail_img' title='Used if there is an error' src='images/redesign/help-icon.svg' class='icon-help'>
           <span id='contactEmail_tip' class='tooltip' style='display: none'>Used if there is an error</span>
         </div>
       </div>
     </div>
     <input id="save" type="submit" value="Save" class="buttons btn-success">
-    <input id="status" type="button" value="Back To Status Page" class="buttons">
+    <a href="plugin.php?_menu=status&plugin=fpp-zettle&page=status.php" class="buttons">Back to Status Page</a>
   </form>
 </div>
 <?php }

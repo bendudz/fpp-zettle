@@ -145,10 +145,6 @@ $(function () {
     SaveZettleConfig(data, '#save', true, 'Details Saved!');
   });
 
-  $('#createSubscriptions').on('click', function () {
-    window.location.href = "plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php";
-  });
-
   $('#clear_config').on('click', function (e) {
     if (confirm('CLEAR CONFIG are you sure?')) {
       $.ajax({
@@ -281,8 +277,22 @@ $(function () {
     });
   });
 
-  $('#status').on('click', function () {
-    window.location.href = "plugin.php?_menu=status&plugin=fpp-zettle&page=status.php";
+  $('#update_subscription').on('submit', function (e) {
+    e.preventDefault();
+    var subscription_data = {
+      organizationUuid: $('organization_uiid').val(),
+      destination: $('#destination').val(),
+      contactEmail: $('#contactEmail').val()
+    };
+
+    $.ajax({
+      type: "POST",
+      url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=update_subscription&nopage=1',
+      dataType: 'json',
+      async: false,
+      data: subscription_data,
+      success: function (data) {}
+    });
   });
 
   $('#api_effect').on('submit', function (e) {

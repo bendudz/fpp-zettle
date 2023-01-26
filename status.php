@@ -228,6 +228,10 @@ function getStatusData($pj)
         ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=yesterday', 'yesterday');
         ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_week', 'this_week');
         ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_month', 'this_month');
+
+        setTimeout(function () {
+            ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today', 'today');
+        }, 300000);
     });
 </script>
 </body>

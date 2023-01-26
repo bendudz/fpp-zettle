@@ -15,6 +15,7 @@ $command_array = array(
   'login' => 'LoginUser',
   'subscriptions' => 'GetSubscriptions',
   'create_subscription' => 'CreatePurchaseSubscription',
+  'update_subscription' => 'updatePurchaseSubscription',
   'get_org_id' => 'GetOrgId',
   'delete_subscription' => 'DeleteSubscription',
   'clear_config' => 'ClearConfig',
@@ -198,30 +199,7 @@ function CreatePurchaseSubscription()
     // Get destination from form
     $destination_url = $_POST['destination'];
     // Explode destination_url to get parts that we need
-    $explode_destination_url = explode('/', $destination_url);
-    // Get the url that we need
-    $base_url = $explode_destination_url[2];
-    // Check if explode_destination_url last item == event
-    if (end($explode_destination_url) == 'event') {
-        // Unset first two explode_destination_url items
-        unset($explode_destination_url[0]);
-        unset($explode_destination_url[1]);
-        // Rebuild destination url
-        $destination = implode('/', $explode_destination_url);
-    } else {
-        // Build destination url with added part
-        $destination = $base_url . '/api/plugin/fpp-zettle/event';
-    }
-    // Check for ui password
-    if (checkForUIPassword()) {
-        // Build username_password
-        $username_password = 'admin:' . $settings['password'] . '@';
-        // Combine username_password and destination
-        $complete_destination_url = $username_password . $destination;
-    } else {
-        // set destination as password is not found
-        $complete_destination_url = $destination;
-    }
+    $complete_destination_url = explode_destination_url($destination_url, $settings);
 
     $query = httpPost(
         $subscriptions_url,
@@ -260,6 +238,54 @@ function CreatePurchaseSubscription()
           'message' => 'Purchase Subscription Created',
           'subscription' => $query,
           'organizationUuid' => $_POST['organizationUuid']
+        ]);
+    }
+}
+
+//plugin.php?plugin=fpp-zettle&page=zettle.php&command=update_subscription&nopage=1
+function updatePurchaseSubscription()
+{
+    global $pusher_base;
+    global $settings;
+
+    $organization_uuid = $_POST['organization_uuid'];
+    $subscription_uuid = $_POST['subscription_uuid'];
+
+    // Put together url
+    $url = $pusher_base . '/' . $organization_uuid . '/subscriptions/' . $subscription_uuid;
+    // Get destination from form
+    $destination_url = $_POST['destination'];
+    // Explode destination_url to get parts that we need
+    $complete_destination_url = explode_destination_url($destination_url, $settings);
+
+    $query = httpPost(
+        $url,
+        [
+            "eventNames" => ["PurchaseCreated"],
+            "destination" => 'https://' . $complete_destination_url,
+            "contactEmail" => $_POST['contactEmail']
+            ],
+        [
+                "Content-type: application/json"
+            ],
+        true,
+        true
+    );
+
+    // Convert stdClass object to array
+    $data = json_decode(json_encode($query), true);
+
+    if (array_key_exists('errorType', $data)) {
+        echo jsonOutput([
+            'error' => true,
+            'message' => $data['developerMessage']
+        ]);
+    } else {
+        echo jsonOutput([
+          'error' => false,
+          'message' => 'Purchase Subscription Updated',
+          'subscription' => $query,
+          'organizationUuid' => $organizationUuid
         ]);
     }
 }

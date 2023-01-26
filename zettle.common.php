@@ -156,3 +156,43 @@ function isSiteAvailible($url){
     // return $response?true:false;
     return $httpcode;
 }
+
+/**
+ * Explode destination url make sure all is right
+ *
+ * @param string $url This is the url that zettle will talk to
+ * @param array $settings fpp settings
+ * @return string
+ */
+function explode_destination_url(string $url, array $settings): string {
+  $explode_destination_url = explode('/', $url);
+    // Get the url that we need
+    $base_url = $explode_destination_url[2];
+    // Check if explode_destination_url last item == event
+    if (end($explode_destination_url) == 'event') {
+        // Unset first two explode_destination_url items
+        unset($explode_destination_url[0]);
+        unset($explode_destination_url[1]);
+        // Rebuild destination url
+        $destination = implode('/', $explode_destination_url);
+    } else {
+        // Build destination url with added part
+        $destination = $base_url . '/api/plugin/fpp-zettle/event';
+    }
+    // Check for ui password
+    if (checkForUIPassword()) {
+        // Build username_password
+        $username_password = 'admin:' . $settings['password'] . '@';
+        // Combine username_password and destination
+        $complete_destination_url = $username_password . $destination;
+    } else {
+        // set destination as password is not found
+        $complete_destination_url = $destination;
+    }
+
+    return $complete_destination_url;
+}
+
+function jsonOutput($array) {
+  return json_encode($array);
+}
