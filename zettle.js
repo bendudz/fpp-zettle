@@ -1,11 +1,4 @@
 var zettleConfig = null;
-var uuidv1 = null;
-
-function uuid() {
-  $.get('https://www.uuidtools.com/api/generate/v1', function (data) {
-    uuidv1 = data[0];
-  });
-}
 
 function SaveZettleConfig(config, button = '', reload = false, success_msg = '') {
   var data = JSON.stringify(config);
@@ -127,8 +120,6 @@ $(function () {
       }
     }
   });
-  // Genarate UUID
-  uuid();
 
   $('#setup').on('submit', function (e) {
     e.preventDefault();
@@ -231,7 +222,7 @@ $(function () {
       contentType: 'application/json',
       success: function (data) {
         var subscription_data = {
-          uuid: uuidv1,
+          uuid: $('#uuid').val(),
           organizationUuid: data.organizationUuid,
           destination: $('#destination').val(),
           contactEmail: $('#contactEmail').val()
@@ -280,7 +271,8 @@ $(function () {
   $('#update_subscription').on('submit', function (e) {
     e.preventDefault();
     var subscription_data = {
-      organizationUuid: $('organization_uiid').val(),
+      organization_uuid: $('#organization_uuid').val(),
+      subscription_uuid: $('#subscription_uuid').val(),
       destination: $('#destination').val(),
       contactEmail: $('#contactEmail').val()
     };
@@ -291,7 +283,27 @@ $(function () {
       dataType: 'json',
       async: false,
       data: subscription_data,
-      success: function (data) {}
+      success: function (data) {
+        if (data.error) {
+          $.jGrowl('Error: ' + data.message, {
+            themeState: 'danger'
+          });
+        } else {
+          $.jGrowl(data.message, {
+            themeState: 'success'
+          });
+          SaveZettleConfig({
+            "client_id": zettleConfig.client_id,
+            "client_secret": zettleConfig.client_secret,
+            "organizationUuid": data
+              .organizationUuid,
+            "subscriptions": data.subscription
+          }, '', false, 'Subscription Details Update!');
+          setTimeout(function () {
+            location.reload();
+          }, 3000);
+        }
+      }
     });
   });
 

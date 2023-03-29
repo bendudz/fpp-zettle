@@ -1,6 +1,9 @@
 <?php
+include 'vendor/autoload.php';
 include_once "/opt/fpp/www/common.php";
 include_once 'zettle.common.php';
+
+use GuzzleHttp\Client;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -92,7 +95,7 @@ function buildQuery($data = [], $o = [], $url)
     return $jsonResult;
 }
 
-function httpPost($url, $data, $headers, $auth = false, $json = false)
+function httpPost($url, $data, $headers, $auth = false, $json = false, $method = 'POST')
 {
     if ($auth) {
         if (isset($_SESSION['expires_in']) && isset($_SESSION['access_token'])) {
@@ -104,9 +107,11 @@ function httpPost($url, $data, $headers, $auth = false, $json = false)
                         'message' => $login['message']
                     ]);
                 }
-                $headers[] = "Authorization: Bearer " . $login['access_token'];
+                // $headers[] = "Authorization: Bearer " . $login['access_token'];
+                $headers['Authorization'] = "Bearer " . $login['access_token'];
             } else {
-                $headers[] = "Authorization: Bearer ".$_SESSION['access_token'];
+                // $headers[] = "Authorization: Bearer ".$_SESSION['access_token'];
+                $headers['Authorization'] = "Bearer " . $_SESSION['access_token'];
             }
         } else {
             $login = LoginUser();
@@ -120,14 +125,29 @@ function httpPost($url, $data, $headers, $auth = false, $json = false)
         }
     }
 
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $json ? json_encode($data) : http_build_query($data));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    return json_decode($response);
+    // Make up request options
+    $options = [
+        'headers' => $headers
+    ];
+
+    if ($json) {
+        $options['json'] = $data;
+    } else {
+        $options['form_params'] = $data;
+    }
+
+    $client = new Client();
+    $response = $client->request($method, $url, $options);
+
+
+    // $curl = curl_init($url);
+    // curl_setopt($curl, CURLOPT_POST, true);
+    // curl_setopt($curl, CURLOPT_POSTFIELDS, $json ? json_encode($data) : http_build_query($data));
+    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    // curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    // $response = curl_exec($curl);
+    // curl_close($curl);
+    return json_decode($response->getBody());
 }
 
 // /plugin.php?plugin=fpp-zettle&page=zettle.php&command=login&nopage=1
@@ -252,7 +272,7 @@ function updatePurchaseSubscription()
     $subscription_uuid = $_POST['subscription_uuid'];
 
     // Put together url
-    $url = $pusher_base . '/' . $organization_uuid . '/subscriptions/' . $subscription_uuid;
+    $url = $pusher_base . '/organizations/' . $organization_uuid . '/subscriptions/' . $subscription_uuid;
     // Get destination from form
     $destination_url = $_POST['destination'];
     // Explode destination_url to get parts that we need
@@ -261,6 +281,8 @@ function updatePurchaseSubscription()
     $query = httpPost(
         $url,
         [
+            // 'uuid' => $_POST['uuid'],
+            // "transportName"=> "WEBHOOK",
             "eventNames" => ["PurchaseCreated"],
             "destination" => 'https://' . $complete_destination_url,
             "contactEmail" => $_POST['contactEmail']
@@ -269,25 +291,26 @@ function updatePurchaseSubscription()
                 "Content-type: application/json"
             ],
         true,
-        true
+        true,
+        'PUT'
     );
 
     // Convert stdClass object to array
     $data = json_decode(json_encode($query), true);
 
-    if (array_key_exists('errorType', $data)) {
-        echo jsonOutput([
-            'error' => true,
-            'message' => $data['developerMessage']
-        ]);
-    } else {
-        echo jsonOutput([
-          'error' => false,
-          'message' => 'Purchase Subscription Updated',
-          'subscription' => $query,
-          'organizationUuid' => $organization_uuid
-        ]);
-    }
+    $pluginJson = convertAndGetSettings('zettle');
+
+    $subscriptionData = $pluginJson['subscriptions'];
+
+    $subscriptionData['destination'] = 'https://' . $complete_destination_url;
+    $subscriptionData['contactEmail'] = $_POST['contactEmail'];
+
+    echo jsonOutput([
+        'error' => false,
+        'message' => 'Purchase Subscription Updated',
+        'subscription' => $subscriptionData,
+        'organizationUuid' => $organization_uuid
+    ]);
 }
 
 //plugin=fpp-zettle&page=zettle.php&command=get_org_id&nopage=1

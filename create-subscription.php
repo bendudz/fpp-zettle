@@ -1,6 +1,12 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include_once 'zettle.common.php';
+include 'vendor/autoload.php';
 $pluginName = 'zettle';
+$uuid = \AbmmHasan\Uuid::v1();
 
 $pluginJson = convertAndGetSettings($pluginName);
 
@@ -49,6 +55,7 @@ if (count($pluginJson['subscriptions']) > 0) { ?>
       <p>If you are using Dataplicity. Make sure you <b>Activate</b> the wormhole from there web portal. Overwise you will get an error.</p>
     </div>
     <form id="subscription" action="" method="post">
+      <input type="hidden" name="uuid" id="uuid" value="<?php echo $uuid; ?>">
     <div class="container-fluid settingsTable settingsGroupTable">
       <div class="row">
         <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
