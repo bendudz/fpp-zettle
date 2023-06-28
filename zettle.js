@@ -4,7 +4,7 @@ function SaveZettleConfig(config, button = '', reload = false, success_msg = '')
   var data = JSON.stringify(config);
   $.ajax({
     type: "POST",
-    url: 'fppjson.php?command=setPluginJSON&plugin=fpp-zettle',
+    url: 'api/configfile/plugin.fpp-zettle.json',
     dataType: 'json',
     async: false,
     data: data,
@@ -83,43 +83,56 @@ $(function () {
     });
   }
 
-  $.ajax({
-    type: "GET",
-    url: 'fppjson.php?command=getPluginJSON&plugin=fpp-zettle',
-    dataType: 'json',
-    contentType: 'application/json',
-    success: function (data) {
-      if (typeof data === "string") {
-        zettleConfig = $.parseJSON(data);
-      } else {
-        zettleConfig = data;
-      }
-      if ($('#api_effect').length > 0) {
-        console.log('api_effect found');
-        var newButtonRowCommand = 'button_TPL_Command';
-        var newButtonRowTable = 'tableButtonTPL';
+  // $.ajax({
+  //   type: "GET",
+  //   url: 'api/configfile/plugin.fpp-zettle.json',
+  //   dataType: 'json',
+  //   contentType: 'application/json',
+  //   success: function (data) {
+  //     processZettleConfig(data);
+  //   }
+  // });
 
-        LoadCommandList(newButtonRowCommand);
-        PopulateExistingCommand(zettleConfig, newButtonRowCommand, newButtonRowTable, true);
+  $.get('api/configfile/plugin.fpp-zettle.json')
+    .done(function(data) {
+      processZettleConfig(data);
+    })
+    .fail(function(data) {
+      processZettleConfig('[]');
+    });
 
-        if (zettleConfig.command == 'Overlay Model Effect' && zettleConfig.args[2] == 'Text') {
-          $('#text_options').show();
-        }
-
-        $('.buttonCommand').attr('id', newButtonRowCommand).on('change', function () {
-          CommandSelectChanged(newButtonRowCommand, newButtonRowTable, true);
-
-          $('#tableButtonTPL_arg_3_row').find('select').on('change', function () {
-            if ($(this).val() == 'Text') {
-              $('#text_options').fadeIn();
-            } else {
-              $('#text_options').fadeOut();
-            }
-          });
-        });
-      }
+  function processZettleConfig(config) {
+    if (typeof config === "string") {
+      zettleConfig = $.parseJSON(config);
+    } else {
+     zettleConfig = config;
     }
-  });
+
+    if ($('#api_effect').length > 0) {
+      console.log('api_effect found');
+      var newButtonRowCommand = 'button_TPL_Command';
+      var newButtonRowTable = 'tableButtonTPL';
+
+      LoadCommandList(newButtonRowCommand);
+      PopulateExistingCommand(zettleConfig, newButtonRowCommand, newButtonRowTable, true);
+
+      if (zettleConfig.command == 'Overlay Model Effect' && zettleConfig.args[2] == 'Text') {
+        $('#text_options').show();
+      }
+
+      $('.buttonCommand').attr('id', newButtonRowCommand).on('change', function () {
+        CommandSelectChanged(newButtonRowCommand, newButtonRowTable, true);
+
+        $('#tableButtonTPL_arg_3_row').find('select').on('change', function () {
+          if ($(this).val() == 'Text') {
+            $('#text_options').fadeIn();
+          } else {
+            $('#text_options').fadeOut();
+          }
+        });
+      });
+    }
+  }
 
   $('#setup').on('submit', function (e) {
     e.preventDefault();
