@@ -48,6 +48,17 @@
 <p>When a real transaction is received the plugin will log it to a transaction file. You can view transactions in <code>Status / Control &gt; Zettle - Status</code>. This page will also allow you to clear any transactions should you wish. This is mearly for you to see what / who has used your Zettle device to donate at your show.</p>
 <p><img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/status-page.png" alt="1"></p>
 
+<h2 id="pushover-setup">Pushover Setup</h2>
+<p>Get notification sent your phone every time a donate is made. Pushover is free to use for 30 days. If you want to use it for longer there is a $5 USD one-time purchase fee. Check out the details at there website: <a href="https://pushover.net/" target="_blank">https://pushover.net</a></p>
+<p>To get up and running with Pushover you will need to create an account and get two keys that will be need to everything to work. The two keys you need is the <strong>Application API Token</strong> and <strong>User Key</strong></p>
+<p>You can find <strong>User Key</strong> on the first page you go after you login on the rigth hand side</p>
+<p>To get the <strong>Application API Token</strong> first you need to create an application.</p>
+<p>Navigate to your Pushover dashboard.</p>
+<p>Scroll down to <code>Your Applications</code></p>
+<p>Click <code>Create an Application/API Token</code></p>
+<p>Ender a <code>Name</code> for your application then click <code>Create Application</code></p>
+<p>Once your application is created you will see your API Token/Key</p>
+
 <h2 id="commands">Commands</h2>
 <p>Zettle Total: Allows you to show what has been raised at the end or during your show using the "Overlay Model Effect Command". The command text can use all text options available.</p>
 <p>The command will only work if you are using the "Overlay Model Effect Command" in your zettle setup page.</p>
