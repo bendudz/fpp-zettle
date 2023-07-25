@@ -1,6 +1,12 @@
 <?php
 
+use LeonardoTeixeira\Pushover\Client;
+use LeonardoTeixeira\Pushover\Exceptions\PushoverException;
+use LeonardoTeixeira\Pushover\Message;
+use LeonardoTeixeira\Pushover\Priority;
+
 include_once 'zettle.common.php';
+include 'vendor/autoload.php';
 
 # Add API resources to this file
 
@@ -102,6 +108,9 @@ function fppZettleEvent()
             // Write to log file
             custom_logs('command fired');
         }
+        if (isset($config['pushover']) && $config['pushover']['activate'] == 'yes') {
+            pushover($config);
+        }
         return true;
     }
     return true;
@@ -110,3 +119,16 @@ function fppZettleEvent()
 // function runningTotal($option = 'everything') {
 //     return file_get_contents('http://localhost/plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=' . $option);
 // }
+
+function pushover($config)
+{
+    $client = new Client($config['pushover']['user_key'], $config['pushover']['app_token']);
+    $message = new Message($config['pushover']['message'], 'FPP CARD READER', Priority::HIGH);
+
+    try {
+        $client->push($message);
+        custom_logs('The message has been pushed!');
+    } catch (PushoverException $e) {
+        custom_logs('ERROR: ', $e->getMessage());
+    }
+}

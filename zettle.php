@@ -24,7 +24,8 @@ $command_array = array(
   'clear_config' => 'ClearConfig',
   'clear_subscription' => 'ClearSubscription',
   'matrix_text' => 'MatrixText',
-  'get_purchases' => 'GetPurchases'
+  'get_purchases' => 'GetPurchases',
+  'update_json' => 'UpdateJson'
 );
 
 $command = "";
@@ -501,4 +502,20 @@ function GetPurchases () {
 
         echo '£' . number_format($total, 2);
     // }
+}
+
+function UpdateJson()
+{
+    $pluginJson = convertAndGetSettings('zettle');
+    $pluginJson['pushover']['activate'] = $_POST['activate'];
+    $pluginJson['pushover']['app_token'] = $_POST['app_token'];
+    $pluginJson['pushover']['user_key'] = $_POST['user_key'];
+    $pluginJson['pushover']['message'] = $_POST['message'];
+
+    setPluginJSON('fpp-zettle', $pluginJson);
+
+    echo json_encode([
+        'message' => 'Pushover Config Update',
+        'data' => $pluginJson,
+    ]);
 }

@@ -1,6 +1,7 @@
 {
     "require": {
         "abmmhasan/uuid": "^1.0",
-        "guzzlehttp/guzzle": "^6.0"
+        "guzzlehttp/guzzle": "^6.0",
+        "leonardoteixeira/pushover": "^1.2"
     }
 }

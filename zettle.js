@@ -419,4 +419,26 @@ $(function () {
     CommandToJSON('button_TPL_Command', 'tableButtonTPL', zettle);
     SaveZettleConfig(zettle, '#effect_save', true, 'Effect Saved!');
   });
+
+  $('#pushover').on('submit', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+      type: "POST",
+      url: "plugin.php?plugin=fpp-zettle&page=zettle.php&command=update_json&nopage=1",
+      dataType: 'json',
+      async: false,
+      data: {
+        activate: $('#pushover_activate option:selected').val(),
+        app_token: $('#pushover_app_token').val(),
+        user_key: $('#pushover_user_key').val(),
+        message: $('#pushover_message').val()
+      },
+      success: function (data) {
+        $.jGrowl(data.message, {
+          themeState: "success"
+        });
+      }
+    });
+  });
 });
