@@ -120,9 +120,9 @@ function getStatusData($pj)
     <div class="col">
         <div class="alert-success alert mb-0">
             <div class="d-flex align-items-center">
-                <div class="avatar rounded no-thumbnail bg-success text-light"><i class="fas fa-pound-sign fa-lg"></i></div>
+                <div class="avatar rounded no-thumbnail bg-success text-white"><i class="fas fa-pound-sign fa-lg"></i></div>
                 <div class="flex-fill ms-3 text-truncate">
-                    <div class="h6 mb-0">Today</div>
+                    <div class="h6 mb-0"><strong>Today</strong></div>
                     <span class="small" id="today">£0</span>
                 </div>
             </div>
@@ -131,9 +131,9 @@ function getStatusData($pj)
     <div class="col">
         <div class="alert-success alert mb-0">
             <div class="d-flex align-items-center">
-                <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fas fa-pound-sign fa-lg"></i></div>
+                <div class="avatar rounded no-thumbnail bg-success text-white"><i class="fas fa-pound-sign fa-lg"></i></div>
                 <div class="flex-fill ms-3 text-truncate">
-                    <div class="h6 mb-0">Yesterday</div>
+                    <div class="h6 mb-0"><strong>Yesterday</strong></div>
                     <span class="small" id="yesterday">£0</span>
                 </div>
             </div>
@@ -142,9 +142,9 @@ function getStatusData($pj)
     <div class="col">
         <div class="alert-success alert mb-0">
             <div class="d-flex align-items-center">
-                <div class="avatar rounded no-thumbnail bg-success text-light"><i class="fas fa-pound-sign fa-lg"></i></div>
+                <div class="avatar rounded no-thumbnail bg-success text-white"><i class="fas fa-pound-sign fa-lg"></i></div>
                 <div class="flex-fill ms-3 text-truncate">
-                    <div class="h6 mb-0">This Week</div>
+                    <div class="h6 mb-0"><strong>This Week</strong></div>
                     <span class="small" id="this_week">£0</span>
                 </div>
             </div>
@@ -153,9 +153,9 @@ function getStatusData($pj)
     <div class="col">
         <div class="alert-success alert mb-0">
             <div class="d-flex align-items-center">
-                <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fas fa-pound-sign fa-lg"></i></div>
+                <div class="avatar rounded no-thumbnail bg-success text-white"><i class="fas fa-pound-sign fa-lg"></i></div>
                 <div class="flex-fill ms-3 text-truncate">
-                    <div class="h6 mb-0">This Month</div>
+                    <div class="h6 mb-0"><strong>This Month</strong></div>
                     <span class="small" id="this_month">£0</span>
                 </div>
             </div>

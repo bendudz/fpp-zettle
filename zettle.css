@@ -53,3 +53,7 @@
 .alert-link:hover {
   text-decoration: underline !important;
 }
+
+.text-white {
+    color: #fff!important;
+}
