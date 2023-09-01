@@ -149,7 +149,7 @@ if (!is_executable($settings["pluginDirectory"] . "/fpp-zettle/commands/ZettleTo
                 </div>
             </div>
         </div>
-        <input id="save" type="submit" value="Save" class="buttons btn-success">
+        <input type="submit" value="Save" class="buttons btn-success">
     </form>
     <?php } ?>
 </div>

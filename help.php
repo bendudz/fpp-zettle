@@ -2,6 +2,13 @@
 <p><a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="Pull Requests Welcome"></a>
     <img src="https://shields.io/badge/fpp-AnnounceZettle-brightgreen" alt="FPP Zettle Logo"></p>
 <p>Get yourself an iZettle device, take a donation &amp; trigger an effect on your light show.</p>
+<ul>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#dataplicity-setup">Dataplicity Setup</a></li>
+    <li><a href="#fpp">FPP</a></li>
+    <li><a href="#pushover-setup">Pushover Setup</a></li>
+    <li><a href="#commands">Commands</a></li>
+</ul>
 <h2 id="getting-started">Getting Started</h2>
 <p>You&#39;ll need an iZettle device to use this plugin.</p>
 <p>Either <a href="https://register.zettle.com/gb">register</a> or <a href="https://login.zettle.com/">login</a> with Zettle.</p>

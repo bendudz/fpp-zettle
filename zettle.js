@@ -1,15 +1,15 @@
 var zettleConfig = null;
 
 function SaveZettleConfig(config, button = '', reload = false, success_msg = '') {
-  var data = JSON.stringify(config);
+  // var data = JSON.stringify(config);
   $.ajax({
     type: "POST",
-    url: 'api/configfile/plugin.fpp-zettle.json',
+    // url: 'api/configfile/plugin.fpp-zettle.json',
+    url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=update_json&nopage=1',
+    async: false,
+    data: config,
     dataType: 'json',
     async: false,
-    data: data,
-    processData: false,
-    contentType: 'application/json',
     beforeSend: function () {
       if (button != '') {
         $(button).prop('disabled', true);
@@ -83,16 +83,6 @@ $(function () {
     });
   }
 
-  // $.ajax({
-  //   type: "GET",
-  //   url: 'api/configfile/plugin.fpp-zettle.json',
-  //   dataType: 'json',
-  //   contentType: 'application/json',
-  //   success: function (data) {
-  //     processZettleConfig(data);
-  //   }
-  // });
-
   $.get('api/configfile/plugin.fpp-zettle.json')
     .done(function(data) {
       processZettleConfig(data);
@@ -140,11 +130,11 @@ $(function () {
     var client_id = $("#client_id").val();
     var client_secret = $("#client_secret").val();
 
-    // Get current config
-    var data = zettleConfig;
-    // Override config feilds
-    data.client_id = client_id;
-    data.client_secret = client_secret;
+    var data = {
+      option: "setup",
+      client_id: client_id,
+      client_secret: client_secret,
+    };
     // Save config
     SaveZettleConfig(data, '#save', true, 'Details Saved!');
   });
@@ -258,13 +248,6 @@ $(function () {
               $.jGrowl(data.message, {
                 themeState: 'success'
               });
-              SaveZettleConfig({
-                "client_id": zettleConfig.client_id,
-                "client_secret": zettleConfig.client_secret,
-                "organizationUuid": data
-                  .organizationUuid,
-                "subscriptions": data.subscription
-              }, '', false, 'Subscription Details Saved!');
               setTimeout(function () {
                 location.reload();
               }, 3000);
@@ -305,13 +288,6 @@ $(function () {
           $.jGrowl(data.message, {
             themeState: 'success'
           });
-          SaveZettleConfig({
-            "client_id": zettleConfig.client_id,
-            "client_secret": zettleConfig.client_secret,
-            "organizationUuid": data
-              .organizationUuid,
-            "subscriptions": data.subscription
-          }, '', false, 'Subscription Details Update!');
           setTimeout(function () {
             location.reload();
           }, 3000);
@@ -334,10 +310,7 @@ $(function () {
     });
 
     var zettle = {
-      "client_id": zettleConfig.client_id,
-      "client_secret": zettleConfig.client_secret,
-      "organizationUuid": zettleConfig.organizationUuid,
-      "subscriptions": zettleConfig.subscriptions
+      "option": 'effect',
     };
     CommandToJSON('button_TPL_Command', 'tableButtonTPL', zettle);
     SaveZettleConfig(zettle, '#effect_save', true, 'Effect Saved!');
@@ -397,47 +370,34 @@ $(function () {
     StreamURL('plugin.php?plugin=fpp-zettle&page=install-dataplicity.php&nopage=1&command=' + command, 'installText', 'InstallDone');
   });
 
-  $('#api_effect').on('submit', function (e) {
-    e.preventDefault();
-
-    var effect = $('#select_effect option:selected').val();
-
-    $('[id^="tableButton"]').each(function () {
-      var oldId = $(this).prop('id')
-      var idArr = oldId.split('_');
-      idArr[0] = 'tableButtonTPL'
-      $(this).attr('id', idArr.join('_'));
-      console.log($(this).attr('id', idArr.join('_')));
-    });
-
-    var zettle = {
-      "client_id": zettleConfig.client_id,
-      "client_secret": zettleConfig.client_secret,
-      "organizationUuid": zettleConfig.organizationUuid,
-      "subscriptions": zettleConfig.subscriptions
-    };
-    CommandToJSON('button_TPL_Command', 'tableButtonTPL', zettle);
-    SaveZettleConfig(zettle, '#effect_save', true, 'Effect Saved!');
-  });
-
   $('#pushover').on('submit', function (e) {
     e.preventDefault();
 
+    var thisForm = $(this);
+    var submitButton = $("input[type=submit]",thisForm);
+
     $.ajax({
       type: "POST",
-      url: "plugin.php?plugin=fpp-zettle&page=zettle.php&command=update_json&nopage=1",
+      url: "plugin.php?plugin=fpp-zettle&page=zettle.php&command=save_pushover&nopage=1",
       dataType: 'json',
       async: false,
       data: {
+        option: "pusher",
         activate: $('#pushover_activate option:selected').val(),
         app_token: $('#pushover_app_token').val(),
         user_key: $('#pushover_user_key').val(),
         message: $('#pushover_message').val()
       },
+      beforeSend: function () {
+        $(submitButton).prop('disabled', true);
+      },
       success: function (data) {
         $.jGrowl(data.message, {
           themeState: "success"
         });
+        setTimeout(function () {
+          location.reload();
+        }, 3000);
       }
     });
   });

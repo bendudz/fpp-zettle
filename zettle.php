@@ -25,7 +25,8 @@ $command_array = array(
   'clear_subscription' => 'ClearSubscription',
   'matrix_text' => 'MatrixText',
   'get_purchases' => 'GetPurchases',
-  'update_json' => 'UpdateJson'
+  'save_pushover' => 'SavePushover',
+  'update_json' => 'UpdateJson',
 );
 
 $command = "";
@@ -254,11 +255,17 @@ function CreatePurchaseSubscription()
             'message' => $message
         ]);
     } else {
+
+        UpdateJson2('subscription', [
+            'subscriptions' => $query,
+            'organizationUuid' => $_POST['organizationUuid'],
+        ]);
+
         echo json_encode([
           'error' => false,
           'message' => 'Purchase Subscription Created',
-          'subscription' => $query,
-          'organizationUuid' => $_POST['organizationUuid']
+          //'subscription' => $query,
+          //'organizationUuid' => $_POST['organizationUuid']
         ]);
     }
 }
@@ -306,11 +313,13 @@ function updatePurchaseSubscription()
     $subscriptionData['destination'] = 'https://' . $complete_destination_url;
     $subscriptionData['contactEmail'] = $_POST['contactEmail'];
 
+    updateJson2('update_subscription', $subscriptionData);
+
     echo jsonOutput([
         'error' => false,
         'message' => 'Purchase Subscription Updated',
-        'subscription' => $subscriptionData,
-        'organizationUuid' => $organization_uuid
+        // 'subscription' => $subscriptionData,
+        // 'organizationUuid' => $organization_uuid
     ]);
 }
 
@@ -504,18 +513,68 @@ function GetPurchases () {
     // }
 }
 
+function SavePushOver () {
+    UpdateJson2('pushover', [
+        'activate' => $_POST['activate'],
+        'app_token' => $_POST['app_token'],
+        'user_key' => $_POST['user_key'],
+        'message' => $_POST['message'],
+    ]);
+
+    echo jsonOutput([
+        'error' => false,
+        'message' => 'Pushover Updated!'
+    ]);
+}
+
 function UpdateJson()
 {
     $pluginJson = convertAndGetSettings('zettle');
-    $pluginJson['pushover']['activate'] = $_POST['activate'];
-    $pluginJson['pushover']['app_token'] = $_POST['app_token'];
-    $pluginJson['pushover']['user_key'] = $_POST['user_key'];
-    $pluginJson['pushover']['message'] = $_POST['message'];
+
+    switch ($_POST['option']) {
+        case 'setup':
+            unset($_POST['option']);
+            $pluginJson = array_merge($pluginJson, $_POST);
+            break;
+
+        case 'effect':
+            unset($_POST['option']);
+
+            $pluginJson = array_merge($pluginJson, $_POST);
+            if ($pluginJson['multisyncCommand'] == "false") {
+                $pluginJson['multisyncCommand'] = false;
+            } else {
+                $pluginJson['multisyncCommand'] = true;
+            }
+            break;
+    }
 
     setPluginJSON('fpp-zettle', $pluginJson);
 
     echo json_encode([
-        'message' => 'Pushover Config Update',
-        'data' => $pluginJson,
+        'error' => false
     ]);
+}
+
+function UpdateJson2($option, $data)
+{
+    $pluginJson = convertAndGetSettings('zettle');
+
+    switch ($option) {
+        case 'pushover':
+            $pluginJson['pushover']['activate'] = $data['activate'];
+            $pluginJson['pushover']['app_token'] = $data['app_token'];
+            $pluginJson['pushover']['user_key'] = $data['user_key'];
+            $pluginJson['pushover']['message'] = $data['message'];
+            break;
+
+        case 'subscription':
+        case 'update_subscription';
+            $pluginJson = array_merge($pluginJson, $data);
+            break;
+    }
+
+    setPluginJSON('fpp-zettle', $pluginJson);
+
+    return true;
 }
