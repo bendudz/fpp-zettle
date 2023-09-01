@@ -98,7 +98,7 @@ if (!is_executable($settings["pluginDirectory"] . "/fpp-zettle/commands/ZettleTo
         <input id="effect_save" type="submit" value="Save" class="buttons btn-success">
         <input id="test_command" type="button" value="Test" class="buttons">
     </form>
-    <div class="alert alert-info">If you are looking for help press F1</div>
+    <div class="alert alert-info">If you are looking for help press F1 or <a href="plugin.php?plugin=fpp-zettle&page=help.php" class="alert-link" target="_blank">Click Here</a></div>
 
     <legend>Pushover</legend>
     <p>Get notification sent your phone every time a donate is made. Pushover is free to use for 30 days. If you want to use it for longer there is a $5 USD one-time purchase fee. Check out the details at there website: <a href="https://pushover.net/" target="_blank">https://pushover.net</a></p>

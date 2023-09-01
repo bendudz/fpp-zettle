@@ -129,7 +129,7 @@ function getStatusData($pj)
         </div>
     </div>
     <div class="col">
-        <div class="alert-info alert mb-0">
+        <div class="alert-success alert mb-0">
             <div class="d-flex align-items-center">
                 <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fas fa-pound-sign fa-lg"></i></div>
                 <div class="flex-fill ms-3 text-truncate">
@@ -151,7 +151,7 @@ function getStatusData($pj)
         </div>
     </div>
     <div class="col">
-        <div class="alert-info alert mb-0">
+        <div class="alert-success alert mb-0">
             <div class="d-flex align-items-center">
                 <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fas fa-pound-sign fa-lg"></i></div>
                 <div class="flex-fill ms-3 text-truncate">

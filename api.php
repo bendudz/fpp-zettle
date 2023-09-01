@@ -44,7 +44,15 @@ function fppZettleEvent()
 {
     $event = json_decode(file_get_contents('php://input'), true);
     header("Content-Type: application/json");
-
+    // Check for eventName in the post data
+    if (!isset($event['eventName'])) {
+        // eventName could not be found display message to user
+        return json_encode([
+            'error' => true,
+            'message' => 'eventName could not be found in request, please try again']
+        );
+    }
+    // Check if eventName === PurchaseCreated
     if ($event['eventName'] == 'PurchaseCreated') {
         $payload = json_decode(json_decode(json_encode($event['payload']), true), true);
         $amount = ($payload['amount'] / 100);

@@ -132,6 +132,8 @@ function httpPost($url, $data, $headers, $auth = false, $json = false, $method =
         'headers' => $headers
     ];
 
+    // custom_logs($options);
+
     if ($json) {
         $options['json'] = $data;
     } else {
@@ -233,7 +235,7 @@ function CreatePurchaseSubscription()
             "contactEmail" => $_POST['contactEmail']
             ],
         [
-                "Content-type: application/json"
+                "Content-type" => "application/json"
             ],
         true,
         true
@@ -313,7 +315,9 @@ function updatePurchaseSubscription()
     $subscriptionData['destination'] = 'https://' . $complete_destination_url;
     $subscriptionData['contactEmail'] = $_POST['contactEmail'];
 
-    updateJson2('update_subscription', $subscriptionData);
+    updateJson2('update_subscription', [
+        'subscriptions' => $subscriptionData
+    ]);
 
     echo jsonOutput([
         'error' => false,
