@@ -26,6 +26,7 @@ $command_array = array(
   'matrix_text' => 'MatrixText',
   'get_purchases' => 'GetPurchases',
   'save_pushover' => 'SavePushover',
+  'save_publish' => 'SavePublish',
   'update_json' => 'UpdateJson',
 );
 
@@ -531,6 +532,18 @@ function SavePushOver () {
     ]);
 }
 
+function SavePublish () {
+    UpdateJson2('publish', [
+        'activate' => $_POST['activate'],
+        //'location' => $_POST['location'],
+    ]);
+
+    echo jsonOutput([
+        'error' => false,
+        'message' => 'Publish Updated!'
+    ]);
+}
+
 function UpdateJson()
 {
     $pluginJson = convertAndGetSettings('zettle');
@@ -576,6 +589,10 @@ function UpdateJson2($option, $data)
         case 'update_subscription';
             $pluginJson = array_merge($pluginJson, $data);
             break;
+
+        case 'publish':
+            $pluginJson['publish']['activate'] = $data['activate'];
+            //$pluginJson['publish']['location'] = $data['location'];
     }
 
     setPluginJSON('fpp-zettle', $pluginJson);

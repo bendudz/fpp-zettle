@@ -401,4 +401,34 @@ $(function () {
       }
     });
   });
+
+  $('#publish').on('submit', function (e) {
+    e.preventDefault();
+
+    var thisForm = $(this);
+    var submitButton = $("input[type=submit]",thisForm);
+
+    $.ajax({
+      type: "POST",
+      url: "plugin.php?plugin=fpp-zettle&page=zettle.php&command=save_publish&nopage=1",
+      dataType: 'json',
+      async: false,
+      data: {
+        option: "publish",
+        activate: $('#publish_activate option:selected').val(),
+        //location: $('#publish_location').val(),
+      },
+      beforeSend: function () {
+        $(submitButton).prop('disabled', true);
+      },
+      success: function (data) {
+        $.jGrowl(data.message, {
+          themeState: "success"
+        });
+        setTimeout(function () {
+          location.reload();
+        }, 3000);
+      }
+    });
+  });
 });

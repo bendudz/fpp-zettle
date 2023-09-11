@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Client as GuzzleHttpClient;
 use LeonardoTeixeira\Pushover\Client;
 use LeonardoTeixeira\Pushover\Exceptions\PushoverException;
 use LeonardoTeixeira\Pushover\Message;
@@ -119,6 +120,9 @@ function fppZettleEvent()
         if (isset($config['pushover']) && $config['pushover']['activate'] == 'yes') {
             pushover($config);
         }
+        if (isset($config['publish']) && $config['publish']['activate'] == 'yes') {
+            publishTransactionDetails($config, $payload);
+        }
         return true;
     }
     return true;
@@ -139,4 +143,24 @@ function pushover($config)
     } catch (PushoverException $e) {
         custom_logs('ERROR: ', $e->getMessage());
     }
+}
+
+function publishTransactionDetails($config, $payload)
+{
+    $client = new GuzzleHttpClient(["base_uri" => "https://fpp-zettle/api"]);
+
+    $options = [
+        'amount' => $payload['amount'],
+        'currency' => $payload['currency'],
+    ];
+
+    // if ($config['publish']['location'] == 'yes') {
+    //     $gpsCoordinates = $payload['gpsCoordinates'];
+    //     $options['latitude'] = $gpsCoordinates['latitude'];
+    //     $options['longitude'] = $gpsCoordinates['longitude'];
+    // }
+
+    $response = $client->post("/transactions", $options);
+    custom_logs('--publishTransactionDetails--');
+    custom_logs($response->getBody());
 }
