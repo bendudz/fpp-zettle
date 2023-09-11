@@ -8,6 +8,7 @@
     <li><a href="#fpp">FPP</a></li>
     <li><a href="#pushover-setup">Pushover Setup</a></li>
     <li><a href="#commands">Commands</a></li>
+    <li><a href="#notes">Things To Note</a></li>
 </ul>
 <h2 id="getting-started">Getting Started</h2>
 <p>You&#39;ll need an iZettle device to use this plugin.</p>
@@ -69,6 +70,17 @@
 <h2 id="commands">Commands</h2>
 <p>Zettle Total: Allows you to show what has been raised at the end or during your show using the "Overlay Model Effect Command". The command text can use all text options available.</p>
 <p>The command will only work if you are using the "Overlay Model Effect Command" in your zettle setup page.</p>
+
+<h2 id="notes">Things To Note</h2>
+<ol>
+    <li>For repeat payments to work you will need to iphone running iOS 14. The last phone that supports iOS 14 is an iPhone 6s. You are able to pick up an iphone on facebook market place for as little £30.</li>
+    <li>To get repeat payments actived on your zettle account you need to contact them using the live chat or send them an email</li>
+    <li>Once you have repeat payments actived on your zettle account you need to turn it on in your zettle app by going to “Settings” > “Payment settings” / “Card”</li>
+    <li>The iPhone needs to been connected to the internet and have the zettle app loaded for every thing to work</li>
+    <li>Battey life on both the card reader and the phone does not last in the cold so would need to connected to power</li>
+    <li>Bluetooth range on the card reader we found is not the best so we recommend that you keep the iPhone with in 5 feet</li>
+    <li>The card reader is not water proof and would need to box to keep the water out. Here is a <a href="https://www.amazon.co.uk/dp/B08FC91HHV" target="_blank">link</a> to box that works well</li>
+</ol>
 
 <h2 id="privacy-policy">Privacy Policy</h2>
 <h3 id="what-we-collect">What We Collect</h3>
