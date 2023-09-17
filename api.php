@@ -147,11 +147,18 @@ function pushover($config)
 
 function publishTransactionDetails($config, $payload)
 {
-    $client = new GuzzleHttpClient(["base_uri" => "https://fpp-zettle/api"]);
+    $client = new GuzzleHttpClient([
+        "base_uri" => "https://fpp-zettle.co.uk",
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
 
     $options = [
-        'amount' => $payload['amount'],
-        'currency' => $payload['currency'],
+        'form_params' => [
+            'amount' => $payload['amount'],
+            'currency' => $payload['currency'],
+        ],
     ];
 
     // if ($config['publish']['location'] == 'yes') {
@@ -160,7 +167,7 @@ function publishTransactionDetails($config, $payload)
     //     $options['longitude'] = $gpsCoordinates['longitude'];
     // }
 
-    $response = $client->post("/transactions", $options);
+    $response = $client->post("/api/transactions", $options);
     custom_logs('--publishTransactionDetails--');
     custom_logs($response->getBody());
 }

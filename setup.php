@@ -114,7 +114,7 @@ if (!is_executable($settings["pluginDirectory"] . "/fpp-zettle/commands/ZettleTo
                 <div class="printSettingFieldCol col-md">
                     <select id="pushover_activate" required class="form-control">
                         <option value="yes" <?php echo $pluginJson['pushover']['activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
-                        <option value="no" <?php echo $pluginJson['pushover']['activate'] == 'no' ? 'selected' : null; ?>>No</option>
+                        <option value="no" <?php echo $pluginJson['pushover']['activate'] == 'no' ? 'selected' : null; echo !isset($pluginJson['pushover']['activate']) ? 'selected' : ''; ?>>No</option>
                     </select>
                 </div>
             </div>
