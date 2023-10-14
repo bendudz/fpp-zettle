@@ -1,5 +1,5 @@
 [{
-  "name": "Zettle Totals",
+  "name": "Announce Zettle - Zettle Totals",
   "script": "ZettleTotals.sh",
   "description": "Show what has been raised at the end or during your show. You are have use of all Text options {{EVERYTHING}} {{TODAY}} {{THIS_MONTH}}",
   "args": [{
