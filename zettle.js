@@ -84,10 +84,10 @@ $(function () {
   }
 
   $.get('api/configfile/plugin.fpp-zettle.json')
-    .done(function(data) {
+    .done(function (data) {
       processZettleConfig(data);
     })
-    .fail(function(data) {
+    .fail(function (data) {
       processZettleConfig('[]');
     });
 
@@ -95,7 +95,7 @@ $(function () {
     if (typeof config === "string") {
       zettleConfig = $.parseJSON(config);
     } else {
-     zettleConfig = config;
+      zettleConfig = config;
     }
 
     if ($('#api_effect').length > 0) {
@@ -130,13 +130,32 @@ $(function () {
     var client_id = $("#client_id").val();
     var client_secret = $("#client_secret").val();
 
-    var data = {
-      option: "setup",
-      client_id: client_id,
-      client_secret: client_secret,
-    };
-    // Save config
-    SaveZettleConfig(data, '#save', true, 'Details Saved!');
+    // Check if keys are valid
+    $.ajax({
+      type: "GET",
+      url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=check_keys&nopage=1',
+      dataType: 'json',
+      async: false,
+      data: {
+        "client_id": client_id,
+        "client_secret": client_secret,
+      },
+      processData: false,
+      contentType: 'application/json',
+      success: function (data) {
+        var data = {
+          option: "setup",
+          client_id: client_id,
+          client_secret: client_secret,
+          organizationUuid: data.organizationUuid
+        };
+        // Save config
+        SaveZettleConfig(data, '#save', true, 'Details Saved!');
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        DialogError('Signup Error', "ERROR: There seems to be a problem with your keys please check them and try again!");
+      }
+    });
   });
 
   $('#clear_config').on('click', function (e) {
@@ -374,7 +393,7 @@ $(function () {
     e.preventDefault();
 
     var thisForm = $(this);
-    var submitButton = $("input[type=submit]",thisForm);
+    var submitButton = $("input[type=submit]", thisForm);
 
     $.ajax({
       type: "POST",
@@ -406,7 +425,7 @@ $(function () {
     e.preventDefault();
 
     var thisForm = $(this);
-    var submitButton = $("input[type=submit]",thisForm);
+    var submitButton = $("input[type=submit]", thisForm);
 
     $.ajax({
       type: "POST",

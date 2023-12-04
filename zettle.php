@@ -15,19 +15,20 @@ if (empty($a)) {
 $_SESSION['session_id'] = session_id();
 
 $command_array = array(
-  'login' => 'LoginUser',
-  'subscriptions' => 'GetSubscriptions',
-  'create_subscription' => 'CreatePurchaseSubscription',
-  'update_subscription' => 'updatePurchaseSubscription',
-  'get_org_id' => 'GetOrgId',
-  'delete_subscription' => 'DeleteSubscription',
-  'clear_config' => 'ClearConfig',
-  'clear_subscription' => 'ClearSubscription',
-  'matrix_text' => 'MatrixText',
-  'get_purchases' => 'GetPurchases',
-  'save_pushover' => 'SavePushover',
-  'save_publish' => 'SavePublish',
-  'update_json' => 'UpdateJson',
+    'login' => 'LoginUser',
+    'subscriptions' => 'GetSubscriptions',
+    'create_subscription' => 'CreatePurchaseSubscription',
+    'update_subscription' => 'updatePurchaseSubscription',
+    'get_org_id' => 'GetOrgId',
+    'delete_subscription' => 'DeleteSubscription',
+    'clear_config' => 'ClearConfig',
+    'clear_subscription' => 'ClearSubscription',
+    'matrix_text' => 'MatrixText',
+    'get_purchases' => 'GetPurchases',
+    'save_pushover' => 'SavePushover',
+    'save_publish' => 'SavePublish',
+    'update_json' => 'UpdateJson',
+    'check_keys' => 'CheckKeys',
 );
 
 $command = "";
@@ -35,7 +36,7 @@ $args = array();
 
 $oauth_base = "https://oauth.zettle.com";
 $pusher_base = "https://pusher.izettle.com";
-$subscriptions_url = $pusher_base."/organizations/self/subscriptions";
+$subscriptions_url = $pusher_base . "/organizations/self/subscriptions";
 $purchases_url = "https://purchase.izettle.com/purchases/v2";
 
 
@@ -51,7 +52,7 @@ if (array_key_exists($command, $command_array)) {
     global $debug;
 
     if ($debug) {
-        error_log("Calling " .$command);
+        error_log("Calling " . $command);
     }
 
     call_user_func($command_array[$command]);
@@ -88,7 +89,7 @@ function buildQuery($data = [], $o = [], $url)
     }
 
     // $o['header'] = 'Authorization: Bearer '.$access_token.'\r\n' . 'Content-Type: application/json';
-    $o['header'] = ["Authorization: Bearer " . $access_token,"Content-Type: application/json"];
+    $o['header'] = ["Authorization: Bearer " . $access_token, "Content-Type: application/json"];
 
     $opts = array('http' => $o);
     $context = stream_context_create($opts);
@@ -163,7 +164,7 @@ function LoginUser()
     $pluginJson = convertAndGetSettings('zettle');
 
     $query = httpPost(
-        $oauth_base.'/token',
+        $oauth_base . '/token',
         [
             'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
             'client_id' => $pluginJson['client_id'],
@@ -175,7 +176,7 @@ function LoginUser()
     );
 
     if (isset($query->error) || isset($query->code)) {
-        return[
+        return [
             'error' => true,
             'message' => isset($query->error) ? $query->error_description : $query->message
         ];
@@ -199,7 +200,7 @@ function GetSubscriptions()
     global $subscriptions_url;
 
     $query = buildQuery([], [
-      'method'  => 'GET',
+        'method'  => 'GET',
     ], $subscriptions_url);
 
     if (isset($query['error'])) {
@@ -230,14 +231,14 @@ function CreatePurchaseSubscription()
         $subscriptions_url,
         [
             'uuid' => $_POST['uuid'],
-            "transportName"=> "WEBHOOK",
+            "transportName" => "WEBHOOK",
             "eventNames" => ["PurchaseCreated"],
             "destination" => 'https://' . $complete_destination_url,
             "contactEmail" => $_POST['contactEmail']
-            ],
+        ],
         [
-                "Content-type" => "application/json"
-            ],
+            "Content-type" => "application/json"
+        ],
         true,
         true
     );
@@ -265,10 +266,10 @@ function CreatePurchaseSubscription()
         ]);
 
         echo json_encode([
-          'error' => false,
-          'message' => 'Purchase Subscription Created',
-          //'subscription' => $query,
-          //'organizationUuid' => $_POST['organizationUuid']
+            'error' => false,
+            'message' => 'Purchase Subscription Created',
+            //'subscription' => $query,
+            //'organizationUuid' => $_POST['organizationUuid']
         ]);
     }
 }
@@ -297,10 +298,10 @@ function updatePurchaseSubscription()
             "eventNames" => ["PurchaseCreated"],
             "destination" => 'https://' . $complete_destination_url,
             "contactEmail" => $_POST['contactEmail']
-            ],
+        ],
         [
-                "Content-type: application/json"
-            ],
+            "Content-type: application/json"
+        ],
         true,
         true,
         'PUT'
@@ -343,8 +344,8 @@ function GetOrgId()
         ]);
     } else {
         $query = buildQuery([], [
-        'method' => 'GET',
-        ], $oauth_base.'/users/self', true);
+            'method' => 'GET',
+        ], $oauth_base . '/users/self', true);
 
         if (isset($query->error)) {
             echo json_encode([
@@ -367,7 +368,7 @@ function DeleteSubscription($display = true)
 
     if (isset($pluginJson['subscriptions']['uuid'])) {
         $query = buildQuery([], [
-        'method' => 'DELETE',
+            'method' => 'DELETE',
         ], $subscriptions_url . '/' . $pluginJson['subscriptions']['uuid']);
     }
 
@@ -415,7 +416,7 @@ function setPluginJSON($plugin, $js)
 
 function MatrixText()
 {
-    $url = 'http://192.168.1.156/api/command/'.urlencode('Overlay Model Effect');
+    $url = 'http://192.168.1.156/api/command/' . urlencode('Overlay Model Effect');
 
     $data = [
         "Matrix",
@@ -428,7 +429,7 @@ function MatrixText()
         "Right to Left",
         "100",
         "0",
-        "Thank You ".$_GET['name']
+        "Thank You " . $_GET['name']
     ];
 
     $query = json_encode($data);
@@ -443,7 +444,8 @@ function MatrixText()
     echo $response;
 }
 
-function GetPurchases () {
+function GetPurchases()
+{
     global $purchases_url;
 
     $current_year = date('Y');
@@ -461,8 +463,8 @@ function GetPurchases () {
 
         case 'yesterday':
             $data = [
-                'startDate' => date('Y-m-d',strtotime("-1 days")) . 'T00:00',
-                'endDate' => date('Y-m-d',strtotime("-1 days")) . 'T23:59',
+                'startDate' => date('Y-m-d', strtotime("-1 days")) . 'T00:00',
+                'endDate' => date('Y-m-d', strtotime("-1 days")) . 'T23:59',
             ];
             break;
 
@@ -498,7 +500,7 @@ function GetPurchases () {
     }
 
     $query = buildQuery([], [
-      'method'  => 'GET'
+        'method'  => 'GET'
     ], $url);
 
     // if (isset($query['code'])) {
@@ -507,18 +509,19 @@ function GetPurchases () {
     //         'message' => $query['message'] . '//Query Error'
     //     ]);
     // } else {
-        $purchases = $query->purchases;
+    $purchases = $query->purchases;
 
-        $total = 0;
-        foreach ($purchases as $purchase) {
-            $total += $purchase->amount / 100;
-        }
+    $total = 0;
+    foreach ($purchases as $purchase) {
+        $total += $purchase->amount / 100;
+    }
 
-        echo '£' . number_format($total, 2);
+    echo '£' . number_format($total, 2);
     // }
 }
 
-function SavePushOver () {
+function SavePushOver()
+{
     UpdateJson2('pushover', [
         'activate' => $_POST['activate'],
         'app_token' => $_POST['app_token'],
@@ -532,7 +535,8 @@ function SavePushOver () {
     ]);
 }
 
-function SavePublish () {
+function SavePublish()
+{
     UpdateJson2('publish', [
         'activate' => $_POST['activate'],
         //'location' => $_POST['location'],
@@ -598,4 +602,33 @@ function UpdateJson2($option, $data)
     setPluginJSON('fpp-zettle', $pluginJson);
 
     return true;
+}
+
+function CheckKeys($data = [])
+{
+    global $oauth_base;
+
+    $query = httpPost(
+        $oauth_base . '/token',
+        [
+            'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+            'client_id' => $data['client_id'],
+            'assertion' => $data['client_secret']
+        ],
+        [
+            'Content-Type: application/x-www-form-urlencoded'
+        ]
+    );
+
+    if (isset($query->error) || isset($query->code)) {
+        return [
+            'error' => true,
+            'message' => isset($query->error) ? $query->error_description : $query->message
+        ];
+    }
+
+    return [
+        'error' => false,
+        'message' => 'Key Valid'
+    ]
 }

@@ -48,9 +48,11 @@ function fppZettleEvent()
     // Check for eventName in the post data
     if (!isset($event['eventName'])) {
         // eventName could not be found display message to user
-        return json_encode([
-            'error' => true,
-            'message' => 'eventName could not be found in request, please try again']
+        return json_encode(
+            [
+                'error' => true,
+                'message' => 'eventName could not be found in request, please try again'
+            ]
         );
     }
     // Check if eventName === PurchaseCreated
@@ -81,28 +83,14 @@ function fppZettleEvent()
         // Check an command has set
         if ($config['command'] != '') {
             // Build command url from selected command on setup page
-            $url = 'http://localhost/api/command/'.urlencode($config['command']);
+            $url = 'http://localhost/api/command/' . urlencode($config['command']);
             // Get command args
             $data = $config['args'];
             // Check if command is "Overlay Model Effect"
             if ($config['command'] == 'Overlay Model Effect') {
-                // Find and replace vaules in array as payment details
-                $text = str_replace([
-                    // '{{PAYER_NAME}}',
-                    '{{AMOUNT}}',
-                    '{{EVERYTHING}}',
-                    '{{TODAY}}',
-                    '{{THIS_MONTH}}'
-                ], [
-                    // $paymentData['userDisplayName'],
-                    $paymentData['formatted_amount'],
-                    runningTotal('everything'),
-                    runningTotal('today'),
-                    runningTotal('this_month')
-                ], end($data));
                 // Remove and replace last item from array
                 array_pop($data);
-                $data[] = $text;
+                $data[] = buildMessage($paymentData, $data);
             }
             // Fire the command
             $query = json_encode($data);
@@ -118,7 +106,7 @@ function fppZettleEvent()
             custom_logs('command fired');
         }
         if (isset($config['pushover']) && $config['pushover']['activate'] == 'yes') {
-            pushover($config);
+            pushover($config, $paymentData);
         }
         if (isset($config['publish']) && $config['publish']['activate'] == 'yes') {
             publishTransactionDetails($config, $payload);
@@ -132,14 +120,16 @@ function fppZettleEvent()
 //     return file_get_contents('http://localhost/plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=' . $option);
 // }
 
-function pushover($config)
+function pushover($config, $paymentData)
 {
+    $build_message = buildMessage($paymentData, $config['pushover']['message']);
+
     $client = new Client($config['pushover']['user_key'], $config['pushover']['app_token']);
-    $message = new Message($config['pushover']['message'], 'FPP CARD READER', Priority::HIGH);
+    $message = new Message($build_message, 'FPP CARD READER', Priority::HIGH);
 
     try {
         $client->push($message);
-        custom_logs('The message has been pushed!');
+        custom_logs('The pushover message has been pushed!');
     } catch (PushoverException $e) {
         custom_logs('ERROR: ', $e->getMessage());
     }
@@ -170,4 +160,22 @@ function publishTransactionDetails($config, $payload)
     $response = $client->post("/api/transactions", $options);
     custom_logs('--publishTransactionDetails--');
     custom_logs($response->getBody());
+}
+
+function buildMessage($paymentData, $data)
+{
+    // Find and replace values in array as payment details
+    $text = str_replace([
+        '{{AMOUNT}}',
+        '{{EVERYTHING}}',
+        '{{TODAY}}',
+        '{{THIS_MONTH}}'
+    ], [
+        $paymentData['formatted_amount'],
+        runningTotal('everything'),
+        runningTotal('today'),
+        runningTotal('this_month')
+    ], is_array($data) ? end($data) : $data);
+
+    return $text;
 }
