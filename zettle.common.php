@@ -18,9 +18,9 @@ function convertAndGetSettings($filename)
 
   $cfgFile = $settings['configDirectory'] . "/plugin.fpp-" . $filename . ".json";
   if (file_exists($cfgFile)) {
-      $j = file_get_contents($cfgFile);
-      $json = json_decode($j, true);
-      return $json;
+    $j = file_get_contents($cfgFile);
+    $json = json_decode($j, true);
+    return $json;
   }
   // Create json for config not found
   if ($filename == 'zettle') {
@@ -74,8 +74,8 @@ function logEntry($data)
 
 function checkForDataplicity()
 {
-    $serial = '/opt/dataplicity/tuxtunnel/serial';
-    return file_exists($serial);
+  $serial = '/opt/dataplicity/tuxtunnel/serial';
+  return file_exists($serial);
 }
 
 function checkForUIPassword()
@@ -94,18 +94,20 @@ function outputSettings()
   return $settings;
 }
 
-function custom_logs($message) {
+function custom_logs($message)
+{
   global $settings;
-  if( is_array($message) ) {
-        $message = json_encode($message);
+  if (is_array($message)) {
+    $message = json_encode($message);
   }
-  $file = fopen($settings['logDirectory'] . "/fpp-zettle.log","a");
+  $file = fopen($settings['logDirectory'] . "/fpp-zettle.log", "a");
   fwrite($file, "\n" . date('Y-m-d h:i:s') . " :: " . $message);
   fclose($file);
-	return;
+  return;
 }
 
-function totalTransactions($amount = 0) {
+function totalTransactions($amount = 0)
+{
   global $settings;
 
   $filepath = $settings['configDirectory'] . "/plugin.fpp-zettle-transactions-total.txt";
@@ -127,34 +129,36 @@ function totalTransactions($amount = 0) {
   }
 }
 
-function runningTotal($option = 'everything') {
-    return file_get_contents('http://localhost/plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=' . $option);
+function runningTotal($option = 'everything')
+{
+  return file_get_contents('http://localhost/plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=' . $option);
 }
 
-function isSiteAvailible($url){
-    // Check, if a valid url is provided
-    if(!filter_var($url, FILTER_VALIDATE_URL)){
-        return false;
-    }
+function isSiteAvailible($url)
+{
+  // Check, if a valid url is provided
+  if (!filter_var($url, FILTER_VALIDATE_URL)) {
+    return false;
+  }
 
-    // Initialize cURL
-    $curlInit = curl_init($url);
+  // Initialize cURL
+  $curlInit = curl_init($url);
 
-    // Set options
-    curl_setopt($curlInit,CURLOPT_CONNECTTIMEOUT,10);
-    curl_setopt($curlInit,CURLOPT_HEADER,true);
-    curl_setopt($curlInit,CURLOPT_NOBODY,true);
-    curl_setopt($curlInit,CURLOPT_RETURNTRANSFER,true);
+  // Set options
+  curl_setopt($curlInit, CURLOPT_CONNECTTIMEOUT, 10);
+  curl_setopt($curlInit, CURLOPT_HEADER, true);
+  curl_setopt($curlInit, CURLOPT_NOBODY, true);
+  curl_setopt($curlInit, CURLOPT_RETURNTRANSFER, true);
 
-    // Get response
-    $response = curl_exec($curlInit);
-    $httpcode = curl_getinfo($curlInit, CURLINFO_HTTP_CODE);
+  // Get response
+  $response = curl_exec($curlInit);
+  $httpcode = curl_getinfo($curlInit, CURLINFO_HTTP_CODE);
 
-    // Close a cURL session
-    curl_close($curlInit);
+  // Close a cURL session
+  curl_close($curlInit);
 
-    // return $response?true:false;
-    return $httpcode;
+  // return $response?true:false;
+  return $httpcode;
 }
 
 /**
@@ -164,35 +168,37 @@ function isSiteAvailible($url){
  * @param array $settings fpp settings
  * @return string
  */
-function explode_destination_url(string $url, array $settings) {
+function explode_destination_url(string $url, array $settings)
+{
   $explode_destination_url = explode('/', $url);
-    // Get the url that we need
-    $base_url = $explode_destination_url[2];
-    // Check if explode_destination_url last item == event
-    if (end($explode_destination_url) == 'event') {
-        // Unset first two explode_destination_url items
-        unset($explode_destination_url[0]);
-        unset($explode_destination_url[1]);
-        // Rebuild destination url
-        $destination = implode('/', $explode_destination_url);
-    } else {
-        // Build destination url with added part
-        $destination = $base_url . '/api/plugin/fpp-zettle/event';
-    }
-    // Check for ui password
-    if (checkForUIPassword()) {
-        // Build username_password
-        $username_password = 'admin:' . $settings['password'] . '@';
-        // Combine username_password and destination
-        $complete_destination_url = $username_password . $destination;
-    } else {
-        // set destination as password is not found
-        $complete_destination_url = $destination;
-    }
+  // Get the url that we need
+  $base_url = $explode_destination_url[2];
+  // Check if explode_destination_url last item == event
+  if (end($explode_destination_url) == 'event') {
+    // Unset first two explode_destination_url items
+    unset($explode_destination_url[0]);
+    unset($explode_destination_url[1]);
+    // Rebuild destination url
+    return implode('/', $explode_destination_url);
+  } else {
+    // Build destination url with added part
+    return $base_url . '/api/plugin/fpp-zettle/event';
+  }
+  // // Check for ui password
+  // if (checkForUIPassword()) {
+  //     // Build username_password
+  //     $username_password = 'admin:' . $settings['password'] . '@';
+  //     // Combine username_password and destination
+  //     $complete_destination_url = $username_password . $destination;
+  // } else {
+  //     // set destination as password is not found
+  //     $complete_destination_url = $destination;
+  // }
 
-    return $complete_destination_url;
+  // return $complete_destination_url;
 }
 
-function jsonOutput($array) {
+function jsonOutput($array)
+{
   return json_encode($array);
 }
