@@ -608,9 +608,6 @@ function CheckKeys()
 {
     global $oauth_base;
 
-    echo print_r($_POST, true);
-    exit();
-
     $query = httpPost(
         $oauth_base . '/token',
         [
@@ -624,14 +621,14 @@ function CheckKeys()
     );
 
     if (isset($query->error) || isset($query->code)) {
-        return [
+        echo json_encode([
             'error' => true,
             'message' => isset($query->error) ? $query->error_description : $query->message
-        ];
+        ]);
     }
 
-    return [
+    echo json_encode([
         'error' => false,
         'message' => 'Key Valid'
-    ];
+    ]);
 }

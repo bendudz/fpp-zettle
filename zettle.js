@@ -127,40 +127,30 @@ $(function () {
   $('#setup').on('submit', function (e) {
     e.preventDefault();
 
-    var data = {
-      option: "setup",
-      client_id: $("#client_id").val(),
-      client_secret: $("#client_secret").val(),
-      organizationUuid: data.organizationUuid
-    };
-    // Save config
-    SaveZettleConfig(data, '#save', true, 'Details Saved!');
-
     // Check if keys are valid
-    // $.ajax({
-    //   type: "POST",
-    //   url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=check_keys&nopage=1',
-    //   dataType: 'json',
-    //   async: false,
-    //   data: {
-    //     client_id: $("#client_id").val(),
-    //     client_secret: $("#client_secret").val(),
-    //   },
-    //   contentType: 'application/json',
-    //   success: function (data) {
-    //     var data = {
-    //       option: "setup",
-    //       client_id: $("#client_id").val(),
-    //       client_secret: $("#client_secret").val(),
-    //       organizationUuid: data.organizationUuid
-    //     };
-    //     // Save config
-    //     SaveZettleConfig(data, '#save', true, 'Details Saved!');
-    //   },
-    //   error: function (xhr, ajaxOptions, thrownError) {
-    //     DialogError('Signup Error', "ERROR: There seems to be a problem with your keys please check them and try again!");
-    //   }
-    // });
+    $.ajax({
+      type: "POST",
+      url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=check_keys&nopage=1',
+      data: {
+        client_id: $("#client_id").val(),
+        client_secret: $("#client_secret").val(),
+      },
+      dataType: 'json',
+      async: false,
+      success: function (data) {
+        var data = {
+          option: "setup",
+          client_id: $("#client_id").val(),
+          client_secret: $("#client_secret").val(),
+          organizationUuid: data.organizationUuid
+        };
+        // Save config
+        SaveZettleConfig(data, '#save', true, 'Details Saved!');
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        DialogError('Signup Error', "ERROR: There seems to be a problem with your keys please check them and try again!");
+      }
+    });
   });
 
   $('#clear_config').on('click', function (e) {
