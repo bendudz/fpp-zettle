@@ -604,16 +604,19 @@ function UpdateJson2($option, $data)
     return true;
 }
 
-function CheckKeys($data = [])
+function CheckKeys()
 {
     global $oauth_base;
+
+    echo print_r($_POST, true);
+    exit();
 
     $query = httpPost(
         $oauth_base . '/token',
         [
             'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'client_id' => $data['client_id'],
-            'assertion' => $data['client_secret']
+            'client_id' => $_POST['client_id'],
+            'assertion' => $_POST['client_secret']
         ],
         [
             'Content-Type: application/x-www-form-urlencoded'
