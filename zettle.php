@@ -630,5 +630,5 @@ function CheckKeys($data = [])
     return [
         'error' => false,
         'message' => 'Key Valid'
-    ]
+    ];
 }
