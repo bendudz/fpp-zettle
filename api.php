@@ -81,7 +81,7 @@ function fppZettleEvent()
         // Get zettle config
         $config = convertAndGetSettings('zettle');
         // Check an command has set
-        if ($config['command'] != '') {
+        if ($config['effect_activate'] == 'yes' && $config['command'] != '') {
             // Build command url from selected command on setup page
             $url = 'http://localhost/api/command/' . urlencode($config['command']);
             // Get command args
@@ -131,7 +131,7 @@ function pushover($config, $paymentData)
         $client->push($message);
         custom_logs('The pushover message has been pushed!');
     } catch (PushoverException $e) {
-        custom_logs('ERROR: ', $e->getMessage());
+        custom_logs('PUSHOVER ERROR: ', $e->getMessage());
     }
 }
 
@@ -158,8 +158,8 @@ function publishTransactionDetails($config, $payload)
     // }
 
     $response = $client->post("/api/transactions", $options);
-    custom_logs('--publishTransactionDetails--');
-    custom_logs($response->getBody());
+    custom_logs('Publish Transaction Details to fpp-zettle.co.uk');
+    // custom_logs($response->getBody());
 }
 
 function buildMessage($paymentData, $data)

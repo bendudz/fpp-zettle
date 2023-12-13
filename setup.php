@@ -63,16 +63,39 @@ if (!is_executable($settings["pluginDirectory"] . "/fpp-zettle/commands/ZettleTo
                 <li>{{TODAY}} : Show the amount you have rased today</li>
                 <li>{{THIS_MONTH}} : Show the amount you have rased this month</li>
             </ul>
-            <p>Note: You can put what ever you want in the text feild does not to have the above options in it.</p>
+            <p>Note: You can put what ever you want in the text felid does not to have the above options in it.</p>
         </div>
 
         <form id="api_effect" action="" method="post">
             <div class="container-fluid settingsTable settingsGroupTable">
                 <div class="row">
-                    <div class="buttonCommandWrap">
+                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                        <div class="description">
+                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Activate
+                        </div>
+                    </div>
+                    <div class="printSettingFieldCol col-md">
+                        <select id="effect_activate" required class="form-control">
+                            <option value="yes" <?php echo $pluginJson['effect_activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
+                            <option value="no" <?php echo $pluginJson['effect_activate'] == 'no' ? 'selected' : null;
+                                                echo !isset($pluginJson['effect_activate']) ? 'selected' : ''; ?>>No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                        <div class="description">
+                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Select Command
+                        </div>
+                    </div>
+                    <div class="printSettingFieldCol col-md">
                         <select id="button_TPL_Command" class="buttonCommand" required>
                             <option value="" disabled selected>Select a Command</option>
                         </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="buttonCommandWrap">
                         <div class="bb_commandTableWrap">
                             <div class="bb_commandTableCrop">
                                 <table border=0 id="tableButtonTPL" class="tableButton">

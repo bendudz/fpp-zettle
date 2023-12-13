@@ -325,6 +325,7 @@ $(function () {
 
     var zettle = {
       "option": 'effect',
+      "effect_activate": $('#effect_activate option:selected').val(),
     };
     CommandToJSON('button_TPL_Command', 'tableButtonTPL', zettle);
     SaveZettleConfig(zettle, '#effect_save', true, 'Effect Saved!');
