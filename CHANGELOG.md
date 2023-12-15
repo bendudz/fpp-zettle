@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 15-12-2023
+### Changed
+- Remove scripts/fpp_update.sh to try and fix the plugin update problem
+
 ## 13-12-2023
 ### Changed
 - Allow the effect to be Activated or not. Allowing you to turn off the effect temp
