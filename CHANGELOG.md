@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## 16-12-2023
 ### Changed
 - Fixed buildMessage in api
+- Add commands/ZettleTotals.sh to gitignore and edit fpp_uninstall so the config file does not get removed at plugin uninstall
 
 ## 15-12-2023
 ### Changed
