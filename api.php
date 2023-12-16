@@ -88,9 +88,9 @@ function fppZettleEvent()
             $data = $config['args'];
             // Check if command is "Overlay Model Effect"
             if ($config['command'] == 'Overlay Model Effect') {
+                $data[] = buildMessage($paymentData, $data);
                 // Remove and replace last item from array
                 array_pop($data);
-                $data[] = buildMessage($paymentData, $data);
             }
             // Fire the command
             $query = json_encode($data);
@@ -176,6 +176,8 @@ function buildMessage($paymentData, $data)
         runningTotal('today'),
         runningTotal('this_month')
     ], is_array($data) ? end($data) : $data);
+
+    // custom_logs('Build Message Output: ' . $text);
 
     return $text;
 }
