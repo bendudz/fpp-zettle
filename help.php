@@ -1,6 +1,7 @@
 <h1 id="announce-zettle-">Announce Zettle!</h1>
 <p><a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="Pull Requests Welcome"></a>
-    <img src="https://shields.io/badge/fpp-AnnounceZettle-brightgreen" alt="FPP Zettle Logo"></p>
+    <img src="https://shields.io/badge/fpp-AnnounceZettle-brightgreen" alt="FPP Zettle Logo">
+</p>
 <p>Get yourself an iZettle device, take a donation &amp; trigger an effect on your light show.</p>
 <ul>
     <li><a href="#getting-started">Getting Started</a></li>
@@ -16,18 +17,21 @@
 <ul>
     <li>Click &#39;Integrations&#39; (Bottom Left)</li>
     <li>Click &#39;API Keys&#39;
-        <img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-api-key.png" alt="Zettle API Integrations"></li>
+        <img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-api-key.png" alt="Zettle API Integrations">
+    </li>
     <li>Click &#39;Create API Key&#39;</li>
     <li>Type a name for your API Key.</li>
     <li>Select &#39;READ:USERINFO and READ:PURCHASE&#39;<br>
-        <img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-apikeys.png" alt="1"></li>
+        <img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-apikeys.png" alt="1">
+    </li>
     <li>Click &#39;Create Key&#39;</li>
 </ul>
 <p>You will now be presented with 2 attributes you need to copy &amp; keep safe. They won&#39;t be retrievable again so make sure you capture them:</p>
 <ul>
     <li>client_id</li>
     <li>API Key
-        <img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-apikeys-created.png" alt="1"></li>
+        <img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-apikeys-created.png" alt="1">
+    </li>
 </ul>
 <h2 id="dataplicity-setup">Dataplicity Setup</h2>
 <p>This plugin relies on a secure https endpoint so Zettle can send events to you. The easiest way to set up a https endpoint is to use <a href="https://www.dataplicity.com">Dataplicity</a></p>
@@ -87,3 +91,5 @@
 <p>Absolutely nothing!</p>
 <h3 id="what-we-don-t-collect">What We Don&#39;t Collect</h3>
 <p>We do not collect or store any of your personal information. The information you submit via this plugin is transmitted between your Pi &amp; the Zettle API. Any transactions are kept on your device &amp; are retrievable from Zettle using your API Keys (client_id &amp; secret) should you clear them. </p>
+
+<h2>This is a test</h2>
