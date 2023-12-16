@@ -91,5 +91,3 @@
 <p>Absolutely nothing!</p>
 <h3 id="what-we-don-t-collect">What We Don&#39;t Collect</h3>
 <p>We do not collect or store any of your personal information. The information you submit via this plugin is transmitted between your Pi &amp; the Zettle API. Any transactions are kept on your device &amp; are retrievable from Zettle using your API Keys (client_id &amp; secret) should you clear them. </p>
-
-<h2>This is a test</h2>
