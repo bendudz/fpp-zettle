@@ -88,9 +88,10 @@ function fppZettleEvent()
             $data = $config['args'];
             // Check if command is "Overlay Model Effect"
             if ($config['command'] == 'Overlay Model Effect') {
-                $data[] = buildMessage($paymentData, $data);
+                $text = buildMessage($paymentData, $data);
                 // Remove and replace last item from array
                 array_pop($data);
+                $data[] = $text;
             }
             // Fire the command
             $query = json_encode($data);
