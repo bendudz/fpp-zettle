@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 16-12-2023
+### Changed
+- Fixed buildMessage in api
+
 ## 15-12-2023
 ### Changed
 - Remove scripts/fpp_update.sh to try and fix the plugin update problem
