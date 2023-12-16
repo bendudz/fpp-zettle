@@ -177,7 +177,7 @@ function buildMessage($paymentData, $data)
         runningTotal('this_month')
     ], is_array($data) ? end($data) : $data);
 
-    // custom_logs('Build Message Output: ' . $text);
+    custom_logs('Build Message Output: ' . $text);
 
     return $text;
 }
