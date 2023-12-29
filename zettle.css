@@ -57,3 +57,12 @@
 .text-white {
     color: #fff!important;
 }
+
+.loading {
+  opacity: .75;
+}
+
+.justify-content-between {
+  -ms-flex-pack: justify !important;
+  justify-content: space-between !important;
+}

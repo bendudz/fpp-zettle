@@ -69,37 +69,28 @@ $pluginJson = convertAndGetSettings($pluginName);
         <form id="api_effect" action="" method="post">
             <div class="container-fluid settingsTable settingsGroupTable">
                 <div class="row">
-                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                        <div class="description">
-                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Activate
-                        </div>
-                    </div>
-                    <div class="printSettingFieldCol col-md">
-                        <select id="effect_activate" required class="form-control">
-                            <option value="yes" <?php echo $pluginJson['effect_activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
-                            <option value="no" <?php echo $pluginJson['effect_activate'] == 'no' ? 'selected' : null;
-                                                echo !isset($pluginJson['effect_activate']) ? 'selected' : ''; ?>>No</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                        <div class="description">
-                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Select Command
-                        </div>
-                    </div>
-                    <div class="printSettingFieldCol col-md">
-                        <select id="button_TPL_Command" class="buttonCommand" required>
-                            <option value="" disabled selected>Select a Command</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="buttonCommandWrap">
                         <div class="bb_commandTableWrap">
                             <div class="bb_commandTableCrop">
                                 <table border=0 id="tableButtonTPL" class="tableButton">
-
+                                    <tr>
+                                        <td>Activate:</td>
+                                        <td>
+                                            <select id="effect_activate" required>
+                                                <option value="yes" <?php echo $pluginJson['effect_activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
+                                                <option value="no" <?php echo $pluginJson['effect_activate'] == 'no' ? 'selected' : null;
+                                                                    echo !isset($pluginJson['effect_activate']) ? 'selected' : ''; ?>>No</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Command:</td>
+                                        <td>
+                                            <select id="button_TPL_Command" class="buttonCommand" required>
+                                                <option value="" disabled selected>Select a Command</option>
+                                            </select>
+                                        </td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
@@ -122,7 +113,13 @@ $pluginJson = convertAndGetSettings($pluginName);
         </div-->
             <input id="effect_save" type="submit" value="Save" class="buttons btn-success">
             <input id="test_command" type="button" value="Test" class="buttons">
+            <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=multiple-readers.php" class="buttons">Have Multiple Readers</a>
         </form>
+
+        <?php if (isset($pluginJson['readers']) && count($pluginJson['readers']) > 0) { ?>
+            <p>You multiple readers configured</p>
+        <?php } ?>
+
         <div class="alert alert-info">If you are looking for help press F1 or <a href="plugin.php?plugin=fpp-zettle&page=help.php" class="alert-link" target="_blank">Click Here</a></div>
 
         <legend>Pushover</legend>

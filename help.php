@@ -9,6 +9,7 @@
     <li><a href="#fpp">FPP</a></li>
     <li><a href="#pushover-setup">Pushover Setup</a></li>
     <li><a href="#commands">Commands</a></li>
+    <li><a href="#multi-readers">Multi Readers</a></li>
     <li><a href="#notes">Things To Note</a></li>
 </ul>
 <h2 id="getting-started">Getting Started</h2>
@@ -17,12 +18,12 @@
 <ul>
     <li>Click &#39;Integrations&#39; (Bottom Left)</li>
     <li>Click &#39;API Keys&#39;
-        <img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-api-key.png" alt="Zettle API Integrations">
+        <img src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-api-key.png" alt="Zettle API Integrations" class="img-fluid img-thumbnail">
     </li>
     <li>Click &#39;Create API Key&#39;</li>
     <li>Type a name for your API Key.</li>
     <li>Select &#39;READ:USERINFO and READ:PURCHASE&#39;<br>
-        <img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-apikeys.png" alt="1">
+        <img src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-apikeys.png" alt="1" class="img-fluid img-thumbnail">
     </li>
     <li>Click &#39;Create Key&#39;</li>
 </ul>
@@ -30,7 +31,7 @@
 <ul>
     <li>client_id</li>
     <li>API Key
-        <img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-apikeys-created.png" alt="1">
+        <img src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-apikeys-created.png" alt="1" class="img-fluid img-thumbnail">
     </li>
 </ul>
 <h2 id="dataplicity-setup">Dataplicity Setup</h2>
@@ -42,23 +43,23 @@
 <p>Click <code>&#39;Content Setup&#39; &gt; &#39;Plugin Manager&#39;</code></p>
 <p>Install the <code>Announce Zettle</code> plugin.</p>
 <p>Once installed, navigate to <code>&#39;Content Setup&#39; &gt; &#39;Zettle - Setup&#39;</code>.</p>
-<p><img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/setup-init.png" alt="1"></p>
+<p><img src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/setup-init.png" alt="1" class="img-fluid img-thumbnail"></p>
 <p>Add your <code>Client ID</code> and <code>Secret</code> to the page &amp; click &#39;Save&#39;</p>
-<p><img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/create-sub.png" alt=""></p>
+<p><img src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/create-sub.png" alt="" class="img-fluid img-thumbnail"></p>
 <p>This will now unlock the ability to add a <code>Subscription</code> that will listen for &#39;purchases&#39; aka donations from our Zettle device.</p>
 <p>Enter your Dataplicity wormhole address followed by this plugin&#39;s API event path. ie</p>
 <p><code>https://{wormhole address}/api/plugin/fpp-zettle/event</code></p>
 <p><code>https://wandering-sheep-0157.dataplicity.io/api/plugin/fpp-zettle/event</code></p>
 <p>Add your email address too. This is the address that is notified of any errors sending (or in Zettle&#39;s terminology, &#39;pushing&#39;) a transaction to your Pi.</p>
 <p>Save the subscription.</p>
-<p><img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/save-sub.png" alt="1"></p>
+<p><img src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/save-sub.png" alt="1" class="img-fluid img-thumbnail"></p>
 <p>The first time you create a subscription you will receive a test notification sent to your Raspberry Pi. This is just the Zettle API notifying you that a subscription has been set up.</p>
 <p>Once the subscription has been created successfully, you can then add an effect to be triggered. </p>
 <p>Navigate back to the set-up page where you can select the effect to trigger once a transaction is received.</p>
-<p><img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/add-effect-trigger.png" alt="1"></p>
+<p><img src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/add-effect-trigger.png" alt="1" class="img-fluid img-thumbnail"></p>
 <p>At the moment this plugin can only trigger an effect (ESEQ file), if you have a use case for triggering something else please raise an issue on GitHub, so we can add support.</p>
 <p>When a real transaction is received the plugin will log it to a transaction file. You can view transactions in <code>Status / Control &gt; Zettle - Status</code>. This page will also allow you to clear any transactions should you wish. This is mearly for you to see what / who has used your Zettle device to donate at your show.</p>
-<p><img style='height: 100%; width: 100%; object-fit: contain' src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/status-page.png" alt="1"></p>
+<p><img src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/status-page.png" alt="1" class="img-fluid img-thumbnail"></p>
 
 <h2 id="pushover-setup">Pushover Setup</h2>
 <p>Get notification sent your phone every time a donate is made. Pushover is free to use for 30 days. If you want to use it for longer there is a $5 USD one-time purchase fee. Check out the details at there website: <a href="https://pushover.net/" target="_blank">https://pushover.net</a></p>
@@ -74,6 +75,12 @@
 <h2 id="commands">Commands</h2>
 <p>Zettle Total: Allows you to show what has been raised at the end or during your show using the "Overlay Model Effect Command". The command text can use all text options available.</p>
 <p>The command will only work if you are using the "Overlay Model Effect Command" in your zettle setup page.</p>
+
+<h2 id="multi-readers">Multi Readers</h2>
+<p>If you have multi readers and you would like to run a effect per reader it can be done.</p>
+<p>First you need to configure it this a can be done for the <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=multiple-readers.php">Multi Reader page</a>. On the page you create the number of readers you have, inside each reader you set the product name and what you want to happen.</p>
+<p>The "Product Name" must be the same as it is no Zettle. Your products can be found on your "<a href="https://my.zettle.com/products?from=1&pageSize=50" target="_blank">Product library</a>" on your Zettle account.</p>
+<p><img src="https://fpp-zettle.s3.eu-west-2.amazonaws.com/img/zettle-product-library.png" alt="Zettle Product Library" class="img-fluid img-thumbnail"></p>
 
 <h2 id="notes">Things To Note</h2>
 <ol>

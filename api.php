@@ -55,73 +55,102 @@ function fppZettleEvent()
             ]
         );
     }
-    // Check if eventName === PurchaseCreated
-    if ($event['eventName'] == 'PurchaseCreated') {
-        $payload = json_decode(json_decode(json_encode($event['payload']), true), true);
-        $amount = ($payload['amount'] / 100);
-        $currency = $payload['currency'];
-        // Other Feilds can be added to this
-        $paymentData = [
-            'formatted_amount' => number_format($amount, 2) . ' ' . $currency,
-            'amount' => $amount,
-            'timestamp' => $payload['timestamp'],
-            // 'userDisplayName' => $payload['userDisplayName']
-        ];
-
-        // Get currentTransactions
-        $currentTransactions = convertAndGetSettings('zettle-transactions');
-        // Push new transaction
-        array_push($currentTransactions, $paymentData);
-        // Store transaction to json file
-        writeToJsonFile('transactions', $currentTransactions);
-        // Store transation account
-        totalTransactions($amount);
-        // Write transaction to log file
-        custom_logs($payload);
-        // Get zettle config
-        $config = convertAndGetSettings('zettle');
-        // Check an command has set
-        if ($config['effect_activate'] == 'yes' && $config['command'] != '') {
-            // Build command url from selected command on setup page
-            $url = 'http://localhost/api/command/' . urlencode($config['command']);
-            // Get command args
-            $data = $config['args'];
-            // Check if command is "Overlay Model Effect"
-            if ($config['command'] == 'Overlay Model Effect') {
-                $text = buildMessage($paymentData, $data);
-                // Remove and replace last item from array
-                array_pop($data);
-                $data[] = $text;
-            }
-            // Fire the command
-            $query = json_encode($data);
-            $ch    = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
-            curl_exec($ch);
-            curl_close($ch);
-            // Write to log file
-            custom_logs('command fired');
-        }
-        if (isset($config['pushover']) && $config['pushover']['activate'] == 'yes') {
-            pushover($config, $paymentData);
-        }
-        if (isset($config['publish']) && $config['publish']['activate'] == 'yes') {
-            publishTransactionDetails($config, $payload);
-        }
-        return true;
+    // Check if the right eventName has been sent
+    if ($event['eventName'] != 'PurchaseCreated') {
+        return json_encode(
+            [
+                'error' => true,
+                'message' => 'eventName needs to be PurchaseCreated'
+            ]
+        );
     }
+    // Get payload from zettle and turn in to an array
+    $payload = json_decode(json_decode(json_encode($event['payload']), true), true);
+    $amount = ($payload['amount'] / 100);
+    $currency = $payload['currency'];
+
+    // Other Feilds can be added to this
+    $paymentData = [
+        'formatted_amount' => number_format($amount, 2) . ' ' . $currency,
+        'amount' => $amount,
+        'timestamp' => $payload['timestamp'],
+        'userUuid' => $payload['userUuid'],
+    ];
+
+    // Get currentTransactions
+    $currentTransactions = convertAndGetSettings('zettle-transactions');
+    // Push new transaction
+    array_push($currentTransactions, $paymentData);
+    // Store transaction to json file
+    writeToJsonFile('transactions', $currentTransactions);
+    // Store transation account
+    totalTransactions($amount);
+    // Write transaction to log file
+    custom_logs($payload);
+    // Get zettle config
+    $config = convertAndGetSettings('zettle');
+    // Check for multiple readers
+    if (isset($config['readers']) && count($config['readers']) > 0) {
+        // Reader run count
+        $reader_run = FALSE;
+        // Loop over readers
+        foreach ($config['readers'] as $reader) {
+            // Check if reader has a command set
+            if ($reader['command'] != '') {
+                // Check if a reader has the same product as the payload from zettle has
+                if ($reader['product'] == $payload['products'][0]['name']) {
+                    // Add formatted_amount to reader array
+                    $reader['formatted_amount'] = $paymentData['formatted_amount'];
+                    // Reader has same product runCommand
+                    custom_logs('Run reader command');
+                    runCommand($reader);
+                    $reader_run = TRUE;
+                }
+            }
+        }
+        // Check if a reader has been run
+        if ($reader_run == FALSE) {
+            // No reader found run default command
+            custom_logs('No reader found with assigned product (' . $payload['products'][0]['name'] . ') run default command');
+            runCommand([
+                'command' => $config['command'],
+                'args' => $config['args'],
+                'formatted_amount' => $paymentData['formatted_amount'],
+            ]);
+        }
+    } else {
+        // No multiple readers found run default command
+        if ($config['effect_activate'] == 'yes' && $config['command'] != '') {
+            // Run default command
+            custom_logs('Run default command');
+            runCommand([
+                'command' => $config['command'],
+                'args' => $config['args'],
+                'formatted_amount' => $paymentData['formatted_amount'],
+            ]);
+        }
+    }
+    // Check if pushover is active
+    if (isset($config['pushover']) && $config['pushover']['activate'] == 'yes') {
+        pushover($config, $paymentData);
+    }
+    // Check if publish is active
+    if (isset($config['publish']) && $config['publish']['activate'] == 'yes') {
+        publishTransactionDetails($payload);
+    }
+    // Store userUuid and if they have activated publish or not
+    storeCustomer($config, $paymentData);
     return true;
 }
 
-// function runningTotal($option = 'everything') {
-//     return file_get_contents('http://localhost/plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=' . $option);
-// }
-
-function pushover($config, $paymentData)
+/**
+ * Make pushover message and send it
+ *
+ * @param array $config
+ * @param array $paymentData
+ * @return void
+ */
+function pushover($config = [], $paymentData = [])
 {
     $build_message = buildMessage($paymentData, $config['pushover']['message']);
 
@@ -136,7 +165,13 @@ function pushover($config, $paymentData)
     }
 }
 
-function publishTransactionDetails($config, $payload)
+/**
+ * Publish Transaction Details to fpp-zettle.co.uk
+ *
+ * @param array $payload
+ * @return void
+ */
+function publishTransactionDetails($payload = [])
 {
     $client = new GuzzleHttpClient([
         "base_uri" => "https://fpp-zettle.co.uk",
@@ -163,7 +198,40 @@ function publishTransactionDetails($config, $payload)
     // custom_logs($response->getBody());
 }
 
-function buildMessage($paymentData, $data)
+/**
+ * Store custom data on fpp-zettle.co.uk
+ *
+ * @param array $config
+ * @param array $data
+ * @return void
+ */
+function storeCustomer($config = [], $data = [])
+{
+    $client = new GuzzleHttpClient([
+        "base_uri" => "https://fpp-zettle.co.uk",
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
+
+    $options = [
+        'form_params' => [
+            'user_uuid' => $data['userUuid'],
+            'active' => isset($config['publish']) && $config['publish']['activate'] == 'yes' ? TRUE : FALSE,
+        ],
+    ];
+
+    $client->post("/api/customers", $options);
+}
+
+/**
+ * Build message for Overlay Model Effect
+ *
+ * @param array $paymentData
+ * @param array $data command data
+ * @return string
+ */
+function buildMessage($paymentData = [], $data = [])
 {
     // Find and replace values in array as payment details
     $text = str_replace([
@@ -179,6 +247,38 @@ function buildMessage($paymentData, $data)
     ], is_array($data) ? end($data) : $data);
 
     custom_logs('Build Message Output: ' . $text);
-
     return $text;
+}
+
+/**
+ * Run command
+ *
+ * @param array $data command details
+ * @return void
+ */
+function runCommand($data = [])
+{
+    // Build command url from selected command
+    $url = 'http://localhost/api/command/' . urlencode($data['command']);
+    // Get command args
+    $command_args = $data['args'];
+    // Check if command is "Overlay Model Effect"
+    if ($data['command'] == 'Overlay Model Effect') {
+        $text = buildMessage([$data['formatted_amount']], $command_args);
+        // Remove and replace last item from array
+        array_pop($command_args);
+        $command_args[] = $text;
+    }
+    // Fire the command
+    $query = json_encode($data);
+    $ch    = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+    curl_exec($ch);
+    curl_close($ch);
+    // Write to log file
+    custom_logs('command fired');
 }

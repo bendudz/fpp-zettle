@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 29-12-2023
+### Added
+- Add Multiple Card Readers button to setup page
+- Add support for multiple card readers, to allow a command to be run per reader
+
+### Changed
+- API changes to allow for multiple card readers
+
 ## 16-12-2023
 ### Changed
 - Fixed buildMessage in api
