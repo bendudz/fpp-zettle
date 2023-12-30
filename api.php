@@ -264,7 +264,9 @@ function runCommand($data = [])
     $command_args = $data['args'];
     // Check if command is "Overlay Model Effect"
     if ($data['command'] == 'Overlay Model Effect') {
-        $text = buildMessage([$data['formatted_amount']], $command_args);
+        $text = buildMessage([
+            'formatted_amount' => $data['formatted_amount']
+        ], $command_args);
         // Remove and replace last item from array
         array_pop($command_args);
         $command_args[] = $text;
