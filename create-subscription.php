@@ -9,14 +9,20 @@ $pluginName = 'zettle';
 $uuid = \AbmmHasan\Uuid::v1();
 
 $pluginJson = convertAndGetSettings($pluginName);
-
-if (count($pluginJson['subscriptions']) > 0) { ?>
-    <p class="mb-0">Subscription has been setup nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-<?php echo $pluginName; ?>&page=status.php">status page</a> or back to <a href="plugin.php?_menu=content&plugin=fpp-<?php echo $pluginName; ?>&page=setup.php">set up page</a> to add a trigger.</p>
+if ($pluginJson['client_id'] == '') {
+  $setupUrl = 'plugin.php?' . http_build_query([
+    '_menu' => 'content',
+    'plugin' => 'fpp-' . $pluginName,
+    'page' => 'setup.php'
+  ]);
+  echo '<p>You need to configure this plugin before you can create a Subscription. Click here to get to <a href="' . $setupUrl . '">setup</a></p>';
+} elseif (count($pluginJson['subscriptions']) > 0) { ?>
+  <p class="mb-0">Subscription has been setup nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-<?php echo $pluginName; ?>&page=status.php">status page</a> or back to <a href="plugin.php?_menu=content&plugin=fpp-<?php echo $pluginName; ?>&page=setup.php">set up page</a> to add a trigger.</p>
 <?php } else { ?>
-<link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
-<script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
-<div id="global" class="settings">
-  <legend>Create Subscription</legend>
+  <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
+  <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
+  <div id="global" class="settings">
+    <legend>Create Subscription</legend>
     <?php
     if (!checkForDataplicity()) {
     ?>
@@ -56,34 +62,34 @@ if (count($pluginJson['subscriptions']) > 0) { ?>
     </div>
     <form id="subscription" action="" method="post">
       <input type="hidden" name="uuid" id="uuid" value="<?php echo $uuid; ?>">
-    <div class="container-fluid settingsTable settingsGroupTable">
-      <div class="row">
-        <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-          <div class="description">
-            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Destination
+      <div class="container-fluid settingsTable settingsGroupTable">
+        <div class="row">
+          <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+            <div class="description">
+              <i class="fas fa-fw fa-nbsp ui-level-0"></i>Destination
+            </div>
+          </div>
+          <div class="printSettingFieldCol col-md">
+            <input type='text' id='destination' value="" placeholder="Wormhole Address" required autofocus style="width: 97%;">
+            <img id='HostName_img' title='This is the url that zettle will talk to' src='images/redesign/help-icon.svg' class='icon-help'>
+            <span id='HostName_tip' class='tooltip' style='display: none'>This is the url that zettle will talk to</span>
           </div>
         </div>
-        <div class="printSettingFieldCol col-md">
-          <input type='text' id='destination' value="" placeholder="Wormhole Address" required autofocus style="width: 97%;">
-          <img id='HostName_img' title='This is the url that zettle will talk to' src='images/redesign/help-icon.svg' class='icon-help'>
-          <span id='HostName_tip' class='tooltip' style='display: none'>This is the url that zettle will talk to</span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-          <div class="description">
-            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Contact Email
+        <div class="row">
+          <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+            <div class="description">
+              <i class="fas fa-fw fa-nbsp ui-level-0"></i>Contact Email
+            </div>
+          </div>
+          <div class="printSettingFieldCol col-md">
+            <input type='email' id='contactEmail' value="" required style="width: 97%;">
+            <img id='contactEmail_img' title='Used if there is an error' src='images/redesign/help-icon.svg' class='icon-help'>
+            <span id='contactEmail_tip' class='tooltip' style='display: none'>Used if there is an error</span>
           </div>
         </div>
-        <div class="printSettingFieldCol col-md">
-          <input type='email' id='contactEmail' value="" required style="width: 97%;">
-          <img id='contactEmail_img' title='Used if there is an error' src='images/redesign/help-icon.svg' class='icon-help'>
-          <span id='contactEmail_tip' class='tooltip' style='display: none'>Used if there is an error</span>
-        </div>
       </div>
-    </div>
-    <input id="save" type="submit" value="Save" class="buttons btn-success">
-    <a href="plugin.php?_menu=status&plugin=fpp-zettle&page=status.php" class="buttons">Back to Status Page</a>
-  </form>
-</div>
+      <input id="save" type="submit" value="Save" class="buttons btn-success">
+      <a href="plugin.php?_menu=status&plugin=fpp-zettle&page=status.php" class="buttons">Back to Status Page</a>
+    </form>
+  </div>
 <?php }
