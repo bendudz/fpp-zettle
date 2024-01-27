@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 27-01-2024
+### Changed
+- Fix UUID create on create subscription page
+- Only allow user to access Create Subscription page once the "Client ID" and "Api Key" as need entered
+
 ## 29-12-2023
 ### Added
 - Add Multiple Card Readers button to setup page
