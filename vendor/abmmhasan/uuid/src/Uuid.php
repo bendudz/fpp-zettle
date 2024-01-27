@@ -24,10 +24,11 @@ class Uuid
     {
         $time = microtime(false);
         $time = substr($time, 11) . substr($time, 2, 7);
-        $time = str_pad(dechex($time + 0x01b21dd213814000), 16, '0', STR_PAD_LEFT);
+        $time = str_pad(dechex(intval($time + 0x01b21dd213814000)), 16, '0', STR_PAD_LEFT);
         $clockSeq = random_int(0, 0x3fff);
         $node = $node ?? self::getNode();
-        return sprintf('%08s-%04s-1%03s-%04x-%012s',
+        return sprintf(
+            '%08s-%04s-1%03s-%04x-%012s',
             substr($time, -8),
             substr($time, -12, 4),
             substr($time, -15, 3),
@@ -94,7 +95,8 @@ class Uuid
         if (self::$node) {
             return self::$node;
         }
-        return self::$node = sprintf('%06x%06x',
+        return self::$node = sprintf(
+            '%06x%06x',
             random_int(0, 0xffffff) | 0x010000,
             random_int(0, 0xffffff)
         );
@@ -103,8 +105,10 @@ class Uuid
     private static function output(int $version, string $string)
     {
         $string = str_split($string, 4);
-        return sprintf("%08s-%04s-{$version}%03s-%04x-%012s",
-            $string[0] . $string[1], $string[2],
+        return sprintf(
+            "%08s-%04s-{$version}%03s-%04x-%012s",
+            $string[0] . $string[1],
+            $string[2],
             substr($string[3], 1, 3),
             hexdec($string[4]) & 0x3fff | 0x8000,
             $string[5] . $string[6] . $string[7]
