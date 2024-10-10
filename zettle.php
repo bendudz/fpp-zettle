@@ -29,6 +29,7 @@ $command_array = array(
     'save_publish' => 'SavePublish',
     'update_json' => 'UpdateJson',
     'check_keys' => 'CheckKeys',
+    'clear_transactions' => 'ClearTransactions'
 );
 
 $command = "";
@@ -630,5 +631,13 @@ function CheckKeys()
     echo json_encode([
         'error' => false,
         'message' => 'Key Valid'
+    ]);
+}
+
+function ClearTransactions()
+{
+    setPluginJSON('fpp-zettle-transactions', []);
+    echo json_encode([
+        'error' => false
     ]);
 }

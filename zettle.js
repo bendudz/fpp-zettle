@@ -203,10 +203,10 @@ $(function () {
 
   $('#clear_transactions').on('click', function (e) {
     var transactions = [];
-
+    //plugin.php?plugin=fpp-zettle&page=zettle.php&command=update_json&nopage=1
     $.ajax({
       type: "POST",
-      url: 'fppjson.php?command=setPluginJSON&plugin=fpp-zettle-transactions',
+      url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=clear_transactions&nopage=1',
       dataType: 'json',
       async: false,
       data: JSON.stringify(transactions),

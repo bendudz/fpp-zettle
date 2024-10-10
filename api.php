@@ -23,6 +23,11 @@ function getEndpointsfppzettle()
             'method' => 'POST',
             'endpoint' => 'event',
             'callback' => 'fppZettleEvent'
+        ),
+        array(
+            'method' => 'POST',
+            'endpoint' => 'app',
+            'callback' => 'fppZettleApp'
         )
     );
     return $endpoints;
@@ -60,7 +65,7 @@ function fppZettleEvent()
         return json_encode(
             [
                 'error' => true,
-                'message' => 'eventName needs to be PurchaseCreated'
+                'message' => 'eventName needs to be PurchaseCreated',
             ]
         );
     }
@@ -141,6 +146,39 @@ function fppZettleEvent()
     // Store userUuid and if they have activated publish or not
     storeCustomer($config, $paymentData);
     return true;
+}
+
+function fppZettleApp()
+{
+    $event = json_decode(file_get_contents('php://input'), true);
+    header("Content-Type: application/json");
+
+    $amount = ($event['amount'] / 100);
+    $currency = $event['currency'];
+
+    // Other Feilds can be added to this
+    $paymentData = [
+        'formatted_amount' => number_format($amount, 2) . ' ' . $currency,
+        'amount' => $amount,
+        'timestamp' => time(),
+        'userUuid' => "",
+    ];
+
+    // Get currentTransactions
+    $currentTransactions = convertAndGetSettings('zettle-transactions');
+    // Push new transaction
+    array_push($currentTransactions, $paymentData);
+    // Store transaction to json file
+    writeToJsonFile('transactions', $currentTransactions);
+    // Store transation account
+    totalTransactions($amount);
+
+    return json_encode(
+        [
+            'error' => false,
+            'message' => 'fpp app api function',
+        ]
+    );
 }
 
 /**
@@ -259,7 +297,8 @@ function buildMessage($paymentData = [], $data = [])
 function runCommand($data = [])
 {
     // Build command url from selected command
-    $url = 'http://localhost/api/command/' . urlencode($data['command']);
+    // $url = 'http://localhost/api/command/' . urlencode($data['command']);
+    $url = 'http://localhost/api/command/';
     // Get command args
     $command_args = $data['args'];
     // Check if command is "Overlay Model Effect"
