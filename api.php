@@ -310,6 +310,27 @@ function runCommand($data = [])
         array_pop($command_args);
         $command_args[] = $text;
     }
+    else if ($data['command'] == 'URL') {
+        custom_logs("Is URL");
+        $updated_url = buildMessage([
+            'formatted_amount' => $data['formatted_amount']
+        ], $command_args[0]);
+        $command_args[0] = $updated_url;
+
+        $updated_post_body = buildMessage([
+            'formatted_amount' => $data['formatted_amount']
+        ], $command_args[2]);
+        $command_args[2] = $updated_post_body;
+    }
+
+    if ($data['command'] != 'Overlay Model Effect') {
+        // Write command args back into $data, but only for commands other than Overlay Model Effect,
+        // which never used to do it - is this a bug that needs fixing?
+        $data['args'] = $command_args;
+    }
+
+    custom_logs('Sending command: ' . $data);
+
     // Fire the command
     $query = json_encode($data);
     $ch    = curl_init();
