@@ -269,20 +269,26 @@ function storeCustomer($config = [], $data = [])
  * @param array $data command data
  * @return string
  */
-function buildMessage($paymentData = [], $data = [])
+function buildMessage($paymentData = [], $data = [], $url_encode = false)
 {
+    $replacement_values = [
+        $paymentData['formatted_amount'],
+        runningTotal('everything'),
+        runningTotal('today'),
+        runningTotal('this_month')
+    ];
+
+    if ($url_encode) {
+        $replacement_values = array_map('urlencode', $replacement_values);
+    }
+
     // Find and replace values in array as payment details
     $text = str_replace([
         '{{AMOUNT}}',
         '{{EVERYTHING}}',
         '{{TODAY}}',
         '{{THIS_MONTH}}'
-    ], [
-        $paymentData['formatted_amount'],
-        runningTotal('everything'),
-        runningTotal('today'),
-        runningTotal('this_month')
-    ], is_array($data) ? end($data) : $data);
+    ],  $replacement_values, is_array($data) ? end($data) : $data);
 
     custom_logs('Build Message Output: ' . $text);
     return $text;
@@ -310,6 +316,27 @@ function runCommand($data = [])
         array_pop($command_args);
         $command_args[] = $text;
     }
+    else if ($data['command'] == 'URL') {
+        custom_logs("Is URL");
+        $updated_url = buildMessage([
+            'formatted_amount' => $data['formatted_amount']
+        ], $command_args[0], true);
+        $command_args[0] = $updated_url;
+
+        $updated_post_body = buildMessage([
+            'formatted_amount' => $data['formatted_amount']
+        ], $command_args[2]);
+        $command_args[2] = $updated_post_body;
+    }
+
+    if ($data['command'] != 'Overlay Model Effect') {
+        // Write command args back into $data, but only for commands other than Overlay Model Effect,
+        // which never used to do it - is this a bug that needs fixing?
+        $data['args'] = $command_args;
+    }
+
+    custom_logs('Sending command: ' . $data);
+
     // Fire the command
     $query = json_encode($data);
     $ch    = curl_init();
