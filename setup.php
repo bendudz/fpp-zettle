@@ -54,7 +54,7 @@ $pluginJson = convertAndGetSettings($pluginName);
         <p>Select a command that you would like to run when a transaction comes in</p>
 
         <div id="text_options" class="callout callout-info" style="display: none;">
-            <h4>Overlay Model Effect Text Options</h4>
+            <h4>Overlay Model Effect and URL Text Options</h4>
             <p>There are a number of options available.</p>
             <ul>
                 <!--li>{{PAYER_NAME}} : Show the name of the person that has donated</li-->

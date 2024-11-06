@@ -106,12 +106,20 @@ $(function () {
       LoadCommandList(newButtonRowCommand);
       PopulateExistingCommand(zettleConfig, newButtonRowCommand, newButtonRowTable, true);
 
-      if (zettleConfig.command == 'Overlay Model Effect' && zettleConfig.args[2] == 'Text') {
+      if (
+        zettleConfig.command == 'Overlay Model Effect' && zettleConfig.args[2] == 'Text' ||
+        zettleConfig.command == 'URL'
+      ) {
         $('#text_options').show();
       }
 
       $('.buttonCommand').attr('id', newButtonRowCommand).on('change', function () {
         CommandSelectChanged(newButtonRowCommand, newButtonRowTable, true);
+        if ($("#" + newButtonRowCommand).val() == 'URL') {
+          $('#text_options').fadeIn();
+        } else {
+          $('#text_options').fadeOut();
+        }
 
         $('#tableButtonTPL_arg_3_row').find('select').on('change', function () {
           if ($(this).val() == 'Text') {
