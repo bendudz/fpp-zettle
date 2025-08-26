@@ -75,7 +75,9 @@ function fppZettleEvent()
     $currency = $payload['currency'];
 
     // Other Feilds can be added to this
+    $purchaseUuid = $payload['purchaseUuid'];
     $paymentData = [
+        'purchaseUuid' => $purchaseUuid,
         'formatted_amount' => number_format($amount, 2) . ' ' . $currency,
         'amount' => $amount,
         'timestamp' => $payload['timestamp'],
@@ -84,6 +86,17 @@ function fppZettleEvent()
 
     // Get currentTransactions
     $currentTransactions = convertAndGetSettings('zettle-transactions');
+    foreach ($currentTransactions as $transaction) {
+        if (isset($transaction['purchaseUuid'])) {
+            $id = $transaction['purchaseUuid'];
+            if (isset($id) && $id == $purchaseUuid) {
+                custom_logs($payload);
+                custom_logs("Rejecting duplicate purchaseUuid " . $purchaseUuid);
+                return true;
+            }
+        }
+    }
+
     // Push new transaction
     array_push($currentTransactions, $paymentData);
     // Store transaction to json file
