@@ -43,15 +43,19 @@ function getTransactionsTotal()
 
 function getStatusData($pj)
 {
-    return [[
-        "client_id" => $pj['client_id'],
-        "client_secret" => substr($pj['client_secret'], 0, 8),
-        "email" => $pj['subscriptions']['contactEmail'],
-        "destination" => $pj['subscriptions']['destination'],
-        "status" => $pj['subscriptions']['status']
-    ]];
+    return [
+        [
+            "client_id" => $pj['client_id'],
+            "client_secret" => substr($pj['client_secret'], 0, 8),
+            "email" => $pj['subscriptions']['contactEmail'],
+            "destination" => $pj['subscriptions']['destination'],
+            "status" => $pj['subscriptions']['status']
+        ]
+    ];
 }
 
+$currency = currencyWorkout(isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 'GBP');
+$currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 'GBP';
 ?>
 
 <head>
@@ -123,10 +127,10 @@ function getStatusData($pj)
                     }
                 },
                 data: <?
-                        echo json_encode(getStatusData($pluginJson));
-                        ?>
+                echo json_encode(getStatusData($pluginJson));
+                ?>
 
-            }).render(document.getElementById("status"));
+                                                            }).render(document.getElementById("status"));
         </script>
         <br><br>
 
@@ -139,10 +143,11 @@ function getStatusData($pj)
             <div class="col">
                 <div class="alert-success alert mb-0">
                     <div class="d-flex align-items-center">
-                        <div class="avatar rounded no-thumbnail bg-success text-white"><i class="fas fa-pound-sign fa-lg"></i></div>
+                        <div class="avatar rounded no-thumbnail bg-success text-white"><i
+                                class="fas fa-pound-sign fa-lg"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="h6 mb-0"><strong>Today</strong></div>
-                            <span class="small" id="today">£0</span>
+                            <span class="small" id="today"><?php echo $currency; ?>0</span>
                         </div>
                     </div>
                 </div>
@@ -150,10 +155,11 @@ function getStatusData($pj)
             <div class="col">
                 <div class="alert-success alert mb-0">
                     <div class="d-flex align-items-center">
-                        <div class="avatar rounded no-thumbnail bg-success text-white"><i class="fas fa-pound-sign fa-lg"></i></div>
+                        <div class="avatar rounded no-thumbnail bg-success text-white"><i
+                                class="fas fa-pound-sign fa-lg"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="h6 mb-0"><strong>Yesterday</strong></div>
-                            <span class="small" id="yesterday">£0</span>
+                            <span class="small" id="yesterday"><?php echo $currency; ?>0</span>
                         </div>
                     </div>
                 </div>
@@ -161,10 +167,11 @@ function getStatusData($pj)
             <div class="col">
                 <div class="alert-success alert mb-0">
                     <div class="d-flex align-items-center">
-                        <div class="avatar rounded no-thumbnail bg-success text-white"><i class="fas fa-pound-sign fa-lg"></i></div>
+                        <div class="avatar rounded no-thumbnail bg-success text-white"><i
+                                class="fas fa-pound-sign fa-lg"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="h6 mb-0"><strong>This Week</strong></div>
-                            <span class="small" id="this_week">£0</span>
+                            <span class="small" id="this_week"><?php echo $currency; ?>0</span>
                         </div>
                     </div>
                 </div>
@@ -172,10 +179,11 @@ function getStatusData($pj)
             <div class="col">
                 <div class="alert-success alert mb-0">
                     <div class="d-flex align-items-center">
-                        <div class="avatar rounded no-thumbnail bg-success text-white"><i class="fas fa-pound-sign fa-lg"></i></div>
+                        <div class="avatar rounded no-thumbnail bg-success text-white"><i
+                                class="fas fa-pound-sign fa-lg"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="h6 mb-0"><strong>This Month</strong></div>
-                            <span class="small" id="this_month">£0</span>
+                            <span class="small" id="this_month"><?php echo $currency; ?>0</span>
                         </div>
                     </div>
                 </div>
@@ -187,6 +195,7 @@ function getStatusData($pj)
         <br>
         <input id="clear_transactions" class="buttons" value="Clear Transactions">
         <script>
+            var tableCurrency = '<?php echo $currency; ?>';
             const grid = new gridjs.Grid({
                 columns: [{
                     id: 'timestamp',
@@ -199,7 +208,7 @@ function getStatusData($pj)
                     id: 'amount',
                     name: 'Amount £',
                     width: '50%',
-                    formatter: (cell) => `£${cell}`
+                    formatter: (cell) => `${tableCurrency}${cell}`
                 }],
                 sort: true,
                 resizable: true,
@@ -224,7 +233,7 @@ function getStatusData($pj)
             });
             grid.render(document.getElementById("transactions"));
 
-            setInterval(function() {
+            setInterval(function () {
                 grid.updateConfig({
                     server: {
                         url: '/api/configfile/plugin.fpp-zettle-transactions.json',
@@ -232,33 +241,35 @@ function getStatusData($pj)
                     }
                 }).forceRender();
             }, 30000);
-            $(function() {
+            $(function () {
                 function ajaxGet(url, feild) {
                     $.ajax({
                         type: "GET",
                         url: url,
-                        success: function(data) {
+                        success: function (data) {
                             $('span#' + feild).html(data);
                         }
                     });
                 }
 
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today', 'today');
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=yesterday', 'yesterday');
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_week', 'this_week');
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_month', 'this_month');
+                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today&currency=' + $currencyRaw, 'today');
+                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=yesterday&currency=' + $currencyRaw, 'yesterday');
+                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_week&currency=' + $currencyRaw, 'this_week');
+                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_month&currency=' + $currencyRaw, 'this_month');
 
-                setTimeout(function() {
+                setTimeout(function () {
                     ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today', 'today');
                 }, 300000);
             });
         </script>
-</body>
+    </body>
 <?php } else { ?>
     <?php if ($pluginJson['client_id'] == '') { ?>
-        <p>You need to configure this plugin before you can see the status. Click here to get to <a href="<?php echo $setupUrl; ?>">setup</a></p>
+        <p>You need to configure this plugin before you can see the status. Click here to get to <a
+                href="<?php echo $setupUrl; ?>">setup</a></p>
     <?php } ?>
     <?php if (count($pluginJson['subscriptions']) == 0) { ?>
-        <p>You have <strong>Client ID</strong> and <strong>Client Secret</strong> setup, now you need to create a Subscription to link FPP with Zettle. Click here to <a href="<?php echo $subscriptionUrl; ?>">create subscription</a></p>
+        <p>You have <strong>Client ID</strong> and <strong>Client Secret</strong> setup, now you need to create a Subscription
+            to link FPP with Zettle. Click here to <a href="<?php echo $subscriptionUrl; ?>">create subscription</a></p>
     <?php } ?>
 <?php } ?>

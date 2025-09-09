@@ -454,4 +454,76 @@ $(function () {
       }
     });
   });
+
+  $('#other').on('submit', function (e) {
+    e.preventDefault();
+
+    var thisForm = $(this);
+    var submitButton = $("input[type=submit]", thisForm);
+
+    $.ajax({
+      type: "POST",
+      url: "plugin.php?plugin=fpp-zettle&page=zettle.php&command=save_other&nopage=1",
+      dataType: 'json',
+      async: false,
+      data: {
+        option: "other",
+        currency: $('#other_currency option:selected').val(),
+      },
+      beforeSend: function () {
+        $(submitButton).prop('disabled', true);
+      },
+      success: function (data) {
+        $.jGrowl(data.message, {
+          themeState: "success"
+        });
+        setTimeout(function () {
+          location.reload();
+        }, 3000);
+      }
+    });
+  });
+
+  if ($('#checks').length) {
+    var errors = [];
+    if ($('#client_id').val() != "") {
+      $.ajax({
+        type: "POST",
+        url: 'plugin.php?plugin=fpp-zettle&page=zettle.php&command=check_keys&nopage=1',
+        data: {
+          client_id: $('#client_id').val(),
+          client_secret: $('#client_secret').val(),
+        },
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+          $.ajax({
+            type: "GET",
+            url: "plugin.php?plugin=fpp-zettle&page=zettle.php&command=subscriptions&nopage=1",
+            dataType: "json",
+            success: function (sdata) {
+              if (sdata.subscriptions.length > 0 && !sdata.error) {
+                if (sdata.subscriptions.length > 1) {
+                  errors.push('There are more then one subscriptions found, check out the subscriptions page.');
+                  $('#subscriptions').show();
+                }
+              }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              errors.push('No subscriptions found');
+            }
+          });
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          errors.push('There seems to be a problem with your keys please check them!');
+          
+        }
+      });
+    }
+
+    if (errors.length > 0) {
+      $('#checks').show();
+      $('#checks').html(errors.join('dfghjkl<br>'));
+    }
+  }
 });

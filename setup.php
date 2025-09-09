@@ -24,7 +24,8 @@ $pluginJson = convertAndGetSettings($pluginName);
                     </div>
                 </div>
                 <div class="printSettingFieldCol col-md">
-                    <input type="text" id="client_id" value="<?php echo $pluginJson["client_id"]; ?>" required class="form-control">
+                    <input type="text" id="client_id" value="<?php echo $pluginJson["client_id"]; ?>" required
+                        class="form-control">
                 </div>
             </div>
 
@@ -35,20 +36,27 @@ $pluginJson = convertAndGetSettings($pluginName);
                     </div>
                 </div>
                 <div class="printSettingFieldCol col-md">
-                    <input type="password" id="client_secret" value="<?php echo $pluginJson["client_secret"]; ?>" required class="form-control">
+                    <input type="password" id="client_secret" value="<?php echo $pluginJson["client_secret"]; ?>"
+                        required class="form-control">
                 </div>
             </div>
         </div>
         <input id="save" type="submit" value="Save" class="buttons btn-success">
         <?php if ($pluginJson["client_id"] != "" && count($pluginJson["subscriptions"]) == 0) { ?>
-            <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php" class="buttons">Create Subscription</a>
+            <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php" class="buttons">Create
+                Subscription</a>
         <?php } ?>
         <?php if ($pluginJson["client_id"] != "" && count($pluginJson["subscriptions"]) > 0) { ?>
             <input id="clear_config" type="button" class="buttons" value="Clear Config">
-            <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=update-subscription.php" class="buttons">Update Subscription</a>
+            <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=update-subscription.php" class="buttons">Update
+                Subscription</a>
         <?php } ?>
+        <a id="subscriptions" href="plugin.php?_menu=content&plugin=fpp-zettle&page=subscriptions.php" class="buttons"
+            style="display: none">Update
+            Subscriptions</a>
     </form>
     <?php if ($pluginJson["client_id"] != "" && count($pluginJson["subscriptions"]) > 0) { ?>
+        <div id="checks" class="alert alert-danger" style="display: none"></div>
         <legend>Effect</legend>
         <!--p>The effect that will be run when a transaction comes in.</p-->
         <p>Select a command that you would like to run when a transaction comes in</p>
@@ -79,7 +87,7 @@ $pluginJson = convertAndGetSettings($pluginName);
                                             <select id="effect_activate" required>
                                                 <option value="yes" <?php echo $pluginJson['effect_activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
                                                 <option value="no" <?php echo $pluginJson['effect_activate'] == 'no' ? 'selected' : null;
-                                                                    echo !isset($pluginJson['effect_activate']) ? 'selected' : ''; ?>>No</option>
+                                                echo !isset($pluginJson['effect_activate']) ? 'selected' : ''; ?>>No</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -113,17 +121,21 @@ $pluginJson = convertAndGetSettings($pluginName);
         </div-->
             <input id="effect_save" type="submit" value="Save" class="buttons btn-success">
             <input id="test_command" type="button" value="Test" class="buttons">
-            <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=multiple-readers.php" class="buttons">Have Multiple Readers</a>
+            <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=multiple-readers.php" class="buttons">Have Multiple
+                Readers</a>
         </form>
 
         <?php if (isset($pluginJson['readers']) && count($pluginJson['readers']) > 0) { ?>
             <p>You multiple readers configured</p>
         <?php } ?>
 
-        <div class="alert alert-info">If you are looking for help press F1 or <a href="plugin.php?plugin=fpp-zettle&page=help.php" class="alert-link" target="_blank">Click Here</a></div>
+        <div class="alert alert-info">If you are looking for help press F1 or <a
+                href="plugin.php?plugin=fpp-zettle&page=help.php" class="alert-link" target="_blank">Click Here</a></div>
 
         <legend>Pushover</legend>
-        <p>Get notification sent your phone every time a donate is made. Pushover is free to use for 30 days. If you want to use it for longer there is a $5 USD one-time purchase fee. Check out the details at there website: <a href="https://pushover.net/" target="_blank">https://pushover.net</a></p>
+        <p>Get notification sent your phone every time a donate is made. Pushover is free to use for 30 days. If you want to
+            use it for longer there is a $5 USD one-time purchase fee. Check out the details at there website: <a
+                href="https://pushover.net/" target="_blank">https://pushover.net</a></p>
 
         <form id="pushover" action="">
             <div class="container-fluid settingsTable settingsGroupTable">
@@ -137,7 +149,7 @@ $pluginJson = convertAndGetSettings($pluginName);
                         <select id="pushover_activate" required class="form-control">
                             <option value="yes" <?php echo $pluginJson['pushover']['activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
                             <option value="no" <?php echo $pluginJson['pushover']['activate'] == 'no' ? 'selected' : null;
-                                                echo !isset($pluginJson['pushover']['activate']) ? 'selected' : ''; ?>>No</option>
+                            echo !isset($pluginJson['pushover']['activate']) ? 'selected' : ''; ?>>No</option>
                         </select>
                     </div>
                 </div>
@@ -148,7 +160,8 @@ $pluginJson = convertAndGetSettings($pluginName);
                         </div>
                     </div>
                     <div class="printSettingFieldCol col-md">
-                        <input type="text" id="pushover_app_token" value="<?php echo $pluginJson["pushover"]["app_token"]; ?>" required class="form-control">
+                        <input type="text" id="pushover_app_token"
+                            value="<?php echo $pluginJson["pushover"]["app_token"]; ?>" required class="form-control">
                     </div>
                 </div>
                 <div class="row">
@@ -158,7 +171,8 @@ $pluginJson = convertAndGetSettings($pluginName);
                         </div>
                     </div>
                     <div class="printSettingFieldCol col-md">
-                        <input type="text" id="pushover_user_key" value="<?php echo $pluginJson["pushover"]["user_key"]; ?>" required class="form-control">
+                        <input type="text" id="pushover_user_key" value="<?php echo $pluginJson["pushover"]["user_key"]; ?>"
+                            required class="form-control">
                     </div>
                 </div>
                 <div class="row">
@@ -168,7 +182,8 @@ $pluginJson = convertAndGetSettings($pluginName);
                         </div>
                     </div>
                     <div class="printSettingFieldCol col-md">
-                        <input type="text" id="pushover_message" value="<?php echo $pluginJson["pushover"]["message"]; ?>" required class="form-control">
+                        <input type="text" id="pushover_message" value="<?php echo $pluginJson["pushover"]["message"]; ?>"
+                            required class="form-control">
                     </div>
                 </div>
             </div>
@@ -176,7 +191,8 @@ $pluginJson = convertAndGetSettings($pluginName);
         </form>
 
         <legend>Publish</legend>
-        <p>We would like to gather some information from your donations. We would like to collect the donation amount and store it remotely on the <a href="https://fpp-zettle.co.uk" target="_blank">fpp-zettle.co.uk</a> server.</p>
+        <p>We would like to gather some information from your donations. We would like to collect the donation amount and
+            store it remotely on the <a href="https://fpp-zettle.co.uk" target="_blank">fpp-zettle.co.uk</a> server.</p>
         <p>If you would like to take part in this please select "Yes" from the activate select and press save.</p>
         <form action="" id="publish">
             <div class="container-fluid settingsTable settingsGroupTable">
@@ -190,7 +206,7 @@ $pluginJson = convertAndGetSettings($pluginName);
                         <select id="publish_activate" required class="form-control">
                             <option value="yes" <?php echo $pluginJson['publish']['activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
                             <option value="no" <?php echo $pluginJson['publish']['activate'] == 'no' ? 'selected' : null;
-                                                echo !isset($pluginJson['publish']['activate']) ? 'selected' : ''; ?>>No</option>
+                            echo !isset($pluginJson['publish']['activate']) ? 'selected' : ''; ?>>No</option>
                         </select>
                     </div>
                 </div>
@@ -210,5 +226,30 @@ $pluginJson = convertAndGetSettings($pluginName);
             </div>
             <input type="submit" value="Save" class="buttons btn-success">
         </form>
+
+        <legend>Other Settings</legend>
+        <form action="" id="other">
+            <div class="container-fluid settingsTable settingsGroupTable">
+                <div class="row">
+                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                        <div class="description">
+                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Currency
+                        </div>
+                    </div>
+                    <div class="printSettingFieldCol col-md">
+                        <select id="other_currency" required class="form-control">
+                            <option value="GBP" <?php echo $pluginJson['other']['currency'] == 'GBP' ? 'selected' : null; ?>>
+                                GBP £</option>
+                            <option value="USD" <?php echo $pluginJson['other']['currency'] == 'USD' ? 'selected' : null; ?>>
+                                USD $</option>
+                            <option value="EUR" <?php echo $pluginJson['other']['currency'] == 'EUR' ? 'selected' : null; ?>>
+                                EUR €</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Save" class="buttons btn-success">
+        </form>
+
     <?php } ?>
 </div>

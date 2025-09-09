@@ -29,7 +29,8 @@ $command_array = array(
     'save_publish' => 'SavePublish',
     'update_json' => 'UpdateJson',
     'check_keys' => 'CheckKeys',
-    'clear_transactions' => 'ClearTransactions'
+    'clear_transactions' => 'ClearTransactions',
+    'save_other' => 'SaveOther',
 );
 
 $command = "";
@@ -201,7 +202,7 @@ function GetSubscriptions()
     global $subscriptions_url;
 
     $query = buildQuery([], [
-        'method'  => 'GET',
+        'method' => 'GET',
     ], $subscriptions_url);
 
     if (isset($query['error'])) {
@@ -434,7 +435,7 @@ function MatrixText()
     ];
 
     $query = json_encode($data);
-    $ch    = curl_init();
+    $ch = curl_init();
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, false);
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -453,6 +454,7 @@ function GetPurchases()
     $current_month = date('m');
 
     $option = $_GET['option'];
+    $currency = currencyWorkout($_GET['currency']);
 
     switch ($option) {
         case 'today':
@@ -501,7 +503,7 @@ function GetPurchases()
     }
 
     $query = buildQuery([], [
-        'method'  => 'GET'
+        'method' => 'GET'
     ], $url);
 
     // if (isset($query['code'])) {
@@ -517,7 +519,7 @@ function GetPurchases()
         $total += $purchase->amount / 100;
     }
 
-    echo '£' . number_format($total, 2);
+    echo $currency . number_format($total, 2);
     // }
 }
 
@@ -598,6 +600,11 @@ function UpdateJson2($option, $data)
         case 'publish':
             $pluginJson['publish']['activate'] = $data['activate'];
             //$pluginJson['publish']['location'] = $data['location'];
+            break;
+
+        case 'other':
+            $pluginJson['other']['currency'] = $data['currency'];
+
     }
 
     setPluginJSON('fpp-zettle', $pluginJson);
@@ -639,5 +646,17 @@ function ClearTransactions()
     setPluginJSON('fpp-zettle-transactions', []);
     echo json_encode([
         'error' => false
+    ]);
+}
+
+function SaveOther()
+{
+    UpdateJson2('other', [
+        'currency' => $_POST['currency'],
+    ]);
+
+    echo jsonOutput([
+        'error' => false,
+        'message' => 'Other Settings Updated!'
     ]);
 }
