@@ -130,7 +130,7 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                 echo json_encode(getStatusData($pluginJson));
                 ?>
 
-                                                            }).render(document.getElementById("status"));
+                                                                }).render(document.getElementById("status"));
         </script>
         <br><br>
 
@@ -196,6 +196,7 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
         <input id="clear_transactions" class="buttons" value="Clear Transactions">
         <script>
             var tableCurrency = '<?php echo $currency; ?>';
+            var currencyRaw = '<?php echo $currencyRaw ?>';
             const grid = new gridjs.Grid({
                 columns: [{
                     id: 'timestamp',
@@ -252,10 +253,10 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                     });
                 }
 
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today&currency=' + $currencyRaw, 'today');
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=yesterday&currency=' + $currencyRaw, 'yesterday');
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_week&currency=' + $currencyRaw, 'this_week');
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_month&currency=' + $currencyRaw, 'this_month');
+                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today&currency=' + currencyRaw, 'today');
+                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=yesterday&currency=' + currencyRaw, 'yesterday');
+                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_week&currency=' + currencyRaw, 'this_week');
+                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_month&currency=' + currencyRaw, 'this_month');
 
                 setTimeout(function () {
                     ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today', 'today');
