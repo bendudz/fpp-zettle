@@ -130,7 +130,7 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                 echo json_encode(getStatusData($pluginJson));
                 ?>
 
-                                                                }).render(document.getElementById("status"));
+                                                                        }).render(document.getElementById("status"));
         </script>
         <br><br>
 
@@ -259,7 +259,7 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                 ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_month&currency=' + currencyRaw, 'this_month');
 
                 setTimeout(function () {
-                    ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today', 'today');
+                    ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today&currency=' + currencyRaw, 'today');
                 }, 300000);
             });
         </script>
