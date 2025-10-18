@@ -132,6 +132,8 @@ function fppZettleEvent()
                 'command' => $config['command'],
                 'args' => $config['args'],
                 'formatted_amount' => $paymentData['formatted_amount'],
+                'multisyncCommand' => isset($config['multisyncHosts']) ? $config['multisyncCommand'] : false,
+                'multisyncHosts' => isset($config['multisyncHosts']) ? $config['multisyncHosts'] : ""
             ]);
         }
     }
@@ -288,7 +290,7 @@ function buildMessage($paymentData = [], $data = [], $url_encode = false)
         '{{EVERYTHING}}',
         '{{TODAY}}',
         '{{THIS_MONTH}}'
-    ],  $replacement_values, is_array($data) ? end($data) : $data);
+    ], $replacement_values, is_array($data) ? end($data) : $data);
 
     custom_logs('Build Message Output: ' . $text);
     return $text;
@@ -315,8 +317,7 @@ function runCommand($data = [])
         // Remove and replace last item from array
         array_pop($command_args);
         $command_args[] = $text;
-    }
-    else if ($data['command'] == 'URL') {
+    } else if ($data['command'] == 'URL') {
         custom_logs("Is URL");
         $updated_url = buildMessage([
             'formatted_amount' => $data['formatted_amount']
@@ -327,6 +328,11 @@ function runCommand($data = [])
             'formatted_amount' => $data['formatted_amount']
         ], $command_args[2]);
         $command_args[2] = $updated_post_body;
+
+        if ($data['multisyncCommand'] == false) {
+            unset($data['multisyncCommand']);
+            unset($data['multisyncHosts']);
+        }
     }
 
     if ($data['command'] != 'Overlay Model Effect') {
@@ -335,11 +341,11 @@ function runCommand($data = [])
         $data['args'] = $command_args;
     }
 
-    custom_logs('Sending command: ' . $data);
+    custom_logs('Sending command: ' . implode('--', $data));
 
     // Fire the command
     $query = json_encode($data);
-    $ch    = curl_init();
+    $ch = curl_init();
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, false);
     curl_setopt($ch, CURLOPT_URL, $url);
