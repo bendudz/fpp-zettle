@@ -345,19 +345,19 @@ $(function () {
       // Display error to user if command not found
       DialogError('Error', 'No command found, please select a command!');
     } else {
-      var url = "api/command/";
+      var url = "api/command";
       var data = {};
       // Get command data
       CommandToJSON('button_TPL_Command', 'tableButtonTPL', data);
       // Build url with selected command
-      url += data['command'];
+      // url += data['command'];
       // Send ajax to test command to see if user likes it before they save it
       $.ajax({
         type: "POST",
         url: url,
         dataType: 'text',
         async: false,
-        data: JSON.stringify(data['args']),
+        data: JSON.stringify(data),
         processData: false,
         contentType: 'application/json',
         success: function (data) {

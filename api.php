@@ -329,6 +329,8 @@ function runCommand($data = [])
         ], $command_args[2]);
         $command_args[2] = $updated_post_body;
 
+        // Check if multisyncCommand is set to false 
+        // if so unset the multisync options 
         if ($data['multisyncCommand'] == false) {
             unset($data['multisyncCommand']);
             unset($data['multisyncHosts']);
