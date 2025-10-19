@@ -328,19 +328,19 @@ function runCommand($data = [])
             'formatted_amount' => $data['formatted_amount']
         ], $command_args[2]);
         $command_args[2] = $updated_post_body;
-
-        // Check if multisyncCommand is set to false 
-        // if so unset the multisync options 
-        if ($data['multisyncCommand'] == false) {
-            unset($data['multisyncCommand']);
-            unset($data['multisyncHosts']);
-        }
     }
 
     if ($data['command'] != 'Overlay Model Effect') {
         // Write command args back into $data, but only for commands other than Overlay Model Effect,
         // which never used to do it - is this a bug that needs fixing?
         $data['args'] = $command_args;
+    }
+
+    // Check if multisyncCommand is set to false 
+    // if so unset the multisync options 
+    if ($data['multisyncCommand'] == false) {
+        unset($data['multisyncCommand']);
+        unset($data['multisyncHosts']);
     }
 
     custom_logs('Sending command: ' . implode('--', $data));
