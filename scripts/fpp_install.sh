@@ -14,7 +14,8 @@ defalt_json=$(cat <<EOF
 	"organizationUuid": "",
    "subscriptions": [],
 	 "effect_activate": "no",
-	"command": ""
+	"command": "",
+	"publish": ["active": "yes"],
 }
 EOF
 )
