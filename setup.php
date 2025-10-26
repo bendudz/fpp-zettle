@@ -15,6 +15,8 @@ $pluginJson = convertAndGetSettings($pluginName);
     <legend>Zettle Setup</legend>
     <p>Add your client id and secret generated from the Zettle Integrations
         webpage</p>
+    <p>Follow install steps to get the keys you need: <a
+            href="https://fpp-zettle.co.uk/docs/Zettle/plugin/configurations" target="_blank">Here</a></p>
     <form id="setup" action="" method="post">
         <div class="container-fluid settingsTable settingsGroupTable">
             <div class="row">
