@@ -555,6 +555,20 @@ function UpdateJson()
 {
     $pluginJson = convertAndGetSettings('zettle');
 
+    if ($_POST['option'] == 'setup') {
+        if (!is_array($pluginJson)) {
+            $pluginJson = [
+                "client_id" => "",
+                "client_secret" => "",
+                "organizationUuid" => "",
+                "subscriptions" => [],
+                "effect_activate" => "no",
+                "command" => "",
+                "publish" => ["active" => "yes"],
+            ];
+        }
+    }
+
     switch ($_POST['option']) {
         case 'setup':
             unset($_POST['option']);
