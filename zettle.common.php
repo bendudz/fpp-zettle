@@ -8,7 +8,8 @@ function emptyConfig()
     'organizationUuid' => '',
     'subscriptions' => [],
     'effect_activate' => 'no',
-    'command' => ''
+    'command' => '',
+    'publish' => ['activate' => 'yes'],
   ];
 }
 

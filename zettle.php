@@ -564,7 +564,7 @@ function UpdateJson()
                 "subscriptions" => [],
                 "effect_activate" => "no",
                 "command" => "",
-                "publish" => ["active" => "yes"],
+                "publish" => ["activate" => "yes"],
             ];
         }
     }
