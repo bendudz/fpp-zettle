@@ -5,5 +5,5 @@
 	"subscriptions": [],
 	"effect_activate": "no",
 	"command": "",
-	"publish": ["activate": "yes"]
+	"publish": {"activate": "yes"}
 }
