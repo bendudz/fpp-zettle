@@ -61,6 +61,14 @@ fi
 
 shell_exec("sudo chown -R fpp:fpp /home/fpp/media/config/plugin.fpp-zettle.json");
 
+TRANSACTIONS="/home/pi/fpp/config/plugin.fpp-zettle-transactions.json"
+log "Writing default transactions to $CONFIG"
+    cp "${PLUGIN_DIR}/config/fpp-zettle-transactions.json.example" "$CONFIG" 2>/dev/null || \
+    cat > "$CONFIG" <<'JSONEOF'
+[]
+JSONEOF
+fi
+
 echo "You need a secure https endpoint on your pi to use this plugin. Dataplicity is the easiest way to achieve that. Check out the readme or the plugin help text for more information."
 
 echo "Please restart fppd for new FPP Commands to be visible."

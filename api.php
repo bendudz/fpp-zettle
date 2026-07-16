@@ -145,8 +145,11 @@ function fppZettleEvent()
     if (isset($config['publish']) && $config['publish']['activate'] == 'yes') {
         publishTransactionDetails($payload);
     }
+
     // Store userUuid and if they have activated publish or not
-    storeCustomer($config, $paymentData);
+    if (!isset($event['debug'])) {
+        storeCustomer($config, $paymentData);
+    }
     return true;
 }
 

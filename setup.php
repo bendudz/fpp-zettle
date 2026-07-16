@@ -10,9 +10,40 @@ $pluginJson = convertAndGetSettings($pluginName);
 ?>
 <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
 <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
+<style>
+    .zettle-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: .3rem;
+        padding: .35rem .8rem;
+        font-size: .875rem;
+        font-weight: 500;
+        line-height: 1.5;
+        text-align: center;
+        white-space: nowrap;
+        cursor: pointer;
+        border: 1px solid #3a7fc1;
+        border-radius: .3rem;
+        text-decoration: none !important;
+        background-color: #1a6eb5;
+        color: #fff !important;
+        transition: background-color .15s ease-in-out, border-color .15s;
+        vertical-align: middle;
+    }
+</style>
 <div id="global" class="settings">
     <?php include $settings["pluginDirectory"] . "/fpp-zettle/pluginUpdate.php" ?>
-    <legend>Zettle Setup</legend>
+    <div class="d-flex justify-content-between align-items-center mb-2 sled-page-header">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+            <h2 class="mb-0">Zettle Setup</h2>
+        </div>
+        <div class="d-flex align-items-center gap-2 zettle-donate-row">
+            <a href="https://buymeacoffee.com/mjonesfpp" target="_blank" rel="noopener noreferrer"
+                class="zettle-btn">
+                <i class="fas fa-fw fa-mug-hot"></i> Buy Me a Coffee
+            </a>
+        </div>
+    </div>
     <p>Add your client id and secret generated from the Zettle Integrations
         webpage</p>
     <p>Follow install steps to get the keys you need: <a
@@ -89,7 +120,7 @@ $pluginJson = convertAndGetSettings($pluginName);
                                             <select id="effect_activate" required>
                                                 <option value="yes" <?php echo $pluginJson['effect_activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
                                                 <option value="no" <?php echo $pluginJson['effect_activate'] == 'no' ? 'selected' : null;
-                                                echo !isset($pluginJson['effect_activate']) ? 'selected' : ''; ?>>No</option>
+                                                                    echo !isset($pluginJson['effect_activate']) ? 'selected' : ''; ?>>No</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -151,7 +182,7 @@ $pluginJson = convertAndGetSettings($pluginName);
                         <select id="pushover_activate" required class="form-control">
                             <option value="yes" <?php echo $pluginJson['pushover']['activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
                             <option value="no" <?php echo $pluginJson['pushover']['activate'] == 'no' ? 'selected' : null;
-                            echo !isset($pluginJson['pushover']['activate']) ? 'selected' : ''; ?>>No</option>
+                                                echo !isset($pluginJson['pushover']['activate']) ? 'selected' : ''; ?>>No</option>
                         </select>
                     </div>
                 </div>
@@ -208,7 +239,7 @@ $pluginJson = convertAndGetSettings($pluginName);
                         <select id="publish_activate" required class="form-control">
                             <option value="yes" <?php echo $pluginJson['publish']['activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
                             <option value="no" <?php echo $pluginJson['publish']['activate'] == 'no' ? 'selected' : null;
-                            echo !isset($pluginJson['publish']['activate']) ? 'selected' : ''; ?>>No</option>
+                                                echo !isset($pluginJson['publish']['activate']) ? 'selected' : ''; ?>>No</option>
                         </select>
                     </div>
                 </div>
