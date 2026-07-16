@@ -1,0 +1,9 @@
+{
+  "client_id": "",
+	"client_secret": "",
+	"organizationUuid": "",
+	"subscriptions": [],
+	"effect_activate": "no",
+	"command": "",
+	"publish": ["activate": "yes"]
+}

@@ -1,33 +1,51 @@
 #!/bin/bash
 
-# fpp-zettle install script
-echo "Installing Announce Zettle Plugin for FPP...."
+PLUGIN_DIR="$(dirname "$0")"
 
-echo "Writing config file...."
+# Log to /tmp first (always writable), then also try the media logs dir
+LOGFILE="/tmp/fppZettle_install.log"
+MEDIA_LOG="/home/fpp/media/logs/fppZettle_install.log"
 
-file=/home/fpp/media/config/plugin.fpp-zettle.json
-
-defalt_json=$(cat <<EOF
-{
-   "client_id": "",
-   "client_secret": "",
-	"organizationUuid": "",
-   "subscriptions": [],
-	 "effect_activate": "no",
-	"command": "",
-	"publish": ["activate": "yes"],
+log() {
+    local msg="[$(date '+%Y-%m-%d %H:%M:%S')] $*"
+    echo "$msg" | tee -a "$LOGFILE"
+    echo "$msg" >> "$MEDIA_LOG" 2>/dev/null || true
 }
-EOF
-)
 
-if [ -s "$file" ]
-then
-	echo " Config file exists and is not empty... continuing "
-else
-	echo " Config file does not exist, or is empty "
-   	touch $file
-	echo "$defalt_json" > /home/fpp/media/config/plugin.fpp-zettle.json
-	sudo chown fpp /home/fpp/media/config/plugin.fpp-zettle.json
+log "=== Announce Zettle install started (user=$(whoami), uid=$(id -u)) ==="
+
+# ── Create media directories ─────────────────────────────────────
+# Do this FIRST so the media log path is available.
+mkdir -p /home/fpp/media/logs
+mkdir -p /home/fpp/media/config
+
+# Now that the dir exists, copy /tmp log into media log
+cat "$LOGFILE" >> "$MEDIA_LOG" 2>/dev/null || true
+
+# ── Make scripts executable ──────────────────────────────────────
+log "Setting script permissions..."
+chmod +x "${PLUGIN_DIR}/scripts/"*.py 2>/dev/null || true
+chmod +x "${PLUGIN_DIR}/scripts/"*.sh 2>/dev/null || true
+chmod +x "${PLUGIN_DIR}/commands/"*.sh 2>/dev/null || true
+chmod +x "${PLUGIN_DIR}/fpp_start.sh"  2>/dev/null || true
+chmod +x "${PLUGIN_DIR}/fpp_stop.sh"   2>/dev/null || true
+
+# ── Write default config if none exists ─────────────────────────
+CONFIG="/home/fpp/media/config/plugin.fpp-zettle.json"
+if [[ ! -f "$CONFIG" ]]; then
+log "Writing default config to $CONFIG"
+    cp "${PLUGIN_DIR}/config/fpp-zettle.json.example" "$CONFIG" 2>/dev/null || \
+    cat > "$CONFIG" <<'JSONEOF'
+{
+	"client_id": "",
+	"client_secret": "",
+	"organizationUuid": "",
+	"subscriptions": [],
+	"effect_activate": "no",
+	"command": "",
+	"publish": ["activate": "yes"]
+}
+JSONEOF
 fi
 
 echo "You need a secure https endpoint on your pi to use this plugin. Dataplicity is the easiest way to achieve that. Check out the readme or the plugin help text for more information."
