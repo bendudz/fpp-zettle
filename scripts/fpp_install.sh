@@ -43,7 +43,18 @@ log "Writing default config to $CONFIG"
 	"subscriptions": [],
 	"effect_activate": "no",
 	"command": "",
-	"publish": {"activate": "yes"}
+	"multisyncCommand": false,
+    "multisyncHosts": "",
+	"publish": {"activate": "yes"},
+	"pushover": {
+    	"activate": "no",
+    	"app_token": "",
+    	"user_key": "",
+    	"message": ""
+  	},
+  	"other": {
+    	"currency": "GBP"
+  	}
 }
 JSONEOF
 fi
