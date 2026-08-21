@@ -38,9 +38,9 @@ chmod +x "${PLUGIN_DIR}/fpp_stop.sh"   2>/dev/null || true
 # ── Write default config if none exists ─────────────────────────
 CONFIG="/home/fpp/media/config/plugin.fpp-zettle.json"
 if [[ ! -f "$CONFIG" ]]; then
-log "Writing default config to $CONFIG"
-    cp "${PLUGIN_DIR}/config/fpp-zettle.json.example" "$CONFIG" 2>/dev/null || \
-    cat > "$CONFIG" <<'JSONEOF'
+	log "Writing default config to $CONFIG"
+  cp "${PLUGIN_DIR}/config/fpp-zettle.json.example" "$CONFIG" 2>/dev/null || \
+  cat > "$CONFIG" <<'JSONEOF'
 {
 	"client_id": "",
 	"client_secret": "",
@@ -63,8 +63,6 @@ log "Writing default config to $CONFIG"
 }
 JSONEOF
 fi
-
-shell_exec("chown -R fpp:fpp /home/fpp/media/config/plugin.fpp-zettle.json");
 
 TRANSACTIONS="/home/pi/fpp/config/plugin.fpp-zettle-transactions.json"
 log "Writing default transactions to $CONFIG"
