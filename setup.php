@@ -37,7 +37,7 @@ $pluginJson = convertAndGetSettings($pluginName);
         <div class="d-flex align-items-center gap-3 flex-wrap">
             <h2 class="mb-0">Zettle Setup</h2>
         </div>
-        <div class="d-flex align-items-center gap-2 zettle-donate-row">
+        <div class="d-flex align-items-center gap-2">
             <a href="https://github.com/bendudz/fpp-zettle" target="_blank" rel="noopener noreferrer"
                 class="zettle-btn">
                 <i class="fas fa-fw fa-code-branch"></i> GitHub Repo

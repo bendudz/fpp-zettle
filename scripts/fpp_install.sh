@@ -14,10 +14,6 @@ LOGDIR="$(getSetting logDirectory 2>/dev/null)"
 LOGDIR="${LOGDIR:-/home/fpp/media/logs}"
 LOGFILE="${LOGDIR}/plugin-fpp-zettle.log"
 
-# Log to /tmp first (always writable), then also try the media logs dir
-LOGFILE="/tmp/fppZettle_install.log"
-MEDIA_LOG="/home/fpp/media/logs/fppZettle_install.log"
-
 log() {
     local msg="[$(date '+%Y-%m-%d %H:%M:%S')] $*"
     mkdir -p "$LOGDIR" 2>/dev/null || true
@@ -30,9 +26,6 @@ log "=== Announce Zettle install started (user=$(whoami), uid=$(id -u)) ==="
 # (log() already mkdir -p's $LOGDIR on every call)
 # Do this FIRST so the media log path is available.
 mkdir -p /home/fpp/media/config
-
-# Now that the dir exists, copy /tmp log into media log
-cat "$LOGFILE" >> "$MEDIA_LOG" 2>/dev/null || true
 
 # ── Make scripts executable ──────────────────────────────────────
 log "Setting script permissions..."
