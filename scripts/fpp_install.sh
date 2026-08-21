@@ -49,7 +49,7 @@ if [[ ! -f "$CONFIG" ]]; then
 	"effect_activate": "no",
 	"command": "",
 	"multisyncCommand": false,
-    "multisyncHosts": "",
+  "multisyncHosts": "",
 	"publish": {"activate": "yes"},
 	"pushover": {
     	"activate": "no",
@@ -70,7 +70,6 @@ log "Writing default transactions to $CONFIG"
     cat > "$CONFIG" <<'JSONEOF'
 []
 JSONEOF
-fi
 
 echo "You need a secure https endpoint on your pi to use this plugin. Dataplicity is the easiest way to achieve that. Check out the readme or the plugin help text for more information."
 
