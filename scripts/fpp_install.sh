@@ -71,7 +71,7 @@ log "Writing default config to $CONFIG"
 JSONEOF
 fi
 
-shell_exec("sudo chown -R fpp:fpp /home/fpp/media/config/plugin.fpp-zettle.json");
+shell_exec("chown -R fpp:fpp /home/fpp/media/config/plugin.fpp-zettle.json");
 
 TRANSACTIONS="/home/pi/fpp/config/plugin.fpp-zettle-transactions.json"
 log "Writing default transactions to $CONFIG"

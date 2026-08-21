@@ -618,7 +618,6 @@ function UpdateJson2($option, $data)
 
         case 'other':
             $pluginJson['other']['currency'] = $data['currency'];
-
     }
 
     setPluginJSON('fpp-zettle', $pluginJson);
