@@ -38,9 +38,9 @@ $pluginJson = convertAndGetSettings($pluginName);
             <h2 class="mb-0">Zettle Setup</h2>
         </div>
         <div class="d-flex align-items-center gap-2 zettle-donate-row">
-            <a href="https://buymeacoffee.com/mjonesfpp" target="_blank" rel="noopener noreferrer"
+            <a href="https://github.com/bendudz/fpp-zettle" target="_blank" rel="noopener noreferrer"
                 class="zettle-btn">
-                <i class="fas fa-fw fa-mug-hot"></i> Buy Me a Coffee
+                <i class="fas fa-fw fa-code-branch"></i> GitHub Repo
             </a>
         </div>
     </div>

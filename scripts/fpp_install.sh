@@ -1,6 +1,18 @@
 #!/bin/bash
+# fpp_install.sh — Announce Zettle plugin installer
+# Called by FPP when the plugin is installed or updated.
 
 PLUGIN_DIR="$(dirname "$0")"
+
+# Resolve FPP's logs directory the documented way (supports a relocated
+# media directory) rather than hard-coding /home/fpp/media/logs, and use
+# the single FPP-conformant log file (plugin-<repoName>.log) for both this
+# install script and the daemon, per the plugin guidelines' logging rules.
+: "${FPPDIR:=/opt/fpp}"
+. "${FPPDIR}/scripts/common" 2>/dev/null || true
+LOGDIR="$(getSetting logDirectory 2>/dev/null)"
+LOGDIR="${LOGDIR:-/home/fpp/media/logs}"
+LOGFILE="${LOGDIR}/plugin-fpp-zettle.log"
 
 # Log to /tmp first (always writable), then also try the media logs dir
 LOGFILE="/tmp/fppZettle_install.log"
@@ -8,15 +20,15 @@ MEDIA_LOG="/home/fpp/media/logs/fppZettle_install.log"
 
 log() {
     local msg="[$(date '+%Y-%m-%d %H:%M:%S')] $*"
-    echo "$msg" | tee -a "$LOGFILE"
-    echo "$msg" >> "$MEDIA_LOG" 2>/dev/null || true
+    mkdir -p "$LOGDIR" 2>/dev/null || true
+    echo "$msg" >> "$LOGFILE" 2>/dev/null || echo "$msg"
 }
 
 log "=== Announce Zettle install started (user=$(whoami), uid=$(id -u)) ==="
 
 # ── Create media directories ─────────────────────────────────────
+# (log() already mkdir -p's $LOGDIR on every call)
 # Do this FIRST so the media log path is available.
-mkdir -p /home/fpp/media/logs
 mkdir -p /home/fpp/media/config
 
 # Now that the dir exists, copy /tmp log into media log
@@ -72,5 +84,7 @@ fi
 echo "You need a secure https endpoint on your pi to use this plugin. Dataplicity is the easiest way to achieve that. Check out the readme or the plugin help text for more information."
 
 echo "Please restart fppd for new FPP Commands to be visible."
-. /opt/fpp/scripts/common
-setSetting restartFlag 1
+setSetting restartFlag 1 2>/dev/null || true
+
+log "=== Announce Zettle install complete ==="
+exit 0

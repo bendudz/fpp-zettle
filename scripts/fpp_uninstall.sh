@@ -1,6 +1,12 @@
 #!/bin/bash
+# fpp_uninstall.sh — Announce Zettle plugin uninstaller
+# Called by FPP when the plugin is removed. Mirrors fpp_install.sh's
 
-#echo "Removing plugin config & transactions...."
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"
+}
 
-#rm -f /home/fpp/media/config/plugin.fpp-zettle.json
-#rm -f /home/fpp/media/config/plugin.fpp-zettle-transactions.json
+log "=== Announce Zettle uninstall started ==="
+
+log "=== Announce Zettle uninstall complete. Config in place. ==="
+exit 0

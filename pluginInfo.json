@@ -2,10 +2,11 @@
   "repoName": "fpp-zettle",
   "name": "Announce Zettle!",
   "author": "Ben Dudley, Michael Jones",
-  "description": "Receive a notification from Zettle when payments are made so you can trigger effects via your display",
+  "description": "Receive a notification from Zettle Webhook using Dataplicity or local request. When payments are made so you can trigger effects via your display",
   "homeURL": "https://github.com/bendudz/fpp-zettle",
   "srcURL": "https://github.com/bendudz/fpp-zettle.git",
   "bugURL": "https://github.com/bendudz/fpp-zettle/issues",
+  "iconUrl": "https://raw.githubusercontent.com/bendudz/fpp-zettle/main/icon.png",
   "allowUpdates": 1,
   "versions": [
     {
@@ -21,7 +22,7 @@
       "sha": ""
     },
     {
-      "minFPPVersion": "9.0",
+      "minFPPVersion": "10.0",
       "maxFPPVersion": "0",
       "branch": "main",
       "sha": ""
