@@ -64,10 +64,10 @@ if [[ ! -f "$CONFIG" ]]; then
 JSONEOF
 fi
 
-TRANSACTIONS="/home/pi/fpp/config/plugin.fpp-zettle-transactions.json"
-log "Writing default transactions to $CONFIG"
-    cp "${PLUGIN_DIR}/config/fpp-zettle-transactions.json.example" "$CONFIG" 2>/dev/null || \
-    cat > "$CONFIG" <<'JSONEOF'
+TRANSACTIONS="${PLUGIN_DIR}/config/plugin.fpp-zettle-transactions.json"
+log "Writing default transactions to $TRANSACTIONS"
+    cp "${PLUGIN_DIR}/config/fpp-zettle-transactions.json.example" "$TRANSACTIONS" 2>/dev/null || \
+    cat > "$TRANSACTIONS" <<'JSONEOF'
 []
 JSONEOF
 
