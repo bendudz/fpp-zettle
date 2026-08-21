@@ -67,7 +67,7 @@ function logEntry($data)
 {
   global $settings;
 
-  $logFile = $settings['logDirectory'] . "/fpp-zettle.log";
+  $logFile = $settings['logDirectory'] . "/plugin-fpp-zettle.log";
   $logWrite = fopen($logFile, "a") or die("Unable to open file!");
   fwrite($logWrite, date('Y-m-d h:i:s A', time()) . ": " . $data . "\n");
   fclose($logWrite);

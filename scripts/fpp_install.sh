@@ -74,7 +74,7 @@ JSONEOF
 echo "You need a secure https endpoint on your pi to use this plugin. Dataplicity is the easiest way to achieve that. Check out the readme or the plugin help text for more information."
 
 echo "Please restart fppd for new FPP Commands to be visible."
-setSetting restartFlag 1 2>/dev/null || true
+source ${FPPDIR}/scripts/common; setSetting restartFlag 1
 
 log "=== Announce Zettle install complete ==="
 exit 0

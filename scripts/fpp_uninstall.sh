@@ -7,6 +7,8 @@ log() {
 }
 
 log "=== Announce Zettle uninstall started ==="
-
+log "There is nothing to remove"
 log "=== Announce Zettle uninstall complete. Config in place. ==="
+
+source ${FPPDIR}/scripts/common; setSetting restartFlag 1
 exit 0
