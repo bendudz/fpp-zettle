@@ -59,9 +59,9 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
 ?>
 
 <head>
-    <link rel="stylesheet" href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css">
+    <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=assets/css/mermaid.min.css&nopage=1">
     <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
-    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <script type="text/javasctipt" src="/plugin.php?plugin=fpp-zettle&file=assets/js/gridjs.umd.js&nopage=1"></script>
     <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
     <style>
         .avatar {
@@ -127,10 +127,10 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                     }
                 },
                 data: <?
-                echo json_encode(getStatusData($pluginJson));
-                ?>
+                        echo json_encode(getStatusData($pluginJson));
+                        ?>
 
-                                                                                }).render(document.getElementById("status"));
+            }).render(document.getElementById("status"));
         </script>
         <br><br>
 
@@ -234,7 +234,7 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
             });
             grid.render(document.getElementById("transactions"));
 
-            setInterval(function () {
+            setInterval(function() {
                 grid.updateConfig({
                     server: {
                         url: '/api/configfile/plugin.fpp-zettle-transactions.json',
@@ -242,12 +242,12 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                     }
                 }).forceRender();
             }, 30000);
-            $(function () {
+            $(function() {
                 function ajaxGet(url, feild) {
                     $.ajax({
                         type: "GET",
                         url: url,
-                        success: function (data) {
+                        success: function(data) {
                             $('span#' + feild).html(data);
                         }
                     });
@@ -258,12 +258,12 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                 ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_week&currency=' + currencyRaw, 'this_week');
                 ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_month&currency=' + currencyRaw, 'this_month');
 
-                setInterval(function () {
+                setInterval(function() {
                     ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today&currency=' + currencyRaw, 'today');
                 }, 30000);
             });
         </script>
-    </body>
+</body>
 <?php } else { ?>
     <?php if ($pluginJson['client_id'] == '') { ?>
         <p>You need to configure this plugin before you can see the status. Click here to get to <a

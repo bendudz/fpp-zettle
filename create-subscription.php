@@ -9,32 +9,23 @@ $pluginName = 'zettle';
 $uuid = \AbmmHasan\Uuid::v1();
 
 $pluginJson = convertAndGetSettings($pluginName);
-if ($pluginJson['client_id'] == '') {
-  $setupUrl = 'plugin.php?' . http_build_query([
-    '_menu' => 'content',
-    'plugin' => 'fpp-' . $pluginName,
-    'page' => 'setup.php'
-  ]);
-  echo '<p>You need to configure this plugin before you can create a Subscription. Click here to get to <a href="' . $setupUrl . '">setup</a></p>';
-} elseif (count($pluginJson['subscriptions']) > 0) { ?>
+if ($pluginJson['client_id'] == '') { ?>
+  <p>You need to configure this plugin before you can create a Subscription. Click here to get to <a href="plugin.php?_menu=status&plugin=fpp-<?php echo $pluginName; ?>&page=setup.php">setup</a></p>
+<?php } elseif (count($pluginJson['subscriptions']) > 0) { ?>
   <p class="mb-0">Subscription has been setup nothing to do here. Go to <a href="plugin.php?_menu=status&plugin=fpp-<?php echo $pluginName; ?>&page=status.php">status page</a> or back to <a href="plugin.php?_menu=content&plugin=fpp-<?php echo $pluginName; ?>&page=setup.php">set up page</a> to add a trigger.</p>
 <?php } else { ?>
   <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
   <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
   <div id="global" class="settings">
     <legend>Create Subscription</legend>
-    <?php
-    if (!checkForDataplicity()) {
-    ?>
+    <?php if (!checkForDataplicity()) { ?>
       <div class="callout callout-danger">
         <h4>Dataplicity:</h4>
         <p>Dataplicity is not installed, please install dataplicity and active wormhole on the device.</p>
         <p><a href="https://www.dataplicity.com/" target="_blank">Go To Dataplicity</a></a></p>
         <p>You could follow Greg Macaree video on whole subject <a href="https://www.youtube.com/watch?v=7LeD3dz-uXU" target="_blank">Click here for video</a></p>
       </div>
-    <?php
-    }
-    ?>
+    <?php } ?>
     <div class="callout callout-info">
       <h4>Destination:</h4>
       <p>Need to be accessible to the internet. Press F1 for help on this topic.</p>

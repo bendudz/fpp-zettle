@@ -92,6 +92,7 @@ function buildQuery($data = [], $o = [], $url)
 
     // $o['header'] = 'Authorization: Bearer '.$access_token.'\r\n' . 'Content-Type: application/json';
     $o['header'] = ["Authorization: Bearer " . $access_token, "Content-Type: application/json"];
+    $o['timeout'] = 5;
 
     $opts = array('http' => $o);
     $context = stream_context_create($opts);
@@ -146,15 +147,6 @@ function httpPost($url, $data, $headers, $auth = false, $json = false, $method =
 
     $client = new Client();
     $response = $client->request($method, $url, $options);
-
-
-    // $curl = curl_init($url);
-    // curl_setopt($curl, CURLOPT_POST, true);
-    // curl_setopt($curl, CURLOPT_POSTFIELDS, $json ? json_encode($data) : http_build_query($data));
-    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    // curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-    // $response = curl_exec($curl);
-    // curl_close($curl);
     return json_decode($response->getBody());
 }
 

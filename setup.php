@@ -42,12 +42,16 @@ $pluginJson = convertAndGetSettings($pluginName);
                 class="zettle-btn">
                 <i class="fas fa-fw fa-code-branch"></i> GitHub Repo
             </a>
+            <a href="https://fpp-zettle.co.uk/docs/Donations/plugins/zettle-installation" target="_blank" rel="noopener noreferrer"
+                class="zettle-btn">
+                <i class="fas fa-fw fa-book"></i> View Docs
+            </a>
         </div>
     </div>
     <p>Add your client id and secret generated from the Zettle Integrations
         webpage</p>
     <p>Follow install steps to get the keys you need: <a
-            href="https://fpp-zettle.co.uk/docs/Zettle/plugin/configurations" target="_blank">Here</a></p>
+            href="https://fpp-zettle.co.uk/docs/Donations/plugins/zettle-configurations" target="_blank">Here</a></p>
     <form id="setup" action="" method="post">
         <div class="container-fluid settingsTable settingsGroupTable">
             <div class="row">
@@ -138,20 +142,6 @@ $pluginJson = convertAndGetSettings($pluginName);
                     </div>
                 </div>
             </div>
-            <!--div class="container-fluid settingsTable settingsGroupTable">
-            <div class="row">
-                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                    <div class="description">
-                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Select effect
-                    </div>
-                </div>
-                <div class="printSettingFieldCol col-md">
-                    <select name="select_effect" id="select_effect" class="form-control">
-                        <option value="">Select Effect</option>
-                    </select>
-                </div>
-            </div>
-        </div-->
             <input id="effect_save" type="submit" value="Save" class="buttons btn-success">
             <input id="test_command" type="button" value="Test" class="buttons">
             <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=multiple-readers.php" class="buttons">Have Multiple
@@ -165,124 +155,9 @@ $pluginJson = convertAndGetSettings($pluginName);
         <div class="alert alert-info">If you are looking for help press F1 or <a
                 href="plugin.php?plugin=fpp-zettle&page=help.php" class="alert-link" target="_blank">Click Here</a></div>
 
-        <legend>Pushover</legend>
-        <p>Get notification sent your phone every time a donate is made. Pushover is free to use for 30 days. If you want to
-            use it for longer there is a $5 USD one-time purchase fee. Check out the details at there website: <a
-                href="https://pushover.net/" target="_blank">https://pushover.net</a></p>
-
-        <form id="pushover" action="">
-            <div class="container-fluid settingsTable settingsGroupTable">
-                <div class="row">
-                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                        <div class="description">
-                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Activate
-                        </div>
-                    </div>
-                    <div class="printSettingFieldCol col-md">
-                        <select id="pushover_activate" required class="form-control">
-                            <option value="yes" <?php echo $pluginJson['pushover']['activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
-                            <option value="no" <?php echo $pluginJson['pushover']['activate'] == 'no' ? 'selected' : null;
-                                                echo !isset($pluginJson['pushover']['activate']) ? 'selected' : ''; ?>>No</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                        <div class="description">
-                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Application API Token
-                        </div>
-                    </div>
-                    <div class="printSettingFieldCol col-md">
-                        <input type="text" id="pushover_app_token"
-                            value="<?php echo $pluginJson["pushover"]["app_token"]; ?>" required class="form-control">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                        <div class="description">
-                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>User Key
-                        </div>
-                    </div>
-                    <div class="printSettingFieldCol col-md">
-                        <input type="text" id="pushover_user_key" value="<?php echo $pluginJson["pushover"]["user_key"]; ?>"
-                            required class="form-control">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                        <div class="description">
-                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Message
-                        </div>
-                    </div>
-                    <div class="printSettingFieldCol col-md">
-                        <input type="text" id="pushover_message" value="<?php echo $pluginJson["pushover"]["message"]; ?>"
-                            required class="form-control">
-                    </div>
-                </div>
-            </div>
-            <input type="submit" value="Save" class="buttons btn-success">
-        </form>
-
-        <legend>Publish</legend>
-        <p>We would like to gather some information from your donations. We would like to collect the donation amount and
-            store it remotely on the <a href="https://fpp-zettle.co.uk" target="_blank">fpp-zettle.co.uk</a> server.</p>
-        <p>If you would like to take part in this please select "Yes" from the activate select and press save.</p>
-        <form action="" id="publish">
-            <div class="container-fluid settingsTable settingsGroupTable">
-                <div class="row">
-                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                        <div class="description">
-                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Activate
-                        </div>
-                    </div>
-                    <div class="printSettingFieldCol col-md">
-                        <select id="publish_activate" required class="form-control">
-                            <option value="yes" <?php echo $pluginJson['publish']['activate'] == 'yes' ? 'selected' : null; ?>>Yes</option>
-                            <option value="no" <?php echo $pluginJson['publish']['activate'] == 'no' ? 'selected' : null;
-                                                echo !isset($pluginJson['publish']['activate']) ? 'selected' : ''; ?>>No</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- <div class="row">
-                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                    <div class="description">
-                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Location
-                    </div>
-                </div>
-                <div class="printSettingFieldCol col-md">
-                    <select id="publish_location" required class="form-control">
-                        <option value="yes" <?php echo $pluginJson['publish']['location'] == 'yes' ? 'selected' : null; ?>>Yes</option>
-                        <option value="no" <?php echo $pluginJson['publish']['location'] == 'no' ? 'selected' : null; ?>>No</option>
-                    </select>
-                </div>
-            </div> -->
-            </div>
-            <input type="submit" value="Save" class="buttons btn-success">
-        </form>
-
-        <legend>Other Settings</legend>
-        <form action="" id="other">
-            <div class="container-fluid settingsTable settingsGroupTable">
-                <div class="row">
-                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                        <div class="description">
-                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Currency
-                        </div>
-                    </div>
-                    <div class="printSettingFieldCol col-md">
-                        <select id="other_currency" required class="form-control">
-                            <option value="GBP" <?php echo $pluginJson['other']['currency'] == 'GBP' ? 'selected' : null; ?>>
-                                GBP £</option>
-                            <option value="USD" <?php echo $pluginJson['other']['currency'] == 'USD' ? 'selected' : null; ?>>
-                                USD $</option>
-                            <option value="EUR" <?php echo $pluginJson['other']['currency'] == 'EUR' ? 'selected' : null; ?>>
-                                EUR €</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <input type="submit" value="Save" class="buttons btn-success">
-        </form>
+        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/pushover.php'; ?>
+        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/publish.php'; ?>
+        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/other-settings.php'; ?>
 
     <?php } ?>
 </div>

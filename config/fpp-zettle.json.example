@@ -16,5 +16,6 @@
   	},
   	"other": {
     	"currency": "GBP"
-  	}
+  	},
+	"readers": []
 }

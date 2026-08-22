@@ -101,7 +101,7 @@ function custom_logs($message)
   if (is_array($message)) {
     $message = json_encode($message);
   }
-  $file = fopen($settings['logDirectory'] . "/fpp-zettle.log", "a");
+  $file = fopen($settings['logDirectory'] . "/plugin-fpp-zettle.log", "a");
   fwrite($file, "\n" . date('Y-m-d H:i:s') . " :: " . $message);
   fclose($file);
   return;
