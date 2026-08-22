@@ -3,13 +3,25 @@
 function emptyConfig()
 {
   return [
-    'client_id' => '',
-    'client_secret' => '',
-    'organizationUuid' => '',
-    'subscriptions' => [],
-    'effect_activate' => 'no',
-    'command' => '',
-    'publish' => ['activate' => 'yes'],
+    "client_id" => "",
+    "client_secret" => "",
+    "organizationUuid" => "",
+    "subscriptions" => [],
+    "effect_activate" => "no",
+    "command" => "",
+    "multisyncCommand" => false,
+    "multisyncHosts" => "",
+    "publish" => ["activate" => "yes"],
+    "pushover" => [
+      "activate" => "no",
+      "app_token" => "",
+      "user_key" => "",
+      "message" => ""
+    ],
+    "other" => [
+      "currency" => "GBP"
+    ],
+    "readers" => []
   ];
 }
 
