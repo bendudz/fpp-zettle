@@ -64,12 +64,17 @@ if [[ ! -f "$CONFIG" ]]; then
 JSONEOF
 fi
 
-TRANSACTIONS="${PLUGIN_DIR}/config/plugin.fpp-zettle-transactions.json"
+TRANSACTIONS="/home/fpp/media/config/plugin.fpp-zettle-transactions.json"
 log "Writing default transactions to $TRANSACTIONS"
     cp "${PLUGIN_DIR}/config/fpp-zettle-transactions.json.example" "$TRANSACTIONS" 2>/dev/null || \
     cat > "$TRANSACTIONS" <<'JSONEOF'
 []
 JSONEOF
+
+log "=== Announce Zettle change config and log file owner to fpp insted of root ==="
+chown fpp:fpp "${LOGFILE}"
+chown fpp:fpp "${CONIG}"
+chown fpp:fpp "${TRANSACTIONS}"
 
 echo "You need a secure https endpoint on your pi to use this plugin. Dataplicity is the easiest way to achieve that. Check out the readme or the plugin help text for more information."
 
