@@ -533,6 +533,7 @@ function SavePushOver()
 function SavePublish()
 {
     UpdateJson2('publish', [
+        'using_apk' => $_POST['using_apk'],
         'activate' => $_POST['activate'],
         //'location' => $_POST['location'],
     ]);

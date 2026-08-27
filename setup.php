@@ -3,6 +3,7 @@
 include_once "zettle.common.php";
 $pluginName = "zettle";
 $pluginJson = convertAndGetSettings($pluginName);
+$apkUrl = "https://fpp-zettle.s3.dualstack.eu-west-2.amazonaws.com/donations_app.apk";
 // // Check if command has been made executable
 // if (!is_executable($settings["pluginDirectory"] . "/fpp-zettle/commands/ZettleTotals.sh")) {
 //     chmod($settings["pluginDirectory"] . "/fpp-zettle/commands/ZettleTotals.sh", 0755);
@@ -33,6 +34,18 @@ $pluginJson = convertAndGetSettings($pluginName);
 </style>
 <div id="global" class="settings">
     <?php include $settings["pluginDirectory"] . "/fpp-zettle/pluginUpdate.php" ?>
+
+    <div class="alert alert-info">
+        This plugin works with custom Zettle Donation andriod app. It can be downloaded <a
+            href="<?php echo $apkUrl; ?>" target="_blank">here</a>
+        <br>
+        Note: This app is not publised on the andriod play store and will need to have <b>Install Unknown Apps</b> enabled
+        on your
+        andriod device.
+
+        If you are using the custom donation app, please select "<strong>Yes</strong>" option on "<strong>Using Apk</strong>" in the public section.
+    </div>
+
     <div class="d-flex justify-content-between align-items-center mb-2 sled-page-header">
         <div class="d-flex align-items-center gap-3 flex-wrap">
             <h2 class="mb-0">Zettle Setup</h2>
@@ -45,6 +58,10 @@ $pluginJson = convertAndGetSettings($pluginName);
             <a href="https://fpp-zettle.co.uk/docs/Donations/plugins/zettle-installation" target="_blank" rel="noopener noreferrer"
                 class="zettle-btn">
                 <i class="fas fa-fw fa-book"></i> View Docs
+            </a>
+            <a href="<?php echo $apkUrl; ?>" target="_blank" rel="noopener noreferrer"
+                class="zettle-btn">
+                <i class="fas fa-fw fa-download"></i> Download APK
             </a>
         </div>
     </div>
@@ -156,6 +173,7 @@ $pluginJson = convertAndGetSettings($pluginName);
                 href="plugin.php?plugin=fpp-zettle&page=help.php" class="alert-link" target="_blank">Click Here</a></div>
 
         <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/pushover.php'; ?>
+        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/publish.php'; ?>
         <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/other-settings.php'; ?>
 
     <?php } ?>

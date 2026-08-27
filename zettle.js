@@ -438,6 +438,7 @@ $(function () {
       async: false,
       data: {
         option: "publish",
+        using_apk: $('#using_apk option:selected').val(),
         activate: $('#publish_activate option:selected').val(),
         //location: $('#publish_location').val(),
       },
@@ -516,7 +517,7 @@ $(function () {
         },
         error: function (xhr, ajaxOptions, thrownError) {
           errors.push('There seems to be a problem with your keys please check them!');
-          
+
         }
       });
     }
