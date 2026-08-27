@@ -142,13 +142,15 @@ function fppZettleEvent()
         pushover($config, $paymentData);
     }
     // Check if publish is active
-    if (isset($config['publish']) && $config['publish']['activate'] == 'yes') {
-        publishTransactionDetails($payload);
-    }
+    if (isset($config['publish']) && $config['publish']['using_apk'] == "no") {
+        if (isset($config['publish']) && $config['publish']['activate'] == 'yes') {
+            publishTransactionDetails($payload);
+        }
 
-    // Store userUuid and if they have activated publish or not
-    if (!isset($event['debug'])) {
-        storeCustomer($config, $paymentData);
+        // Store userUuid and if they have activated publish or not
+        if (!isset($event['debug'])) {
+            storeCustomer($config, $paymentData);
+        }
     }
     return true;
 }

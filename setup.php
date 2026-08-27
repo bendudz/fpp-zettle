@@ -156,7 +156,6 @@ $pluginJson = convertAndGetSettings($pluginName);
                 href="plugin.php?plugin=fpp-zettle&page=help.php" class="alert-link" target="_blank">Click Here</a></div>
 
         <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/pushover.php'; ?>
-        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/publish.php'; ?>
         <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/other-settings.php'; ?>
 
     <?php } ?>

@@ -7,6 +7,20 @@
         <div class="row">
             <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
                 <div class="description">
+                    <i class="fas fa-fw fa-nbsp ui-level-0"></i>Using Apk
+                </div>
+            </div>
+            <div class="printSettingFieldCol col-md">
+                <select id="using_apk" required class="form-control">
+                    <option value="yes" <?php echo $pluginJson['publish']['using_apk'] == 'yes' ? 'selected' : null; ?>>Yes</option>
+                    <option value="no" <?php echo $pluginJson['publish']['using_apk'] == 'no' ? 'selected' : null;
+                                        echo !isset($pluginJson['publish']['using_apk']) ? 'selected' : ''; ?>>No</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                <div class="description">
                     <i class="fas fa-fw fa-nbsp ui-level-0"></i>Activate
                 </div>
             </div>

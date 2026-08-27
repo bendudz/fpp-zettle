@@ -49,8 +49,11 @@ if [[ ! -f "$CONFIG" ]]; then
 	"effect_activate": "no",
 	"command": "",
 	"multisyncCommand": false,
-  "multisyncHosts": "",
-	"publish": {"activate": "yes"},
+  	"multisyncHosts": "",
+	"publish": {
+		"using_apk": "no",
+		"activate": "yes"
+	},
 	"pushover": {
     	"activate": "no",
     	"app_token": "",
@@ -58,6 +61,7 @@ if [[ ! -f "$CONFIG" ]]; then
     	"message": ""
   	},
   	"other": {
+		"using_apk": "no",
     	"currency": "GBP"
   	}
 }
