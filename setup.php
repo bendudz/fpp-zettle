@@ -172,9 +172,9 @@ $apkUrl = "https://fpp-zettle.s3.dualstack.eu-west-2.amazonaws.com/donations_app
         <div class="alert alert-info">If you are looking for help press F1 or <a
                 href="plugin.php?plugin=fpp-zettle&page=help.php" class="alert-link" target="_blank">Click Here</a></div>
 
-        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/pushover.php'; ?>
-        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/publish.php'; ?>
-        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-screen/other-settings.php'; ?>
+        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-forms/pushover.php'; ?>
+        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-forms/publish.php'; ?>
+        <?php include $settings["pluginDirectory"] . '/fpp-zettle/setup-forms/other-settings.php'; ?>
 
     <?php } ?>
 </div>
