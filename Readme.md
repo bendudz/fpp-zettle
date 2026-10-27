@@ -1,9 +1,32 @@
 # Announce Zettle!
 
-[![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
-![FPP Zettle Logo](https://shields.io/badge/fpp-AnnounceZettle-brightgreen)
+### *FPP Plugin: Announce Zettle*
 
-Get yourself an iZettle device, take a donation & trigger an effect on your light show.
+[![FPP Compatible](https://img.shields.io/badge/FPP-8.x%20%7C%2010.x%2B-red?style=for-the-badge&logo=raspberry-pi)](https://github.com/FalconChristmasLighting/fpp)
+[![License](https://img.shields.io/badge/License-Noncommercial-green?style=for-the-badge)](LICENSE)
+[![GitHub](https://img.shields.io/badge/GitHub-bendudz-181717?style=for-the-badge&logo=github)](https://github.com/bendudz/fpp-zettle)
+[![Pull Requests Welcome](https://img.shields.io/badge/GitHub-PRS%20welcome-181717?style=for-the-badge&logo=github)](http://makeapullrequest.com)
+
+---
+
+> **Get yourself an iZettle device, take a donation & trigger an effect on your light show.**
+
+## Table of Contents
+
+- [What Is Announce Zettle?](#-what-is-announce-zettle)
+- [Feature Overview](#-feature-overview)
+- [How It Works (Architecture)](#-how-it-works-architecture)
+- [Hardware You'll Need](#-hardware-youll-need)
+- [Installation](#-installation)
+- [Configuration](#️-configuration)
+- [FPP Video Setup](#-fpp-video-setup)
+- [Analytics Dashboard](#-analytics-dashboard)
+- [FPP Commands](#-fpp-commands)
+- [Troubleshooting](#-troubleshooting)
+- [File Reference](#-file-reference)
+- [Credits](#-credits)
+
+---
 
 ## Getting Started
 
