@@ -61,46 +61,149 @@ if (array_key_exists($command, $command_array)) {
 }
 return;
 
-function buildQuery($data = [], $o = [], $url)
+/**
+ * Sends an authenticated HTTP request to the Zettle API.
+ *
+ * @param array  $data Request parameters.
+ * @param array  $o    HTTP request options, including the method.
+ * @param string $url  API endpoint URL.
+ *
+ * @return object Decoded JSON response or an error object.
+ */
+function buildQuery($data = [], $o = [], $url = '')
 {
-    $postdata = http_build_query($data);
-    $o['content'] = $postdata;
-
-    if (isset($_SESSION['expires_in']) && isset($_SESSION['access_token'])) {
-        if (time() >= $_SESSION['expires_in']) {
-            $login = LoginUser();
-            if ($login['error']) {
-                return [
-                    'error' => true,
-                    'message' => $login['message']
-                ];
-            }
-            $access_token = $login['access_token'];
-        } else {
-            $access_token = $_SESSION['access_token'];
-        }
-    } else {
-        $login = LoginUser();
-        if ($login['error']) {
-            return [
-                'error' => true,
-                'message' => $login['message']
-            ];
-        }
-        $access_token = $login['access_token'];
+    // Check that a URL has been provided.
+    if (empty($url)) {
+        return (object) [
+            'error' => true,
+            'message' => 'No URL provided for API request.'
+        ];
     }
 
-    // $o['header'] = 'Authorization: Bearer '.$access_token.'\r\n' . 'Content-Type: application/json';
-    $o['header'] = ["Authorization: Bearer " . $access_token, "Content-Type: application/json"];
-    $o['timeout'] = 5;
+    // Get a valid access token.
+    if (
+        !isset($_SESSION['expires_in'], $_SESSION['access_token']) ||
+        time() >= $_SESSION['expires_in']
+    ) {
+        $login = LoginUser();
 
-    $opts = array('http' => $o);
-    $context = stream_context_create($opts);
-    $result = file_get_contents($url, false, $context);
-    $jsonResult = json_decode($result);
-    // $jsonResult['error'] = false;
-    return $jsonResult;
+        if (!empty($login['error'])) {
+            return (object) [
+                'error' => true,
+                'message' => $login['message'] ?? 'Authentication failed.'
+            ];
+        }
+
+        $accessToken = $login['access_token'];
+    } else {
+        $accessToken = $_SESSION['access_token'];
+    }
+
+    // Determine the HTTP method.
+    $method = $o['method'] ?? 'GET';
+
+    // Configure the request.
+    $options = [
+        'headers' => [
+            'Authorization' => 'Bearer ' . $accessToken,
+            'Accept' => 'application/json'
+        ],
+        'timeout' => 5,
+        'http_errors' => false
+    ];
+
+    // Add request parameters where applicable.
+    if (!empty($data)) {
+        if (strtoupper($method) === 'GET') {
+            $options['query'] = $data;
+        } else {
+            $options['form_params'] = $data;
+        }
+    }
+
+    try {
+        $client = new Client();
+
+        $response = $client->request(
+            $method,
+            $url,
+            $options
+        );
+
+        $statusCode = $response->getStatusCode();
+        $body = (string) $response->getBody();
+
+        // Decode the JSON response.
+        $result = json_decode($body);
+
+        // Check whether the response contains valid JSON.
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return (object) [
+                'error' => true,
+                'message' => 'Invalid JSON response from Zettle API.',
+                'status_code' => $statusCode
+            ];
+        }
+
+        // Return the API response, including API error details.
+        return $result;
+    } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+        error_log('Zettle API request failed: ' . $e->getMessage());
+
+        return (object) [
+            'error' => true,
+            'message' => 'Unable to communicate with the Zettle API.'
+        ];
+    } catch (\Throwable $e) {
+        error_log('Zettle API error: ' . $e->getMessage());
+
+        return (object) [
+            'error' => true,
+            'message' => 'An unexpected error occurred during the API request.'
+        ];
+    }
 }
+
+// function buildQuery($data = [], $o = [], $url)
+// {
+//     $postdata = http_build_query($data);
+//     $o['content'] = $postdata;
+
+//     if (isset($_SESSION['expires_in']) && isset($_SESSION['access_token'])) {
+//         if (time() >= $_SESSION['expires_in']) {
+//             $login = LoginUser();
+//             if ($login['error']) {
+//                 return [
+//                     'error' => true,
+//                     'message' => $login['message']
+//                 ];
+//             }
+//             $access_token = $login['access_token'];
+//         } else {
+//             $access_token = $_SESSION['access_token'];
+//         }
+//     } else {
+//         $login = LoginUser();
+//         if ($login['error']) {
+//             return [
+//                 'error' => true,
+//                 'message' => $login['message']
+//             ];
+//         }
+//         $access_token = $login['access_token'];
+//     }
+
+//     // $o['header'] = 'Authorization: Bearer '.$access_token.'\r\n' . 'Content-Type: application/json';
+//     $o['header'] = ["Authorization: Bearer " . $access_token, "Content-Type: application/json"];
+//     $o['timeout'] = 5;
+
+//     $opts = array('http' => $o);
+//     $context = stream_context_create($opts);
+//     $result = file_get_contents($url, false, $context);
+//     $jsonResult = json_decode($result);
+//     // $jsonResult['error'] = false;
+//     return $jsonResult;
+// }
 
 function httpPost($url, $data, $headers, $auth = false, $json = false, $method = 'POST')
 {

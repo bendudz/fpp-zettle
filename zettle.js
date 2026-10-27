@@ -156,6 +156,9 @@ $(function () {
         SaveZettleConfig(data, '#save', true, 'Details Saved!');
       },
       error: function (xhr, ajaxOptions, thrownError) {
+        console.log(xhr);
+        console.log(ajaxOptions);
+        console.log(thrownError);
         DialogError('Signup Error', "ERROR: There seems to be a problem with your keys please check them and try again!");
       }
     });
