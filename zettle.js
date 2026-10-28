@@ -488,6 +488,31 @@ $(function () {
     });
   });
 
+  $('#override').on('click', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+      type: "POST",
+      url: "plugin.php?plugin=fpp-zettle&page=zettle.php&command=override&nopage=1",
+      dataType: 'json',
+      async: false,
+      data: {
+        option: "override",
+      },
+      beforeSend: function () {
+        $('#override').prop('disabled', true);
+      },
+      success: function (data) {
+        $.jGrowl(data.message, {
+          themeState: "success"
+        });
+        setTimeout(function () {
+          location.reload();
+        }, 3000);
+      }
+    });
+  });
+
   if ($('#checks').length) {
     var errors = [];
     if ($('#client_id').val() != "") {

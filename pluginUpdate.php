@@ -1,4 +1,4 @@
-<div id="pluginupdate" class="text-center" style="display: none;">
+<div id="pluginupdate" class="text-center" style="display: none; margin-bottom:20px;">
     <div class="updateTable text-success fppPluginEntryUpdateStatus">
         <i class="fas fa-exclamation-circle"></i> <b>Plugin Update Available</b>
     </div>

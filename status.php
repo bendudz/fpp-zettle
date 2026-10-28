@@ -56,6 +56,9 @@ function getStatusData($pj)
 
 $currency = currencyWorkout(isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 'GBP');
 $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 'GBP';
+
+$tranJson = $settings['configDirectory'] . "/plugin.fpp-zettle-transactions.json";
+$totals = getDonationTotals(file_get_contents($tranJson));
 ?>
 
 <head>
@@ -90,54 +93,50 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
 
 <body>
     <?php if ($pluginJson['client_id'] != '' && count($pluginJson['subscriptions']) > 0) { ?>
-
-        <div id="status"></div>
-        <script>
-            new gridjs.Grid({
-                columns: [{
-                    id: 'client_id',
-                    name: 'Client ID'
-                }, {
-                    id: 'client_secret',
-                    name: 'Api Key',
-                    formatter: (cell) => `******`
-                }, {
-                    id: 'email',
-                    name: 'Email'
-                }, {
-                    id: 'destination',
-                    name: 'Destination'
-                }, {
-                    id: 'status',
-                    name: 'Status'
-                }],
-                resizable: true,
-                style: {
-                    table: {
-                        border: '3px solid #ccc'
+        <?php if ($pluginJson['client_id'] != "override") { ?>
+            <div id="status"></div>
+            <script>
+                new gridjs.Grid({
+                    columns: [{
+                        id: 'client_id',
+                        name: 'Client ID'
+                    }, {
+                        id: 'client_secret',
+                        name: 'Api Key',
+                        formatter: (cell) => `******`
+                    }, {
+                        id: 'email',
+                        name: 'Email'
+                    }, {
+                        id: 'destination',
+                        name: 'Destination'
+                    }, {
+                        id: 'status',
+                        name: 'Status'
+                    }],
+                    resizable: true,
+                    style: {
+                        table: {
+                            border: '3px solid #ccc'
+                        },
+                        th: {
+                            'background-color': 'rgba(0, 0, 0, 0.1)',
+                            color: '#000',
+                            'border-bottom': '3px solid #ccc',
+                            'text-align': 'center'
+                        },
+                        td: {
+                            'text-align': 'center'
+                        }
                     },
-                    th: {
-                        'background-color': 'rgba(0, 0, 0, 0.1)',
-                        color: '#000',
-                        'border-bottom': '3px solid #ccc',
-                        'text-align': 'center'
-                    },
-                    td: {
-                        'text-align': 'center'
-                    }
-                },
-                data: <?
-                        echo json_encode(getStatusData($pluginJson));
-                        ?>
+                    data: <?
+                            echo json_encode(getStatusData($pluginJson));
+                            ?>
 
-            }).render(document.getElementById("status"));
-        </script>
-        <br><br>
-
-        <?php
-        // echo date("Y-m-d", strtotime('monday this week')), "\n";
-        // echo date("Y-m-d", strtotime('sunday this week')), "\n";
-        ?>
+                }).render(document.getElementById("status"));
+            </script>
+            <br><br>
+        <?php } ?>
 
         <div class="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4">
             <div class="col">
@@ -147,7 +146,7 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                                 class="fas fa-pound-sign fa-lg"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="h6 mb-0"><strong>Today</strong></div>
-                            <span class="small" id="today"><?php echo $currency; ?>0</span>
+                            <span class="small" id="today"><?php echo $currency . number_format($totals['today'], 2); ?></span>
                         </div>
                     </div>
                 </div>
@@ -159,7 +158,7 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                                 class="fas fa-pound-sign fa-lg"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="h6 mb-0"><strong>Yesterday</strong></div>
-                            <span class="small" id="yesterday"><?php echo $currency; ?>0</span>
+                            <span class="small" id="yesterday"><?php echo $currency . number_format($totals['yesterday'], 2); ?></span>
                         </div>
                     </div>
                 </div>
@@ -171,7 +170,7 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                                 class="fas fa-pound-sign fa-lg"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="h6 mb-0"><strong>This Week</strong></div>
-                            <span class="small" id="this_week"><?php echo $currency; ?>0</span>
+                            <span class="small" id="this_week"><?php echo $currency . number_format($totals['this_week'], 2); ?></span>
                         </div>
                     </div>
                 </div>
@@ -183,7 +182,7 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                                 class="fas fa-pound-sign fa-lg"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="h6 mb-0"><strong>This Month</strong></div>
-                            <span class="small" id="this_month"><?php echo $currency; ?>0</span>
+                            <span class="small" id="this_month"><?php echo $currency . number_format($totals['this_month'], 2); ?></span>
                         </div>
                     </div>
                 </div>
@@ -197,6 +196,7 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
         <script>
             var tableCurrency = '<?php echo $currency; ?>';
             var currencyRaw = '<?php echo $currencyRaw ?>';
+            var override = '<?php $pluginJson['client_id'] != "override" ? 'no' : 'yes'; ?>';
             const grid = new gridjs.Grid({
                 columns: [{
                     id: 'timestamp',
@@ -253,14 +253,20 @@ $currencyRaw = isset($pluginJson['other']) ? $pluginJson['other']['currency'] : 
                     });
                 }
 
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today&currency=' + currencyRaw, 'today');
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=yesterday&currency=' + currencyRaw, 'yesterday');
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_week&currency=' + currencyRaw, 'this_week');
-                ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_month&currency=' + currencyRaw, 'this_month');
-
-                setInterval(function() {
+                if (override == 'no') {
                     ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today&currency=' + currencyRaw, 'today');
-                }, 30000);
+                    ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=yesterday&currency=' + currencyRaw, 'yesterday');
+                    ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_week&currency=' + currencyRaw, 'this_week');
+                    ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=this_month&currency=' + currencyRaw, 'this_month');
+
+                    setInterval(function() {
+                        ajaxGet('plugin.php?plugin=fpp-zettle&page=zettle.php&command=get_purchases&nopage=1&option=today&currency=' + currencyRaw, 'today');
+                    }, 30000);
+                } else {
+                    setInterval(function() {
+                        location.reload();
+                    });
+                }
             });
         </script>
 </body>

@@ -65,52 +65,62 @@ $apkUrl = "https://fpp-zettle.s3.dualstack.eu-west-2.amazonaws.com/donations_app
             </a>
         </div>
     </div>
-    <p>Add your client id and secret generated from the Zettle Integrations
-        webpage</p>
-    <p>Follow install steps to get the keys you need: <a
-            href="https://fpp-zettle.co.uk/docs/Donations/plugins/zettle-configurations" target="_blank">Here</a></p>
-    <form id="setup" action="" method="post">
-        <div class="container-fluid settingsTable settingsGroupTable">
-            <div class="row">
-                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                    <div class="description">
-                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Client ID
-                    </div>
-                </div>
-                <div class="printSettingFieldCol col-md">
-                    <input type="text" id="client_id" value="<?php echo $pluginJson["client_id"]; ?>" required
-                        class="form-control">
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
-                    <div class="description">
-                        <i class="fas fa-fw fa-nbsp ui-level-0"></i>Api Key
+    <?php if ($pluginJson["client_id"] != "override") { ?>
+        <button id="override" class="btn btn-danger">OVERRIDE</button>
+
+        <div class="alert alert-info">
+            Due to changes with dataplicity you can over ride the need for enter zettle details. Click the above button to skip the zettle connect steps.
+        </div>
+
+        <p>Add your client id and secret generated from the Zettle Integrations
+            webpage</p>
+        <p>Follow install steps to get the keys you need: <a
+                href="https://fpp-zettle.co.uk/docs/Donations/plugins/zettle-configurations" target="_blank">Here</a></p>
+        <form id="setup" action="" method="post" style="margin-bottom: 20px;">
+            <div class="container-fluid settingsTable settingsGroupTable">
+                <div class="row">
+                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                        <div class="description">
+                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Client ID
+                        </div>
+                    </div>
+                    <div class="printSettingFieldCol col-md">
+                        <input type="text" id="client_id" value="<?php echo $pluginJson["client_id"]; ?>" required
+                            class="form-control">
                     </div>
                 </div>
-                <div class="printSettingFieldCol col-md">
-                    <input type="password" id="client_secret" value="<?php echo $pluginJson["client_secret"]; ?>"
-                        required class="form-control">
+
+                <div class="row">
+                    <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">
+                        <div class="description">
+                            <i class="fas fa-fw fa-nbsp ui-level-0"></i>Api Key
+                        </div>
+                    </div>
+                    <div class="printSettingFieldCol col-md">
+                        <input type="password" id="client_secret" value="<?php echo $pluginJson["client_secret"]; ?>"
+                            required class="form-control">
+                    </div>
                 </div>
             </div>
-        </div>
-        <input id="save" type="submit" value="Save" class="buttons btn-success">
-        <?php if ($pluginJson["client_id"] != "" && count($pluginJson["subscriptions"]) == 0) { ?>
-            <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php" class="buttons">Create
-                Subscription</a>
-        <?php } ?>
-        <?php if ($pluginJson["client_id"] != "" && count($pluginJson["subscriptions"]) > 0) { ?>
-            <input id="clear_config" type="button" class="buttons" value="Clear Config">
-            <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=update-subscription.php" class="buttons">Update
-                Subscription</a>
-        <?php } ?>
-        <a id="subscriptions" href="plugin.php?_menu=content&plugin=fpp-zettle&page=subscriptions.php" class="buttons"
-            style="display: none">Update
-            Subscriptions</a>
-    </form>
-    <?php if ($pluginJson["client_id"] != "" && count($pluginJson["subscriptions"]) > 0) { ?>
+            <input id="save" type="submit" value="Save" class="buttons btn-success">
+            <?php if ($pluginJson["client_id"] != "" && count($pluginJson["subscriptions"]) == 0) { ?>
+                <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=create-subscription.php" class="buttons">Create
+                    Subscription</a>
+            <?php } ?>
+            <?php if ($pluginJson["client_id"] != "" && count($pluginJson["subscriptions"]) > 0) { ?>
+                <input id="clear_config" type="button" class="buttons" value="Clear Config">
+                <a href="plugin.php?_menu=content&plugin=fpp-zettle&page=update-subscription.php" class="buttons">Update
+                    Subscription</a>
+            <?php } ?>
+            <a id="subscriptions" href="plugin.php?_menu=content&plugin=fpp-zettle&page=subscriptions.php" class="buttons"
+                style="display: none">Update
+                Subscriptions</a>
+        </form>
         <div id="checks" class="alert alert-danger" style="display: none"></div>
+    <?php } ?>
+
+    <?php if ($pluginJson["client_id"] != "" && count($pluginJson["subscriptions"]) > 0) { ?>
         <legend>Effect</legend>
         <!--p>The effect that will be run when a transaction comes in.</p-->
         <p>Select a command that you would like to run when a transaction comes in</p>
@@ -128,7 +138,7 @@ $apkUrl = "https://fpp-zettle.s3.dualstack.eu-west-2.amazonaws.com/donations_app
             <p>Note: You can put what ever you want in the text felid does not to have the above options in it.</p>
         </div>
 
-        <form id="api_effect" action="" method="post">
+        <form id="api_effect" action="" method="post" style="margin-bottom: 20px;">
             <div class="container-fluid settingsTable settingsGroupTable">
                 <div class="row">
                     <div class="buttonCommandWrap">

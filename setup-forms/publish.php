@@ -2,7 +2,7 @@
 <p>We would like to gather some information from your donations. We would like to collect the donation amount and
     store it remotely on the <a href="https://fpp-zettle.co.uk" target="_blank">fpp-zettle.co.uk</a> server.</p>
 <p>If you would like to take part in this please select "Yes" from the activate select and press save.</p>
-<form action="" id="publish">
+<form action="" id="publish" style="margin-bottom: 20px;">
     <div class="container-fluid settingsTable settingsGroupTable">
         <div class="row">
             <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">

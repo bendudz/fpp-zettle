@@ -3,7 +3,7 @@
     use it for longer there is a $5 USD one-time purchase fee. Check out the details at there website: <a
         href="https://pushover.net/" target="_blank">https://pushover.net</a></p>
 
-<form id="pushover" action="">
+<form id="pushover" action="" style="margin-bottom: 20px;">
     <div class="container-fluid settingsTable settingsGroupTable">
         <div class="row">
             <div class="printSettingLabelCol col-md-4 col-lg-3 col-xxxl-2">

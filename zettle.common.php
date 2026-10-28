@@ -233,3 +233,125 @@ function currencyWorkout($currency)
 
   return $c;
 }
+
+function countTransactions(string $json): array
+{
+  $transactions = json_decode($json, true);
+
+  if (!is_array($transactions)) {
+    return [
+      'today' => 0,
+      'yesterday' => 0,
+      'this_week' => 0,
+      'this_month' => 0,
+    ];
+  }
+
+  $timezone = new DateTimeZone(date_default_timezone_get());
+
+  $now = new DateTimeImmutable('now', $timezone);
+
+  $startOfToday = $now->setTime(0, 0, 0);
+  $startOfYesterday = $startOfToday->modify('-1 day');
+  $startOfWeek = $now->modify('monday this week')->setTime(0, 0, 0);
+  $startOfMonth = $now->modify('first day of this month')->setTime(0, 0, 0);
+
+  $counts = [
+    'today' => 0,
+    'yesterday' => 0,
+    'this_week' => 0,
+    'this_month' => 0,
+  ];
+
+  foreach ($transactions as $transaction) {
+    if (!isset($transaction['timestamp'])) {
+      continue;
+    }
+
+    // Convert milliseconds to seconds
+    $timestamp = (int) ($transaction['timestamp'] / 1000);
+
+    $transactionDate = (new DateTimeImmutable('@' . $timestamp))
+      ->setTimezone($timezone);
+
+    if ($transactionDate >= $startOfToday) {
+      $counts['today']++;
+    }
+
+    if (
+      $transactionDate >= $startOfYesterday &&
+      $transactionDate < $startOfToday
+    ) {
+      $counts['yesterday'] += $transaction;
+    }
+
+    if ($transactionDate >= $startOfWeek) {
+      $counts['this_week']++;
+    }
+
+    if ($transactionDate >= $startOfMonth) {
+      $counts['this_month']++;
+    }
+  }
+
+  return $counts;
+}
+
+function getDonationTotals(string $json): array
+{
+  $transactions = json_decode($json, true);
+
+  $totals = [
+    'today' => 0,
+    'yesterday' => 0,
+    'this_week' => 0,
+    'this_month' => 0,
+  ];
+
+  if (!is_array($transactions)) {
+    return $totals;
+  }
+
+  $timezone = new DateTimeZone('Europe/London');
+  $now = new DateTimeImmutable('now', $timezone);
+
+  $startOfToday = $now->setTime(0, 0, 0);
+  $startOfYesterday = $startOfToday->modify('-1 day');
+  $startOfWeek = $now->modify('monday this week')->setTime(0, 0, 0);
+  $startOfMonth = $now->modify('first day of this month')->setTime(0, 0, 0);
+
+  foreach ($transactions as $transaction) {
+    if (!isset($transaction['timestamp'], $transaction['amount'])) {
+      continue;
+    }
+
+    // Convert milliseconds to seconds
+    $timestamp = (int) ($transaction['timestamp'] / 1000);
+
+    $transactionDate = (new DateTimeImmutable('@' . $timestamp))
+      ->setTimezone($timezone);
+
+    $amount = (float) $transaction['amount'];
+
+    if ($transactionDate >= $startOfToday) {
+      $totals['today'] += $amount;
+    }
+
+    if (
+      $transactionDate >= $startOfYesterday &&
+      $transactionDate < $startOfToday
+    ) {
+      $totals['yesterday'] += $amount;
+    }
+
+    if ($transactionDate >= $startOfWeek) {
+      $totals['this_week'] += $amount;
+    }
+
+    if ($transactionDate >= $startOfMonth) {
+      $totals['this_month'] += $amount;
+    }
+  }
+
+  return $totals;
+}

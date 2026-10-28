@@ -31,6 +31,7 @@ $command_array = array(
     'check_keys' => 'CheckKeys',
     'clear_transactions' => 'ClearTransactions',
     'save_other' => 'SaveOther',
+    'override' => 'Override'
 );
 
 $command = "";
@@ -324,13 +325,31 @@ function CreatePurchaseSubscription()
     // Explode destination_url to get parts that we need
     $complete_destination_url = explode_destination_url($destination_url, $settings);
 
+    // custom_logs($complete_destination_url);
+
+    // {
+    //     "uuid": "",
+    //     "transportName": "WEBHOOK",
+    //     "eventNames": [
+    //         "<Array of event names>"
+    //     ],
+    //     "destination": "<destination web site>",
+    //     "contactEmail": "<your contact email>"
+    // }
+
+    if (str_ends_with($destination_url, '/')) {
+        $url = $destination_url . 'api/plugin/fpp-zettle/event';
+    } else {
+        $url = $destination_url . '/api/plugin/fpp-zettle/event';
+    }
+
     $query = httpPost(
         $subscriptions_url,
         [
             'uuid' => $_POST['uuid'],
             "transportName" => "WEBHOOK",
             "eventNames" => ["PurchaseCreated"],
-            "destination" => 'https://' . $complete_destination_url,
+            "destination" => $url,
             "contactEmail" => $_POST['contactEmail']
         ],
         [
@@ -714,6 +733,13 @@ function UpdateJson2($option, $data)
 
         case 'other':
             $pluginJson['other']['currency'] = $data['currency'];
+            break;
+
+        case 'override':
+            $pluginJson["client_id"] = $data["client_id"];
+            $pluginJson["client_secret"] = $data["client_secret"];
+            $pluginJson["organizationUuid"] = $data["organizationUuid"];
+            $pluginJson["subscriptions"] = $data["subscriptions"];
     }
 
     setPluginJSON('fpp-zettle', $pluginJson);
@@ -767,5 +793,22 @@ function SaveOther()
     echo jsonOutput([
         'error' => false,
         'message' => 'Other Settings Updated!'
+    ]);
+}
+
+function override()
+{
+    UpdateJson2('override', [
+        "client_id" => "override",
+        "client_secret" => "override",
+        "organizationUuid" => "override",
+        "subscriptions" => [[
+            "override"
+        ]],
+    ]);
+
+    echo jsonOutput([
+        'error' => false,
+        'message' => 'Override Done'
     ]);
 }
