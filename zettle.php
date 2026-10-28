@@ -727,6 +727,7 @@ function UpdateJson2($option, $data)
             break;
 
         case 'publish':
+            $pluginJson['publish']['using_apk'] = $data['using_apk'];
             $pluginJson['publish']['activate'] = $data['activate'];
             //$pluginJson['publish']['location'] = $data['location'];
             break;
