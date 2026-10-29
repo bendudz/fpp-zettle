@@ -64,7 +64,7 @@ $totals = getDonationTotals(file_get_contents($tranJson));
 <head>
     <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=assets/css/mermaid.min.css&nopage=1">
     <link rel="stylesheet" href="/plugin.php?plugin=fpp-zettle&file=zettle.css&nopage=1">
-    <script type="text/javasctipt" src="/plugin.php?plugin=fpp-zettle&file=assets/js/gridjs.umd.js&nopage=1"></script>
+    <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=assets/js/gridjs.umd.js&nopage=1"></script>
     <script type="text/javascript" src="/plugin.php?plugin=fpp-zettle&file=zettle.js&nopage=1"></script>
     <style>
         .avatar {
@@ -242,7 +242,7 @@ $totals = getDonationTotals(file_get_contents($tranJson));
                         then: data => data.map(card => [card.timestamp, card.amount])
                     }
                 }).forceRender();
-            }, 30000);
+            }, 10000);
             $(function() {
                 function ajaxGet(url, feild) {
                     $.ajax({
@@ -266,7 +266,7 @@ $totals = getDonationTotals(file_get_contents($tranJson));
                 } else {
                     setInterval(function() {
                         location.reload();
-                    });
+                    }, 30000);
                 }
             });
         </script>
