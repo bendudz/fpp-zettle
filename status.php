@@ -96,7 +96,7 @@ $totals = getDonationTotals(file_get_contents($tranJson));
         <?php if ($pluginJson['client_id'] != "override") { ?>
             <div id="status"></div>
             <script>
-                new gridjs.Grid({
+                const statusGrid = new gridjs.Grid({
                     columns: [{
                         id: 'client_id',
                         name: 'Client ID'
@@ -133,7 +133,8 @@ $totals = getDonationTotals(file_get_contents($tranJson));
                             echo json_encode(getStatusData($pluginJson));
                             ?>
 
-                }).render(document.getElementById("status"));
+                });
+                statusGrid.render(document.getElementById("status"));
             </script>
             <br><br>
         <?php } ?>
