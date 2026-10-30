@@ -36,12 +36,12 @@ $apkUrl = "https://fpp-zettle.s3.dualstack.eu-west-2.amazonaws.com/donations_app
     <?php include $settings["pluginDirectory"] . "/fpp-zettle/pluginUpdate.php" ?>
 
     <div class="alert alert-info">
-        This plugin works with custom Zettle Donation andriod app. It can be downloaded <a
+        This plugin works with custom Zettle Donation android app. It can be downloaded <a
             href="<?php echo $apkUrl; ?>" target="_blank">here</a>
         <br>
-        Note: This app is not publised on the andriod play store and will need to have <b>Install Unknown Apps</b> enabled
+        Note: This app is not published on the android play store and will need to have <b>Install Unknown Apps</b> enabled
         on your
-        andriod device.
+        android device.
 
         If you are using the custom donation app, please select "<strong>Yes</strong>" option on "<strong>Using Apk</strong>" in the public section.
     </div>
@@ -67,12 +67,13 @@ $apkUrl = "https://fpp-zettle.s3.dualstack.eu-west-2.amazonaws.com/donations_app
     </div>
 
     <?php if ($pluginJson["client_id"] != "override") { ?>
-        <button id="override" class="btn btn-danger">OVERRIDE</button>
+        <?php if ($pluginJson["client_id"] != "override" || $pluginJson["client_id"] !== "") { ?>
+            <button id="override" class="btn btn-danger mb-2">OVERRIDE</button>
 
-        <div class="alert alert-info">
-            Due to changes with dataplicity you can over ride the need for enter zettle details. Click the above button to skip the zettle connect steps.
-        </div>
-
+            <div class="alert alert-info">
+                New Users - Due to changes with dataplicity you can over ride the need for enter zettle details. Click the above button to skip the zettle connect steps.
+            </div>
+        <?php } ?>
         <p>Add your client id and secret generated from the Zettle Integrations
             webpage</p>
         <p>Follow install steps to get the keys you need: <a
