@@ -67,7 +67,7 @@ $apkUrl = "https://fpp-zettle.s3.dualstack.eu-west-2.amazonaws.com/donations_app
     </div>
 
     <?php if ($pluginJson["client_id"] != "override") { ?>
-        <?php if ($pluginJson["client_id"] != "override" || $pluginJson["client_id"] !== "") { ?>
+        <?php if ($pluginJson["client_id"] != "override" || $pluginJson["client_id"] == "") { ?>
             <button id="override" class="btn btn-danger mb-2">OVERRIDE</button>
 
             <div class="alert alert-info">
